@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GROWIX</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #18251b;
+      color: white;
+    }
+
+    .game {
+      max-width: 520px;
+      min-height: 100vh;
+      margin: auto;
+      padding: 18px;
+      background: linear-gradient(#79b85c 0 38%, #4b8b3c 38% 100%);
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .coins {
+      background: rgba(0,0,0,.25);
+      padding: 9px 13px;
+      border-radius: 14px;
+      font-weight: bold;
+    }
+
+    .farm {
+      background: #78b957;
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.2);
+    }
+
+    .farm-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .plot {
+      aspect-ratio: 1;
+      border-radius: 16px;
+      border: 3px solid #70452b;
+      background: #9a633b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 35px;
+      cursor: pointer;
+      transition: transform .15s;
+      user-select: none;
+    }
+
+    .plot:active {
+      transform: scale(.93);
+    }
+
+    .empty {
+      font-size: 27px;
+    }
+
+    .bottom {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 8px;
+      color: white;
+      background: rgba(0,0,0,.28);
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .info {
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      text-align: center;
+    }
+
+    .level {
+      font-size: 14px;
+      opacity: .85;
+    }
+
+    .xpbar {
+      height: 8px;
+      margin-top: 9px;
+      background: rgba(255,255,255,.25);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .xp {
+      width: 35%;
+      height: 100%;
+      background: white;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="game">
+
+  <div class="top">
+    <div class="logo">🌱 GROWIX</div>
+    <div class="coins">🪙 <span id="coins">100</span></div>
+  </div>
+
+  <div class="farm">
+
+    <div class="farm-title">🏡 Твоя ферма</div>
+
+    <div class="field">
+
+      <div class="plot" onclick="plant(this)">🌱</div>
+      <div class="plot empty" onclick="plant(this)">＋</div>
+      <div class="plot empty" onclick="plant(this)">＋</div>
+
+      <div class="plot empty" onclick="plant(this)">＋</div>
+      <div class="plot empty" onclick="plant(this)">＋</div>
+      <div class="plot empty" onclick="plant(this)">＋</div>
+
+      <div class="plot empty" onclick="plant(this)">＋</div>
+      <div class="plot empty" onclick="plant(this)">＋</div>
+      <div class="plot empty" onclick="plant(this)">＋</div>
+
+    </div>
+
+  </div>
+
+  <div class="info">
+    <div class="level">⭐ Уровень 1 · 35 / 100 XP</div>
+
+    <div class="xpbar">
+      <div class="xp"></div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <button onclick="shop()">🛒 Магазин</button>
+    <button onclick="rating()">🏆 Рейтинг</button>
+    <button onclick="profile()">👤 Профиль</button>
+  </div>
+
+</div>
+
+<script>
+
+  const tg = window.Telegram.WebApp;
+
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  let coins = 100;
+
+  function plant(plot) {
+
+    if (!plot.classList.contains("empty")) {
+      alert("🌱 Эта грядка уже занята!");
+      return;
+    }
+
+    if (coins < 10) {
+      alert("❌ Недостаточно монет!");
+      return;
+    }
+
+    coins -= 10;
+
+    document.getElementById("coins").textContent = coins;
+
+    plot.classList.remove("empty");
+    plot.textContent = "🌱";
+
+    setTimeout(() => {
+
+      plot.textContent = "🌾";
+
+      coins += 25;
+      document.getElementById("coins").textContent = coins;
+
+      alert("🌾 Урожай готов! +25 монет");
+
+    }, 5000);
+  }
+
+  function shop() {
+    alert("🛒 Магазин\n\nСкоро здесь появятся семена, животные и здания!");
+  }
+
+  function rating() {
+    alert("🏆 Рейтинг\n\nСкоро здесь появится мировой рейтинг игроков!");
+  }
+
+  function profile() {
+    alert("👤 Профиль\n\nСкоро здесь будет твой уровень, достижения и статистика.");
+  }
+
+</script>
+
+</body>
+</html>
