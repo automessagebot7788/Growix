@@ -1,241 +1,490 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GROWIX</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GROWIX</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: #18251b;
-      color: white;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101811;
+  color: white;
+}
 
-    .game {
-      max-width: 520px;
-      min-height: 100vh;
-      margin: auto;
-      padding: 18px;
-      background: linear-gradient(#79b85c 0 38%, #4b8b3c 38% 100%);
-    }
+.app {
+  max-width: 520px;
+  min-height: 100vh;
+  margin: auto;
+  padding-bottom: 90px;
+  background: linear-gradient(#6fae50 0%, #3d7435 45%, #244b2a 100%);
+}
 
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
+.header {
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .logo {
-      font-size: 27px;
-      font-weight: 900;
-      letter-spacing: 2px;
-    }
+.logo {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
 
-    .coins {
-      background: rgba(0,0,0,.25);
-      padding: 9px 13px;
-      border-radius: 14px;
-      font-weight: bold;
-    }
+.coins {
+  background: rgba(0,0,0,.28);
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-weight: bold;
+}
 
-    .farm {
-      background: #78b957;
-      border-radius: 24px;
-      padding: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.2);
-    }
+.content {
+  padding: 0 16px;
+}
 
-    .farm-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
+.page {
+  display: none;
+}
 
-    .field {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-    }
+.page.active {
+  display: block;
+}
 
-    .plot {
-      aspect-ratio: 1;
-      border-radius: 16px;
-      border: 3px solid #70452b;
-      background: #9a633b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 35px;
-      cursor: pointer;
-      transition: transform .15s;
-      user-select: none;
-    }
+.card {
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(8px);
+}
 
-    .plot:active {
-      transform: scale(.93);
-    }
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
 
-    .empty {
-      font-size: 27px;
-    }
+.subtitle {
+  opacity: .75;
+  font-size: 14px;
+}
 
-    .bottom {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
+.field {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
 
-    button {
-      border: 0;
-      border-radius: 16px;
-      padding: 15px 8px;
-      color: white;
-      background: rgba(0,0,0,.28);
-      font-size: 14px;
-      font-weight: bold;
-    }
+.plot {
+  aspect-ratio: 1;
+  border: 3px solid #70472c;
+  border-radius: 17px;
+  background: #98603b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  cursor: pointer;
+}
 
-    .info {
-      margin-top: 18px;
-      padding: 15px;
-      border-radius: 18px;
-      background: rgba(0,0,0,.22);
-      text-align: center;
-    }
+.plot:active {
+  transform: scale(.94);
+}
 
-    .level {
-      font-size: 14px;
-      opacity: .85;
-    }
+.empty {
+  font-size: 27px;
+}
 
-    .xpbar {
-      height: 8px;
-      margin-top: 9px;
-      background: rgba(255,255,255,.25);
-      border-radius: 10px;
-      overflow: hidden;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
 
-    .xp {
-      width: 35%;
-      height: 100%;
-      background: white;
-      border-radius: 10px;
-    }
-  </style>
+.item {
+  background: rgba(0,0,0,.22);
+  border-radius: 20px;
+  padding: 18px;
+  text-align: center;
+}
+
+.icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+
+.item-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.small {
+  font-size: 13px;
+  opacity: .7;
+}
+
+.action {
+  width: 100%;
+  border: 0;
+  border-radius: 15px;
+  padding: 12px;
+  margin-top: 10px;
+  background: rgba(255,255,255,.18);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.action:active {
+  transform: scale(.97);
+}
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(520px, 100%);
+  height: 76px;
+  background: rgba(15,25,17,.96);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid rgba(255,255,255,.12);
+  z-index: 100;
+}
+
+.nav button {
+  border: 0;
+  background: transparent;
+  color: #91a092;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.nav button.active {
+  color: white;
+}
+
+.nav-icon {
+  display: block;
+  font-size: 23px;
+  margin-bottom: 4px;
+}
+
+.progress {
+  height: 9px;
+  background: rgba(255,255,255,.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.progress div {
+  height: 100%;
+  width: 35%;
+  background: white;
+  border-radius: 10px;
+}
+</style>
 </head>
 
 <body>
 
-<div class="game">
+<div class="app">
 
-  <div class="top">
+  <header class="header">
     <div class="logo">🌱 GROWIX</div>
     <div class="coins">🪙 <span id="coins">100</span></div>
-  </div>
+  </header>
 
-  <div class="farm">
+  <main class="content">
 
-    <div class="farm-title">🏡 Твоя ферма</div>
+    <!-- ФЕРМА -->
+    <section id="farm" class="page active">
 
-    <div class="field">
+      <div class="card">
+        <div class="title">🏡 Моя ферма</div>
+        <div class="subtitle">Выращивай растения и развивай своё хозяйство</div>
 
-      <div class="plot" onclick="plant(this)">🌱</div>
-      <div class="plot empty" onclick="plant(this)">＋</div>
-      <div class="plot empty" onclick="plant(this)">＋</div>
+        <br>
 
-      <div class="plot empty" onclick="plant(this)">＋</div>
-      <div class="plot empty" onclick="plant(this)">＋</div>
-      <div class="plot empty" onclick="plant(this)">＋</div>
+        <div class="field">
 
-      <div class="plot empty" onclick="plant(this)">＋</div>
-      <div class="plot empty" onclick="plant(this)">＋</div>
-      <div class="plot empty" onclick="plant(this)">＋</div>
+          <div class="plot" onclick="plant(this)">🌱</div>
 
-    </div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
 
-  </div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
 
-  <div class="info">
-    <div class="level">⭐ Уровень 1 · 35 / 100 XP</div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
+          <div class="plot empty" onclick="plant(this)">＋</div>
 
-    <div class="xpbar">
-      <div class="xp"></div>
-    </div>
-  </div>
+        </div>
+      </div>
 
-  <div class="bottom">
-    <button onclick="shop()">🛒 Магазин</button>
-    <button onclick="rating()">🏆 Рейтинг</button>
-    <button onclick="profile()">👤 Профиль</button>
-  </div>
+      <div class="card">
+        <b>⭐ Уровень 1</b>
+        <div class="subtitle">35 / 100 XP</div>
+        <div class="progress">
+          <div></div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ЖИВОТНЫЕ -->
+    <section id="animals" class="page">
+
+      <div class="title">🐄 Мои животные</div>
+
+      <div class="grid">
+
+        <div class="item">
+          <div class="icon">🐔</div>
+          <div class="item-name">Курица</div>
+          <div class="small">Яйца: 0</div>
+          <button class="action" onclick="feed('курицу')">🌾 Покормить</button>
+        </div>
+
+        <div class="item">
+          <div class="icon">🐄</div>
+          <div class="item-name">Корова</div>
+          <div class="small">Молоко: 0</div>
+          <button class="action" onclick="feed('корову')">🌽 Покормить</button>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- МИНИ ИГРЫ -->
+    <section id="games" class="page">
+
+      <div class="title">🎮 Мини-игры</div>
+
+      <div class="card">
+        <div class="icon">⚔️</div>
+        <div class="item-name">PvP Арена</div>
+        <div class="subtitle">
+          Сражайся с другими игроками и получай рейтинговые очки.
+        </div>
+        <button class="action" onclick="coming()">⚔️ Скоро</button>
+      </div>
+
+      <div class="card">
+        <div class="icon">🏎️</div>
+        <div class="item-name">Тракторный заезд</div>
+        <div class="subtitle">
+          Соревнуйся с игроками на скорость.
+        </div>
+        <button class="action" onclick="coming()">🏁 Скоро</button>
+      </div>
+
+    </section>
+
+
+    <!-- МАГАЗИН -->
+    <section id="shop" class="page">
+
+      <div class="title">🛒 Магазин</div>
+
+      <div class="grid">
+
+        <div class="item">
+          <div class="icon">🌾</div>
+          <div class="item-name">Пшеница</div>
+          <div class="small">10 монет</div>
+          <button class="action" onclick="buy(10)">Купить</button>
+        </div>
+
+        <div class="item">
+          <div class="icon">🥕</div>
+          <div class="item-name">Морковь</div>
+          <div class="small">15 монет</div>
+          <button class="action" onclick="buy(15)">Купить</button>
+        </div>
+
+        <div class="item">
+          <div class="icon">🐔</div>
+          <div class="item-name">Курица</div>
+          <div class="small">100 монет</div>
+          <button class="action" onclick="buy(100)">Купить</button>
+        </div>
+
+        <div class="item">
+          <div class="icon">🐄</div>
+          <div class="item-name">Корова</div>
+          <div class="small">250 монет</div>
+          <button class="action" onclick="buy(250)">Купить</button>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ИНВЕНТАРЬ -->
+    <section id="inventory" class="page">
+
+      <div class="title">🎒 Инвентарь</div>
+
+      <div class="grid">
+
+        <div class="item">
+          <div class="icon">🌾</div>
+          <div class="item-name">Пшеница</div>
+          <div class="small">×24</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">🥕</div>
+          <div class="item-name">Морковь</div>
+          <div class="small">×13</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">🥚</div>
+          <div class="item-name">Яйца</div>
+          <div class="small">×0</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">🥛</div>
+          <div class="item-name">Молоко</div>
+          <div class="small">×0</div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <nav class="nav">
+
+    <button class="active" onclick="showPage('farm', this)">
+      <span class="nav-icon">🌱</span>
+      Ферма
+    </button>
+
+    <button onclick="showPage('animals', this)">
+      <span class="nav-icon">🐄</span>
+      Животные
+    </button>
+
+    <button onclick="showPage('games', this)">
+      <span class="nav-icon">🎮</span>
+      Игры
+    </button>
+
+    <button onclick="showPage('shop', this)">
+      <span class="nav-icon">🛒</span>
+      Магазин
+    </button>
+
+    <button onclick="showPage('inventory', this)">
+      <span class="nav-icon">🎒</span>
+      Инвентарь
+    </button>
+
+  </nav>
 
 </div>
 
+
 <script>
 
-  const tg = window.Telegram.WebApp;
+const tg = window.Telegram.WebApp;
 
-  if (tg) {
-    tg.ready();
-    tg.expand();
+if (tg) {
+  tg.ready();
+  tg.expand();
+}
+
+let coins = 100;
+
+function showPage(pageId, button) {
+
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+
+  document.getElementById(pageId).classList.add('active');
+
+  document.querySelectorAll('.nav button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  button.classList.add('active');
+}
+
+function plant(plot) {
+
+  if (!plot.classList.contains('empty')) {
+    alert('🌱 Эта грядка уже занята!');
+    return;
   }
 
-  let coins = 100;
-
-  function plant(plot) {
-
-    if (!plot.classList.contains("empty")) {
-      alert("🌱 Эта грядка уже занята!");
-      return;
-    }
-
-    if (coins < 10) {
-      alert("❌ Недостаточно монет!");
-      return;
-    }
-
-    coins -= 10;
-
-    document.getElementById("coins").textContent = coins;
-
-    plot.classList.remove("empty");
-    plot.textContent = "🌱";
-
-    setTimeout(() => {
-
-      plot.textContent = "🌾";
-
-      coins += 25;
-      document.getElementById("coins").textContent = coins;
-
-      alert("🌾 Урожай готов! +25 монет");
-
-    }, 5000);
+  if (coins < 10) {
+    alert('❌ Недостаточно монет!');
+    return;
   }
 
-  function shop() {
-    alert("🛒 Магазин\n\nСкоро здесь появятся семена, животные и здания!");
+  coins -= 10;
+  document.getElementById('coins').textContent = coins;
+
+  plot.classList.remove('empty');
+  plot.textContent = '🌱';
+
+  setTimeout(() => {
+
+    plot.textContent = '🌾';
+
+    coins += 25;
+    document.getElementById('coins').textContent = coins;
+
+    alert('🌾 Урожай готов! +25 монет');
+
+  }, 5000);
+}
+
+function feed(animal) {
+  alert('🌾 Сначала нужно собрать подходящий корм на ферме!');
+}
+
+function buy(price) {
+
+  if (coins < price) {
+    alert('❌ Недостаточно монет!');
+    return;
   }
 
-  function rating() {
-    alert("🏆 Рейтинг\n\nСкоро здесь появится мировой рейтинг игроков!");
-  }
+  coins -= price;
+  document.getElementById('coins').textContent = coins;
 
-  function profile() {
-    alert("👤 Профиль\n\nСкоро здесь будет твой уровень, достижения и статистика.");
-  }
+  alert('✅ Покупка совершена!');
+}
+
+function coming() {
+  alert('🚧 Этот режим находится в разработке!');
+}
 
 </script>
 
