@@ -32,6 +32,39 @@ body{overflow-x:hidden}button{border:0;font:inherit;color:inherit;cursor:pointer
 .center{text-align:center}.badge{display:inline-block;padding:5px 9px;border-radius:10px;background:rgba(255,255,255,.08);font-size:11px}.danger{color:#ff8585}.good{color:#7eea6d}
 @media(max-width:380px){.heroTitle{font-size:24px}.heroEmoji{font-size:80px}.itemImage{width:65px;height:65px;font-size:40px}}
 </style>
+
+<style>
+/* ===== GROWIX LIVING FARM / BUILD MODE ===== */
+.homeTools{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.homeTool{padding:12px;border-radius:17px;background:linear-gradient(145deg,#203d25,#122619);border:1px solid rgba(255,255,255,.07);text-align:left;font-weight:900}
+.homeTool span{font-size:25px;display:block;margin-bottom:4px}
+.farmWorld{position:relative;min-height:420px;padding:12px;border-radius:24px;overflow:hidden;background:linear-gradient(#79bd62 0 48%,#6ca94f 48%);border:3px solid #315f32;box-shadow:inset 0 0 35px rgba(0,0,0,.16)}
+.farmWorld:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#3e8138 1px,transparent 1px);background-size:18px 18px;opacity:.25}
+.worldTitle{position:relative;z-index:2;text-align:center;font-weight:1000;margin-bottom:7px;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.worldField{position:relative;z-index:2;margin:0 auto;width:88%;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;border-radius:20px;background:#75472b;border:5px solid #4f2d1c}
+.worldPlot{aspect-ratio:1;border-radius:12px;background:linear-gradient(145deg,#8d5834,#6c3d25);display:flex;align-items:center;justify-content:center;font-size:34px;position:relative}
+.worldPlot.ready{animation:ready 1s infinite alternate}
+.buildSlots{position:absolute;inset:0;z-index:3;pointer-events:none}
+.buildSlot{position:absolute;width:62px;height:44px;border:2px dashed rgba(255,255,255,.7);border-radius:12px;background:rgba(20,50,20,.28);display:flex;align-items:center;justify-content:center;font-size:23px;pointer-events:auto}
+.buildSlot small{position:absolute;bottom:-17px;font-size:8px;font-weight:900;color:white;white-space:nowrap}
+.slot1{left:3%;top:22%}.slot2{left:3%;top:42%}.slot3{left:3%;top:62%}
+.slot4{right:3%;top:22%}.slot5{right:3%;top:42%}.slot6{right:3%;top:62%}
+.slot7{left:17%;bottom:3%}.slot8{left:39%;bottom:3%}.slot9{right:17%;bottom:3%}
+.npc{position:absolute;z-index:5;font-size:27px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3));animation:walk 8s ease-in-out infinite alternate}
+.npc small{display:block;font-size:7px;background:rgba(0,0,0,.55);padding:2px 4px;border-radius:5px;text-align:center}
+@keyframes walk{0%{transform:translate(0,0)}25%{transform:translate(35px,12px)}50%{transform:translate(-15px,35px)}75%{transform:translate(40px,55px)}100%{transform:translate(0,20px)}}
+.buildPanel{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.buildCard{padding:11px;border-radius:15px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.05)}
+.buildCard .big{font-size:30px}.buildCard b{font-size:12px}.buildCard small{display:block;color:var(--muted);margin-top:3px}
+.profileStats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.profileStat{padding:13px;border-radius:15px;background:rgba(255,255,255,.05);text-align:center}.profileStat b{display:block;font-size:20px}.profileStat span{font-size:10px;color:var(--muted)}
+.battleArena{padding:14px;border-radius:20px;background:linear-gradient(135deg,#281c1c,#17251a);text-align:center}
+.battleUnits{display:flex;justify-content:space-around;align-items:center;margin:15px 0;font-size:45px}.battleBoss{font-size:70px}.battleUnit{animation:bob .7s infinite alternate}.battleUnit:nth-child(2){animation-delay:.2s}
+@keyframes bob{to{transform:translateY(-7px) scale(1.04)}}
+.hp{height:12px;background:#321919;border-radius:20px;overflow:hidden}.hp i{display:block;height:100%;background:linear-gradient(90deg,#d94d4d,#72d65e);transition:.35s}
+.questCheck{font-size:11px;color:#79df69}
+</style>
+
 </head>
 <body>
 <div id="app">
