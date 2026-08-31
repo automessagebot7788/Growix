@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>GROWIX</title>
+<title>GROWIX FARM</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -14,22 +14,23 @@
 
 :root{
  --bg:#071009;
- --card:#142719;
- --card2:#1d3822;
- --green:#63d451;
- --green2:#2f8c35;
- --white:#f4fff3;
- --muted:#91a695;
- --gold:#ffd45b;
- --red:#e65d5d;
- --blue:#62a9ff;
+ --panel:#102017;
+ --panel2:#172d1d;
+ --panel3:#1d3823;
+ --green:#69df57;
+ --green2:#2f963c;
+ --gold:#ffd45c;
+ --text:#f3fff1;
+ --muted:#91a794;
+ --danger:#ed6262;
+ --blue:#65a9ff;
 }
 
 html,body{
  margin:0;
  padding:0;
- background:var(--bg);
- color:var(--white);
+ background:#071009;
+ color:var(--text);
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
 }
 
@@ -46,12 +47,12 @@ button{
 
 #app{
  width:100%;
- max-width:560px;
+ max-width:580px;
  min-height:100vh;
  margin:auto;
  padding-bottom:100px;
  background:
- radial-gradient(circle at 50% -10%,#285c2e 0%,#102316 35%,#08110b 75%)
+ radial-gradient(circle at 50% -15%,#326c37 0,#18371f 25%,#071009 70%);
 }
 
 .header{
@@ -59,11 +60,11 @@ button{
  top:0;
  z-index:50;
  display:flex;
- justify-content:space-between;
  align-items:center;
- padding:13px 15px;
- background:rgba(7,15,9,.94);
- backdrop-filter:blur(18px);
+ justify-content:space-between;
+ padding:12px 14px;
+ background:rgba(5,12,7,.88);
+ backdrop-filter:blur(20px);
  border-bottom:1px solid rgba(255,255,255,.07)
 }
 
@@ -71,19 +72,20 @@ button{
  display:flex;
  align-items:center;
  gap:8px;
- font-size:22px;
  font-weight:1000;
- letter-spacing:1px
+ letter-spacing:1.5px;
+ font-size:22px
 }
 
 .logoMark{
  width:36px;
  height:36px;
+ border-radius:12px;
  display:flex;
  align-items:center;
  justify-content:center;
- border-radius:12px;
- background:linear-gradient(145deg,#78e85e,#2d8131)
+ background:linear-gradient(145deg,#83ef69,#2c8735);
+ box-shadow:0 5px 18px rgba(68,180,64,.25)
 }
 
 .stats{
@@ -93,7 +95,7 @@ button{
 
 .topStat{
  padding:8px 10px;
- border-radius:12px;
+ border-radius:13px;
  background:rgba(255,255,255,.07);
  font-size:12px;
  font-weight:900
@@ -113,25 +115,24 @@ button{
 }
 
 @keyframes pageIn{
- from{
-  opacity:0;
-  transform:translateY(7px)
- }
- to{
-  opacity:1;
-  transform:translateY(0)
- }
+ from{opacity:0;transform:translateY(7px)}
+ to{opacity:1;transform:translateY(0)}
 }
+
+/* HERO */
 
 .hero{
  position:relative;
  overflow:hidden;
  min-height:175px;
- padding:20px;
- border-radius:27px;
- background:linear-gradient(135deg,#255d2d,#142d1a 55%,#102116);
+ padding:21px;
+ margin-bottom:14px;
+ border-radius:28px;
+ background:
+ radial-gradient(circle at 85% 20%,rgba(130,230,100,.18),transparent 25%),
+ linear-gradient(135deg,#285f31,#142d1b 60%,#0d1d11);
  border:1px solid rgba(255,255,255,.08);
- margin-bottom:14px
+ box-shadow:0 15px 35px rgba(0,0,0,.15)
 }
 
 .heroText{
@@ -142,40 +143,43 @@ button{
 
 .heroTitle{
  font-size:28px;
- line-height:1.05;
- font-weight:1000
+ font-weight:1000;
+ line-height:1.05
 }
 
 .heroSub{
  margin-top:9px;
- color:#c0d5c0;
+ color:#bfd1c0;
  font-size:13px;
- line-height:1.45
+ line-height:1.5
 }
 
 .heroEmoji{
  position:absolute;
- right:12px;
- bottom:5px;
- font-size:95px;
- opacity:.8
+ right:8px;
+ bottom:-5px;
+ font-size:100px;
+ opacity:.78;
+ filter:drop-shadow(0 10px 8px rgba(0,0,0,.2))
 }
 
-.card,
-.itemCard,
-.animalCard{
- padding:15px;
+/* CARDS */
+
+.card{
+ padding:16px;
  margin-bottom:13px;
- border-radius:22px;
- background:linear-gradient(145deg,rgba(27,51,31,.96),rgba(15,31,19,.96));
- border:1px solid rgba(255,255,255,.065)
+ border-radius:23px;
+ background:linear-gradient(145deg,rgba(27,53,32,.96),rgba(12,26,16,.96));
+ border:1px solid rgba(255,255,255,.065);
+ box-shadow:0 10px 25px rgba(0,0,0,.08)
 }
 
 .sectionTitle{
  display:flex;
- justify-content:space-between;
  align-items:center;
- margin-bottom:12px;
+ justify-content:space-between;
+ gap:10px;
+ margin-bottom:13px;
  font-size:18px;
  font-weight:950
 }
@@ -185,33 +189,46 @@ button{
 }
 
 .small{
- font-size:12px
+ font-size:11px
 }
+
+.badge{
+ display:inline-flex;
+ align-items:center;
+ padding:5px 9px;
+ border-radius:10px;
+ background:rgba(255,255,255,.08);
+ font-size:10px;
+ font-weight:900
+}
+
+/* BUTTON */
 
 .btn{
  width:100%;
- padding:12px 13px;
  margin-top:9px;
- border-radius:14px;
- background:linear-gradient(135deg,#4aa843,#337f36);
+ padding:12px 13px;
+ border-radius:15px;
+ background:linear-gradient(135deg,#51b64a,#317d37);
  font-size:13px;
- font-weight:950
+ font-weight:950;
+ box-shadow:0 6px 15px rgba(30,100,38,.18)
 }
 
 .btn.gold{
- background:linear-gradient(135deg,#b98727,#88621c)
-}
-
-.btn.secondary{
- background:rgba(255,255,255,.08)
+ background:linear-gradient(135deg,#c99b32,#87651e)
 }
 
 .btn.blue{
- background:#315f9e
+ background:linear-gradient(135deg,#467fc2,#315887)
+}
+
+.btn.secondary{
+ background:rgba(255,255,255,.075)
 }
 
 .btn.red{
- background:#863d3d
+ background:#833b3b
 }
 
 .btn:disabled{
@@ -219,114 +236,130 @@ button{
  cursor:not-allowed
 }
 
-/* QUICK BUTTONS */
-
-.quickButtons{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:9px;
- margin-bottom:13px
-}
-
-.quickButton{
- display:flex;
- align-items:center;
- gap:10px;
- padding:12px;
- border-radius:17px;
- background:linear-gradient(145deg,#203d25,#122619);
- border:1px solid rgba(255,255,255,.07);
- text-align:left;
- font-weight:900
-}
-
-.quickButton .qIcon{
- width:40px;
- height:40px;
- display:flex;
- align-items:center;
- justify-content:center;
- border-radius:13px;
- background:rgba(255,255,255,.07);
- font-size:23px
-}
-
-.quickButton small{
- display:block;
- color:var(--muted);
- font-size:9px;
- margin-top:2px
-}
-
-/* LIVE FARM */
+/* FARM */
 
 .farmWorld{
  position:relative;
- min-height:470px;
- padding:12px;
- border-radius:25px;
+ min-height:480px;
  overflow:hidden;
+ border-radius:28px;
+ padding:12px;
+ border:3px solid #315c31;
  background:
- linear-gradient(#82c96a 0 53%,#6ca94f 53%);
- border:3px solid #315f32;
- box-shadow:inset 0 0 35px rgba(0,0,0,.17)
+ radial-gradient(circle at 20% 20%,rgba(255,255,255,.1) 0 2px,transparent 3px),
+ linear-gradient(145deg,#75b95c,#5b9d4c);
+ box-shadow:
+ inset 0 0 40px rgba(0,0,0,.18),
+ 0 15px 35px rgba(0,0,0,.18)
 }
 
 .farmWorld:before{
  content:"";
  position:absolute;
  inset:0;
+ opacity:.23;
  background-image:
- radial-gradient(#3e8138 1px,transparent 1px);
- background-size:18px 18px;
- opacity:.25
+ radial-gradient(#356d31 1px,transparent 1px);
+ background-size:18px 18px
+}
+
+.farmWorld:after{
+ content:"";
+ position:absolute;
+ left:8%;
+ right:8%;
+ top:51%;
+ height:12px;
+ border-radius:20px;
+ background:rgba(224,194,132,.45);
+ box-shadow:0 80px 0 rgba(224,194,132,.35)
 }
 
 .worldTitle{
  position:relative;
  z-index:10;
  text-align:center;
+ font-size:15px;
  font-weight:1000;
- margin-bottom:9px;
- text-shadow:0 1px 2px rgba(0,0,0,.4)
+ margin-bottom:10px;
+ text-shadow:0 2px 3px rgba(0,0,0,.35)
 }
 
 .worldField{
  position:relative;
- z-index:4;
- margin:25px auto 0;
- width:78%;
+ z-index:8;
+ width:84%;
+ margin:auto;
+ padding:10px;
  display:grid;
  grid-template-columns:repeat(3,1fr);
- gap:7px;
- padding:10px;
- border-radius:21px;
- background:#75472b;
- border:5px solid #4f2d1c
+ gap:8px;
+ border-radius:22px;
+ background:
+ linear-gradient(145deg,#75462b,#4c2b1b);
+ border:5px solid #422519;
+ box-shadow:
+ inset 0 4px 12px rgba(0,0,0,.25),
+ 0 7px 10px rgba(0,0,0,.2)
 }
 
 .worldPlot{
+ position:relative;
  aspect-ratio:1;
- border-radius:12px;
- background:linear-gradient(145deg,#8d5834,#6c3d25);
  display:flex;
  align-items:center;
  justify-content:center;
- font-size:30px;
- position:relative;
- border:2px solid rgba(255,255,255,.04)
+ border-radius:14px;
+ background:
+ radial-gradient(circle at 30% 25%,rgba(255,255,255,.13),transparent 25%),
+ linear-gradient(145deg,#a3663e,#714024);
+ border:2px solid #59331f;
+ font-size:34px;
+ box-shadow:
+ inset 0 5px 8px rgba(255,255,255,.07),
+ inset 0 -5px 8px rgba(0,0,0,.17)
+}
+
+.worldPlot.empty{
+ font-size:25px;
+ color:#e0aa78
 }
 
 .worldPlot.ready{
- animation:ready 1s infinite alternate
+ animation:readyPlot .8s infinite alternate
 }
 
-@keyframes ready{
- from{transform:translateY(0)}
- to{transform:translateY(-4px)}
+@keyframes readyPlot{
+ from{transform:translateY(0);box-shadow:0 0 0 rgba(120,240,90,0)}
+ to{transform:translateY(-3px);box-shadow:0 0 18px rgba(120,240,90,.45)}
 }
 
-/* BUILDING SPOTS */
+.plotTimer{
+ position:absolute;
+ bottom:4px;
+ left:4px;
+ right:4px;
+ padding:3px;
+ border-radius:7px;
+ text-align:center;
+ background:rgba(0,0,0,.68);
+ font-size:8px;
+ font-weight:900
+}
+
+.plotReady{
+ position:absolute;
+ top:4px;
+ left:4px;
+ padding:3px 5px;
+ border-radius:7px;
+ background:#5fca4e;
+ color:#09200b;
+ font-size:7px;
+ font-weight:1000
+}
+
+/* BUILD SLOTS */
 
 .buildSlots{
  position:absolute;
@@ -337,203 +370,128 @@ button{
 
 .buildSlot{
  position:absolute;
- width:67px;
- height:47px;
- border:2px dashed rgba(255,255,255,.75);
- border-radius:13px;
- background:rgba(20,50,20,.32);
+ width:65px;
+ height:48px;
  display:flex;
  align-items:center;
  justify-content:center;
- font-size:24px;
+ border:2px dashed rgba(255,255,255,.75);
+ border-radius:14px;
+ background:rgba(24,62,27,.32);
+ font-size:25px;
  pointer-events:auto;
- box-shadow:0 3px 10px rgba(0,0,0,.12)
+ transition:.2s
+}
+
+.buildSlot:hover{
+ background:rgba(100,210,80,.25)
 }
 
 .buildSlot small{
  position:absolute;
  bottom:-17px;
- font-size:8px;
- font-weight:900;
- color:white;
- white-space:nowrap
+ white-space:nowrap;
+ font-size:7px;
+ font-weight:1000;
+ color:white
 }
 
-.slot1{left:2%;top:20%}
-.slot2{left:2%;top:35%}
-.slot3{left:2%;top:50%}
-.slot4{right:2%;top:20%}
-.slot5{right:2%;top:35%}
-.slot6{right:2%;top:50%}
-.slot7{left:12%;bottom:4%}
-.slot8{left:36%;bottom:4%}
-.slot9{right:12%;bottom:4%}
+.slot1{left:2%;top:23%}
+.slot2{left:2%;top:43%}
+.slot3{left:2%;top:63%}
 
-.buildSlot.occupied{
- border-style:solid;
- background:rgba(30,75,31,.7)
-}
+.slot4{right:2%;top:23%}
+.slot5{right:2%;top:43%}
+.slot6{right:2%;top:63%}
+
+.slot7{left:14%;bottom:3%}
+.slot8{left:39%;bottom:3%}
+.slot9{right:14%;bottom:3%}
 
 /* NPC */
 
 .npc{
  position:absolute;
- z-index:18;
+ z-index:20;
  font-size:27px;
- filter:drop-shadow(0 2px 2px rgba(0,0,0,.35));
- pointer-events:none;
- animation:walkFarm 13s ease-in-out infinite alternate
+ filter:drop-shadow(0 3px 3px rgba(0,0,0,.3));
+ animation:walkAround 9s ease-in-out infinite alternate
 }
 
-.npc2{
- animation-duration:17s;
- animation-delay:-4s
-}
-
-.npc3{
- animation-duration:21s;
- animation-delay:-8s
-}
-
-.npc4{
- animation-duration:15s;
- animation-delay:-2s
-}
-
-.npcLabel{
+.npc small{
  display:block;
- margin-top:-2px;
- font-size:7px;
- background:rgba(0,0,0,.55);
+ margin-top:-3px;
  padding:2px 4px;
  border-radius:5px;
+ background:rgba(0,0,0,.6);
+ font-size:7px;
  text-align:center
 }
 
-@keyframes walkFarm{
- 0%{
-  transform:translate(0,0)
- }
- 20%{
-  transform:translate(55px,18px)
- }
- 40%{
-  transform:translate(10px,80px)
- }
- 60%{
-  transform:translate(105px,125px)
- }
- 80%{
-  transform:translate(-20px,160px)
- }
- 100%{
-  transform:translate(70px,210px)
- }
+.npc1{left:25%;top:19%;animation-delay:-1s}
+.npc2{left:66%;top:30%;animation-delay:-3s}
+.npc3{left:30%;top:65%;animation-delay:-5s}
+.npc4{left:57%;top:72%;animation-delay:-7s}
+.npc5{left:47%;top:17%;animation-delay:-4s}
+
+@keyframes walkAround{
+ 0%{transform:translate(0,0)}
+ 20%{transform:translate(28px,12px)}
+ 40%{transform:translate(-12px,32px)}
+ 60%{transform:translate(35px,48px)}
+ 80%{transform:translate(-22px,20px)}
+ 100%{transform:translate(12px,-5px)}
 }
 
-/* BUILD */
+/* FARM TOOLS */
 
-.buildPanel{
+.homeTools{
  display:grid;
  grid-template-columns:repeat(2,1fr);
- gap:8px
+ gap:9px;
+ margin-bottom:13px
 }
 
-.buildCard{
- padding:11px;
- border-radius:15px;
- background:rgba(255,255,255,.045);
- border:1px solid rgba(255,255,255,.05)
-}
-
-.buildCard .big{
- font-size:30px
-}
-
-.buildCard b{
- font-size:12px
-}
-
-.buildCard small{
- display:block;
- color:var(--muted);
- margin-top:3px
-}
-
-/* FIELD */
-
-.field{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:9px
-}
-
-.plot{
- position:relative;
- aspect-ratio:1;
- display:flex;
- align-items:center;
- justify-content:center;
+.homeTool{
+ padding:12px;
  border-radius:18px;
- background:linear-gradient(145deg,#71442b,#9a5e38);
- border:3px solid #55331f;
- font-size:38px;
- overflow:hidden
+ background:linear-gradient(145deg,#203e26,#122518);
+ border:1px solid rgba(255,255,255,.07);
+ font-weight:900;
+ transition:.15s
 }
 
-.plot.empty{
- font-size:28px;
- color:#d6a477
+.homeTool:active{
+ transform:scale(.97)
 }
 
-.plot.ready{
- animation:ready 1s infinite alternate
-}
-
-.plotTimer{
- position:absolute;
- bottom:5px;
- left:5px;
- right:5px;
- text-align:center;
- padding:4px;
- border-radius:8px;
- background:rgba(0,0,0,.65);
- font-size:10px;
- font-weight:900
-}
-
-.plotLabel{
- position:absolute;
- top:5px;
- left:5px;
- padding:3px 5px;
- border-radius:7px;
- background:rgba(0,0,0,.38);
- font-size:9px
-}
-
-/* BOOSTER */
-
-.boosterCard{
- border:1px solid rgba(255,212,91,.22);
- background:
- linear-gradient(145deg,rgba(90,69,25,.3),rgba(20,35,20,.95))
-}
-
-.boosterIcon{
- font-size:48px;
- text-align:center;
+.homeTool span{
+ display:block;
+ font-size:25px;
  margin-bottom:5px
 }
 
-.boosterLocked{
- padding:10px;
- border-radius:13px;
- background:rgba(0,0,0,.18);
- color:#c7c7c7;
- font-size:11px;
- text-align:center
+.homeTool small{
+ color:var(--muted);
+ font-size:9px
+}
+
+/* PROGRESS */
+
+.progress{
+ width:100%;
+ height:9px;
+ margin-top:8px;
+ overflow:hidden;
+ border-radius:20px;
+ background:rgba(255,255,255,.07)
+}
+
+.progressFill{
+ height:100%;
+ border-radius:20px;
+ background:linear-gradient(90deg,#3d9e3c,#7bea68);
+ transition:.3s
 }
 
 /* LIST */
@@ -546,34 +504,37 @@ button{
 
 .row{
  display:flex;
- justify-content:space-between;
  align-items:center;
+ justify-content:space-between;
  gap:10px;
- padding:13px;
- border-radius:16px;
- background:rgba(255,255,255,.045)
+ padding:12px;
+ border-radius:17px;
+ background:rgba(255,255,255,.045);
+ border:1px solid rgba(255,255,255,.035)
 }
 
 .rowLeft{
  display:flex;
  align-items:center;
- gap:10px
+ gap:10px;
+ min-width:0
 }
 
 .rowIcon{
- width:42px;
- height:42px;
+ width:43px;
+ height:43px;
+ flex:0 0 43px;
  display:flex;
  align-items:center;
  justify-content:center;
- border-radius:13px;
- background:rgba(255,255,255,.06);
+ border-radius:14px;
+ background:rgba(255,255,255,.065);
  font-size:24px
 }
 
 .rowName{
  font-size:13px;
- font-weight:850
+ font-weight:900
 }
 
 .rowSub{
@@ -584,11 +545,60 @@ button{
 
 .price{
  color:var(--gold);
- font-size:13px;
- font-weight:950
+ font-size:12px;
+ font-weight:950;
+ white-space:nowrap
+}
+
+/* ITEMS */
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:9px
+}
+
+.itemCard{
+ padding:14px;
+ text-align:center;
+ border-radius:21px;
+ background:linear-gradient(145deg,#1a3420,#102217);
+ border:1px solid rgba(255,255,255,.06)
+}
+
+.itemImage{
+ width:70px;
+ height:70px;
+ margin:auto auto 8px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:21px;
+ background:
+ radial-gradient(circle,rgba(105,212,81,.18),rgba(255,255,255,.025));
+ font-size:42px
+}
+
+.itemName{
+ font-size:14px;
+ font-weight:900
+}
+
+.itemCount{
+ margin-top:4px;
+ color:var(--muted);
+ font-size:11px
 }
 
 /* ANIMALS */
+
+.animalCard{
+ padding:15px;
+ margin-bottom:10px;
+ border-radius:21px;
+ background:linear-gradient(145deg,#1a3420,#102217);
+ border:1px solid rgba(255,255,255,.06)
+}
 
 .animalTop{
  display:flex;
@@ -597,62 +607,126 @@ button{
 }
 
 .animalVisual{
- width:70px;
- height:70px;
+ width:65px;
+ height:65px;
  display:flex;
  align-items:center;
  justify-content:center;
- border-radius:21px;
+ border-radius:20px;
  background:rgba(255,255,255,.07);
- font-size:43px
+ font-size:40px
 }
 
 .animalName{
- font-size:17px;
+ font-size:16px;
  font-weight:950
 }
 
 .animalAmount{
- margin-top:4px;
- color:#a8bea9;
- font-size:12px
+ margin-top:3px;
+ color:var(--muted);
+ font-size:11px
 }
 
 .production{
- margin-top:13px;
+ margin-top:12px;
  padding:10px;
  border-radius:14px;
  background:rgba(0,0,0,.18)
 }
 
-/* PROFILE */
+/* SETS */
 
-.profileHeader{
- display:flex;
- align-items:center;
- gap:12px;
- margin-bottom:13px
+.setCard{
+ position:relative;
+ overflow:hidden;
+ padding:17px;
+ margin-bottom:11px;
+ border-radius:22px;
+ background:
+ radial-gradient(circle at 90% 15%,rgba(255,212,91,.12),transparent 28%),
+ linear-gradient(145deg,#263c24,#101f14);
+ border:1px solid rgba(255,212,91,.13)
 }
 
-.profileAvatar{
- width:64px;
- height:64px;
+.setTop{
+ display:flex;
+ align-items:center;
+ gap:12px
+}
+
+.setIcon{
+ width:62px;
+ height:62px;
  display:flex;
  align-items:center;
  justify-content:center;
- border-radius:20px;
- background:linear-gradient(145deg,#356b39,#19341e);
- font-size:34px
+ border-radius:19px;
+ background:rgba(255,255,255,.06);
+ font-size:37px
+}
+
+.setName{
+ font-size:16px;
+ font-weight:1000
+}
+
+.setDesc{
+ margin-top:4px;
+ color:var(--muted);
+ font-size:10px
+}
+
+.setItems{
+ display:flex;
+ gap:6px;
+ flex-wrap:wrap;
+ margin-top:12px
+}
+
+.setItem{
+ padding:6px 8px;
+ border-radius:10px;
+ background:rgba(255,255,255,.06);
+ font-size:10px
+}
+
+/* PROFILE */
+
+.profileHero{
+ padding:18px;
+ border-radius:22px;
+ background:linear-gradient(145deg,#285e30,#142b1a);
+ text-align:center
+}
+
+.avatar{
+ width:70px;
+ height:70px;
+ margin:auto;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:50%;
+ background:linear-gradient(145deg,#75dd60,#2b7833);
+ font-size:36px
+}
+
+.profileName{
+ margin-top:9px;
+ font-size:20px;
+ font-weight:1000
 }
 
 .profileStats{
  display:grid;
  grid-template-columns:repeat(2,1fr);
- gap:8px
+ gap:8px;
+ margin-top:13px
 }
 
 .profileStat{
- padding:13px;
+ padding:12px;
  border-radius:15px;
  background:rgba(255,255,255,.05);
  text-align:center
@@ -660,155 +734,145 @@ button{
 
 .profileStat b{
  display:block;
- font-size:20px
+ font-size:19px
 }
 
 .profileStat span{
- font-size:10px;
- color:var(--muted)
+ color:var(--muted);
+ font-size:9px
 }
 
 /* ARMY */
 
-.armyHero{
- padding:15px;
- border-radius:19px;
- background:linear-gradient(145deg,#1c3922,#101f14);
- margin-bottom:10px
-}
-
-.armyUnit{
+.armyCard{
  display:flex;
  align-items:center;
- gap:11px
+ gap:10px;
+ padding:12px;
+ margin-bottom:8px;
+ border-radius:16px;
+ background:rgba(255,255,255,.045)
 }
 
 .armyIcon{
- width:48px;
- height:48px;
+ width:45px;
+ height:45px;
  display:flex;
  align-items:center;
  justify-content:center;
  border-radius:14px;
- background:rgba(255,255,255,.07);
- font-size:28px
+ background:rgba(255,255,255,.06);
+ font-size:26px
 }
 
 /* BATTLE */
 
 .battleArena{
- padding:14px;
- border-radius:20px;
+ padding:15px;
+ border-radius:22px;
  background:
- linear-gradient(135deg,#281c1c,#17251a);
+ radial-gradient(circle at 50% 0,rgba(220,100,80,.1),transparent 35%),
+ linear-gradient(145deg,#2a1d1d,#122117);
  text-align:center
 }
 
 .battleUnits{
  display:flex;
- justify-content:space-around;
  align-items:center;
- margin:18px 0;
- font-size:43px
+ justify-content:space-around;
+ margin:16px 0;
+ font-size:44px
+}
+
+.battleUnit{
+ animation:battleBob .65s infinite alternate
+}
+
+.battleUnit:nth-child(2){
+ animation-delay:.2s
+}
+
+@keyframes battleBob{
+ to{transform:translateY(-7px) scale(1.04)}
 }
 
 .battleBoss{
  font-size:70px;
- animation:bossFloat 1s infinite alternate
+ animation:bossMove 1s infinite alternate
 }
 
-@keyframes bossFloat{
- from{transform:translateY(0)}
- to{transform:translateY(-8px)}
-}
-
-.battleUnit{
- animation:attack .7s infinite alternate
-}
-
-@keyframes attack{
- from{transform:translateX(0)}
- to{transform:translateX(9px) scale(1.05)}
-}
-
-.damageText{
- font-size:22px;
- font-weight:1000;
- color:#ff7373;
- animation:damage .6s ease
-}
-
-@keyframes damage{
- from{
-  transform:translateY(15px);
-  opacity:0
- }
- to{
-  transform:translateY(0);
-  opacity:1
- }
+@keyframes bossMove{
+ to{transform:scale(1.05)}
 }
 
 .hp{
  height:12px;
- background:#321919;
+ overflow:hidden;
  border-radius:20px;
- overflow:hidden
+ background:#351818
 }
 
 .hp i{
  display:block;
  height:100%;
- background:linear-gradient(90deg,#d94d4d,#72d65e);
- transition:.35s
+ background:linear-gradient(90deg,#d84b4b,#75d85f);
+ transition:.3s
 }
 
-/* RANK */
+/* QUESTS */
 
-.rank{
- display:flex;
- align-items:center;
- gap:10px;
+.quest{
  padding:12px;
- border-radius:15px;
+ margin-bottom:8px;
+ border-radius:17px;
  background:rgba(255,255,255,.045)
 }
 
-.rank.me{
- background:linear-gradient(90deg,rgba(92,200,77,.19),rgba(255,255,255,.04));
- border:1px solid rgba(105,212,81,.16)
+.questTop{
+ display:flex;
+ align-items:center;
+ gap:10px
 }
 
-.rankPlace{
- width:30px;
- text-align:center;
- font-weight:1000
-}
-
-.rankAvatar{
- width:38px;
- height:38px;
+.questIcon{
+ width:40px;
+ height:40px;
  display:flex;
  align-items:center;
  justify-content:center;
- border-radius:50%;
- background:#28472c;
- font-size:18px
+ border-radius:12px;
+ background:rgba(255,255,255,.06);
+ font-size:22px
 }
 
-.rankName{
+.questTitle{
  flex:1;
- font-size:13px;
- font-weight:850
+ font-size:12px;
+ font-weight:900
 }
 
-.rankPoints{
+.questReward{
  color:var(--gold);
- font-size:12px;
+ font-size:11px;
  font-weight:950
 }
 
-/* BOTTOM */
+/* BOOSTER */
+
+.booster{
+ padding:17px;
+ border-radius:22px;
+ background:
+ radial-gradient(circle at 85% 10%,rgba(255,212,91,.16),transparent 30%),
+ linear-gradient(145deg,#40351c,#172418);
+ border:1px solid rgba(255,212,91,.2)
+}
+
+.boosterIcon{
+ font-size:45px
+}
+
+/* NAV */
 
 .bottomNav{
  position:fixed;
@@ -816,12 +880,12 @@ button{
  left:50%;
  bottom:0;
  transform:translateX(-50%);
- width:min(560px,100%);
+ width:min(580px,100%);
  height:82px;
  display:grid;
  grid-template-columns:repeat(5,1fr);
  padding:7px 4px 9px;
- background:rgba(7,14,9,.97);
+ background:rgba(6,13,8,.97);
  backdrop-filter:blur(20px);
  border-top:1px solid rgba(255,255,255,.08)
 }
@@ -840,19 +904,19 @@ button{
 .navIcon{
  display:block;
  margin-bottom:4px;
- font-size:23px
+ font-size:22px
 }
 
 /* MODAL */
 
 .modal{
  position:fixed;
- z-index:150;
+ z-index:200;
  inset:0;
  display:none;
  align-items:flex-end;
- background:rgba(0,0,0,.7);
- backdrop-filter:blur(4px)
+ background:rgba(0,0,0,.72);
+ backdrop-filter:blur(5px)
 }
 
 .modal.show{
@@ -860,12 +924,12 @@ button{
 }
 
 .modalBox{
- width:min(560px,100%);
- max-height:88vh;
+ width:min(580px,100%);
+ max-height:90vh;
  overflow:auto;
  padding:20px;
- border-radius:25px 25px 0 0;
- background:linear-gradient(160deg,#1b3420,#0e1c11);
+ border-radius:26px 26px 0 0;
+ background:linear-gradient(160deg,#1b3420,#0d1b10);
  border-top:1px solid rgba(255,255,255,.1)
 }
 
@@ -882,17 +946,9 @@ button{
  text-align:center
 }
 
-.badge{
- display:inline-block;
- padding:5px 9px;
- border-radius:10px;
- background:rgba(255,255,255,.08);
- font-size:11px
-}
-
 .toast{
  position:fixed;
- z-index:200;
+ z-index:300;
  top:15px;
  left:50%;
  transform:translate(-50%,-20px);
@@ -913,25 +969,11 @@ button{
  transform:translate(-50%,0)
 }
 
-.progress{
- width:100%;
- height:9px;
- overflow:hidden;
- border-radius:20px;
- background:rgba(255,255,255,.07);
- margin-top:9px
-}
-
-.progressFill{
- height:100%;
- border-radius:20px;
- background:linear-gradient(90deg,#3c9d39,#7ce969);
- transition:.3s
-}
-
 @media(max-width:380px){
  .heroTitle{font-size:24px}
  .heroEmoji{font-size:80px}
+ .worldField{width:82%}
+ .buildSlot{width:57px}
 }
 </style>
 </head>
@@ -947,7 +989,7 @@ button{
  </div>
 
  <div class="stats">
-  <div class="topStat">🪙 <span id="coins">0</span></div>
+  <div class="topStat">🪙 <span id="coins">500</span></div>
   <div class="topStat">⭐ Lv.<span id="level">1</span></div>
  </div>
 </header>
@@ -962,129 +1004,135 @@ button{
 
 <div class="hero">
  <div class="heroText">
-  <div class="heroTitle">Твоя ферма 🌱</div>
+  <div class="heroTitle">Моя ферма 🌱</div>
   <div class="heroSub">
-   Строй ферму, выращивай урожай, нанимай рабочих и защищай своё хозяйство.
+   Развивай хозяйство, выращивай урожай,
+   нанимай работников и защищай свою землю.
   </div>
  </div>
  <div class="heroEmoji">🌾</div>
 </div>
 
-<!-- НОВЫЕ КНОПКИ ПРЯМО НА ГЛАВНОМ ЭКРАНЕ -->
+<div class="homeTools">
 
-<div class="quickButtons">
-
- <button class="quickButton" onclick="openProfile()">
-  <div class="qIcon">👤</div>
-  <div>
-   Профиль
-   <small>Твоя статистика</small>
-  </div>
+ <button class="homeTool" onclick="openProfile()">
+  <span>👤</span>
+  Профиль
+  <small>Твоя статистика</small>
  </button>
 
- <button class="quickButton" onclick="openArmy()">
-  <div class="qIcon">🪖</div>
-  <div>
-   Моя армия
-   <small>Войска и сила</small>
-  </div>
+ <button class="homeTool" onclick="openArmy()">
+  <span>🪖</span>
+  Моя армия
+  <small>Стражники и фермеры</small>
  </button>
 
- <button class="quickButton" onclick="openBuild()">
-  <div class="qIcon">🏗️</div>
-  <div>
-   Строительство
-   <small>Защита фермы</small>
-  </div>
+ <button class="homeTool" onclick="openBuild()">
+  <span>🏗️</span>
+  Строительство
+  <small>Заборы и защита</small>
  </button>
 
- <button class="quickButton" onclick="openBooster()">
-  <div class="qIcon">⚡</div>
-  <div>
-   Бустер урожая
-   <small>×2 на 24 часа</small>
-  </div>
+ <button class="homeTool" onclick="openSets()">
+  <span>🎁</span>
+  Наборы
+  <small>Выгодные комплекты</small>
  </button>
 
 </div>
 
-<!-- ЖИВАЯ ФЕРМА -->
-
 <div class="card">
 
  <div class="sectionTitle">
-  <span>🏡 Живая ферма</span>
-  <span class="badge">12 участков</span>
+  <span>🌳 Живая ферма</span>
+  <span class="badge">Участки</span>
  </div>
 
  <div class="farmWorld">
 
-  <div class="worldTitle">🌱 GROWIX FARM</div>
+  <div class="worldTitle">
+   🏡 ДЕРЕВНЯ GROWIX
+  </div>
 
-  <!-- NPC -->
+  <div class="worldField" id="worldField"></div>
 
-  <div class="npc" style="left:17%;top:18%">
+  <div class="buildSlots">
+
+   <div class="buildSlot slot1" onclick="buildSlot(0)">
+    <span id="slotIcon0">＋</span>
+    <small>Оборона</small>
+   </div>
+
+   <div class="buildSlot slot2" onclick="buildSlot(1)">
+    <span id="slotIcon1">＋</span>
+    <small>Оборона</small>
+   </div>
+
+   <div class="buildSlot slot3" onclick="buildSlot(2)">
+    <span id="slotIcon2">＋</span>
+    <small>Оборона</small>
+   </div>
+
+   <div class="buildSlot slot4" onclick="buildSlot(3)">
+    <span id="slotIcon3">＋</span>
+    <small>Оборона</small>
+   </div>
+
+   <div class="buildSlot slot5" onclick="buildSlot(4)">
+    <span id="slotIcon4">＋</span>
+    <small>Оборона</small>
+   </div>
+
+   <div class="buildSlot slot6" onclick="buildSlot(5)">
+    <span id="slotIcon5">＋</span>
+    <small>Оборона</small>
+   </div>
+
+   <div class="buildSlot slot7" onclick="buildSlot(6)">
+    <span id="slotIcon6">＋</span>
+    <small>Постройка</small>
+   </div>
+
+   <div class="buildSlot slot8" onclick="buildSlot(7)">
+    <span id="slotIcon7">＋</span>
+    <small>Постройка</small>
+   </div>
+
+   <div class="buildSlot slot9" onclick="buildSlot(8)">
+    <span id="slotIcon8">＋</span>
+    <small>Постройка</small>
+   </div>
+
+  </div>
+
+  <!-- ЖИВЫЕ NPC -->
+
+  <div class="npc npc1">
    🧑‍🌾
-   <span class="npcLabel">Фермер 🔨</span>
+   <small>Фермер</small>
   </div>
 
-  <div class="npc npc2" style="left:58%;top:18%">
+  <div class="npc npc2">
+   🛡️
+   <small>Стражник</small>
+  </div>
+
+  <div class="npc npc3">
+   👨‍🌾
+   <small>Фермер</small>
+  </div>
+
+  <div class="npc npc4">
+   🛡️
+   <small>Стражник</small>
+  </div>
+
+  <div class="npc npc5">
    🧑‍🌾
-   <span class="npcLabel">Фермер 🪓</span>
-  </div>
-
-  <div class="npc npc3" style="left:28%;top:55%">
-   🛡️
-   <span class="npcLabel">Стражник</span>
-  </div>
-
-  <div class="npc npc4" style="left:65%;top:55%">
-   🛡️
-   <span class="npcLabel">Стражник</span>
-  </div>
-
-  <!-- FIELD -->
-
-  <div id="worldField" class="worldField"></div>
-
-  <!-- BUILD SLOTS -->
-
-  <div id="buildSlots" class="buildSlots">
-
-   <div class="buildSlot slot1" data-slot="0" onclick="useBuildSlot(0)">＋<small>Участок</small></div>
-   <div class="buildSlot slot2" data-slot="1" onclick="useBuildSlot(1)">＋<small>Участок</small></div>
-   <div class="buildSlot slot3" data-slot="2" onclick="useBuildSlot(2)">＋<small>Участок</small></div>
-
-   <div class="buildSlot slot4" data-slot="3" onclick="useBuildSlot(3)">＋<small>Участок</small></div>
-   <div class="buildSlot slot5" data-slot="4" onclick="useBuildSlot(4)">＋<small>Участок</small></div>
-   <div class="buildSlot slot6" data-slot="5" onclick="useBuildSlot(5)">＋<small>Участок</small></div>
-
-   <div class="buildSlot slot7" data-slot="6" onclick="useBuildSlot(6)">＋<small>Участок</small></div>
-   <div class="buildSlot slot8" data-slot="7" onclick="useBuildSlot(7)">＋<small>Участок</small></div>
-   <div class="buildSlot slot9" data-slot="8" onclick="useBuildSlot(8)">＋<small>Участок</small></div>
-
+   <small>Фермер</small>
   </div>
 
  </div>
-
- <div class="muted small" style="margin-top:9px">
-  Нажми на участок вокруг поля и установи забор, чучело или стражника
- </div>
-
-</div>
-
-<!-- ГРЯДКИ -->
-
-<div class="card">
-
- <div class="sectionTitle">
-  <span>🌾 Грядки</span>
-  <span class="muted small">
-   <b id="plotCount">9</b>
-  </span>
- </div>
-
- <div id="field" class="field"></div>
 
  <button class="btn secondary" onclick="expandFarm()">
   🏡 Расширить ферму
@@ -1092,24 +1140,39 @@ button{
 
 </div>
 
-<!-- BOOSTER -->
-
-<div class="card boosterCard">
-
- <div class="boosterIcon">⚡</div>
+<div class="card">
 
  <div class="sectionTitle">
-  <span>Бустер урожая</span>
-  <span class="badge">×2 · 24ч</span>
+  <span>🌾 Урожай</span>
+  <span class="muted small">
+   XP <span id="xp">0</span>/<span id="xpNeed">100</span>
+  </span>
  </div>
 
- <div class="muted small" style="text-align:center;margin-bottom:10px">
-  Все культуры выращиваются в 2 раза быстрее в течение 24 часов.
+ <div class="progress">
+  <div id="xpBar" class="progressFill"></div>
  </div>
 
- <div class="boosterLocked">
-  🔒 Бустер временно недоступен.<br><br>
-  Система Telegram Stars будет подключена после интеграции базы данных.
+</div>
+
+<!-- BOOSTER -->
+
+<div class="booster">
+
+ <div class="sectionTitle">
+  <span>⚡ Бустер урожая</span>
+  <span class="badge">50 ⭐</span>
+ </div>
+
+ <div class="boosterIcon">⚡🌾</div>
+
+ <div style="font-size:14px;font-weight:950;margin-top:5px">
+  Урожай ×2 на 24 часа
+ </div>
+
+ <div class="muted small" style="margin-top:6px">
+  Платная функция Telegram Stars.
+  Будет доступна после подключения базы данных.
  </div>
 
  <button class="btn gold" disabled>
@@ -1118,37 +1181,19 @@ button{
 
 </div>
 
-<!-- XP -->
-
 <div class="card">
 
  <div class="sectionTitle">
-  <span>⭐ Опыт</span>
-  <span class="muted small">
-   <span id="xp">0</span> /
-   <span id="xpNeed">100</span>
-  </span>
+  <span>🎁 Ежедневная награда</span>
  </div>
-
- <div class="progress">
-  <div id="xpBar" class="progressFill" style="width:0%"></div>
- </div>
-
-</div>
-
-<!-- DAILY -->
-
-<div class="card">
-
- <div class="sectionTitle">🎁 Ежедневная награда</div>
 
  <div class="muted small">
-  Заходи каждый день и получай монеты.
+  Возвращайся каждый день за бонусом.
  </div>
 
  <button id="dailyButton"
-  class="btn gold"
-  onclick="claimDaily()">
+         class="btn gold"
+         onclick="claimDaily()">
   🎁 Забрать награду
  </button>
 
@@ -1163,7 +1208,7 @@ button{
 
 <div class="hero">
  <div class="heroText">
-  <div class="heroTitle">Мои животные 🐄</div>
+  <div class="heroTitle">Животные 🐔</div>
   <div class="heroSub">
    Корми животных и собирай продукцию.
   </div>
@@ -1171,7 +1216,7 @@ button{
  <div class="heroEmoji">🐄</div>
 </div>
 
-<div id="animalsContainer" class="list"></div>
+<div id="animalsContainer"></div>
 
 </section>
 
@@ -1198,37 +1243,39 @@ button{
  </div>
 
  <div class="muted small">
-  Один бой каждые 10 минут.
+  Один PvP-бой каждые 10 минут.
+  Бесконечного фарма монет нет.
  </div>
 
  <button id="pvpButton"
-  class="btn"
-  onclick="startPVP()">
+         class="btn"
+         onclick="startPVP()">
   ⚔️ Найти соперника
  </button>
 
  <div id="pvpCooldown"
-  class="muted small"
-  style="margin-top:8px">
+      class="muted small"
+      style="margin-top:8px">
  </div>
 
 </div>
-
 
 <div class="card">
 
  <div class="sectionTitle">
   <span>👑 Боссы</span>
+  <span class="badge">6 часов</span>
  </div>
 
- <div class="muted small">
-  Твои войска сражаются с боссом поэтапно.
+ <div class="muted small"
+      style="margin-bottom:12px">
+  Отправляй свою армию в бой.
+  Можно наблюдать за сражением.
  </div>
 
- <div id="bossList" class="list" style="margin-top:12px"></div>
+ <div id="bossList"></div>
 
 </div>
-
 
 <div class="card">
 
@@ -1237,27 +1284,24 @@ button{
   <span class="badge">КД 5 мин</span>
  </div>
 
- <div class="muted small">
-  Общий кулдаун для мини-игр — 5 минут.
- </div>
-
  <button id="miniButton"
-  class="btn blue"
-  onclick="startHarvestGame()">
+         class="btn blue"
+         onclick="startMiniGame()">
   🎯 Быстрый сбор
  </button>
 
  <div id="miniCooldown"
-  class="muted small"
-  style="margin-top:8px">
+      class="muted small"
+      style="margin-top:8px">
  </div>
 
 </div>
 
-
 <div class="card">
 
- <div class="sectionTitle">🏆 Рейтинг</div>
+ <div class="sectionTitle">
+  🏆 Рейтинг
+ </div>
 
  <div id="ranking"></div>
 
@@ -1274,24 +1318,43 @@ button{
  <div class="heroText">
   <div class="heroTitle">Магазин 🛒</div>
   <div class="heroSub">
-   Покупай семена, животных и защиту.
+   Всё необходимое для развития фермы.
   </div>
  </div>
  <div class="heroEmoji">🛒</div>
 </div>
 
 <div class="sectionTitle">🌱 Семена</div>
-<div id="seedShop" class="list"></div>
+<div id="seedShop"></div>
 
-<div class="sectionTitle" style="margin-top:22px">
+<div class="sectionTitle" style="margin-top:20px">
  🐄 Животные
 </div>
-<div id="animalShop" class="list"></div>
+<div id="animalShop"></div>
 
-<div class="sectionTitle" style="margin-top:22px">
+<div class="sectionTitle" style="margin-top:20px">
  🛡️ Защита
 </div>
-<div id="defenseShop" class="list"></div>
+<div id="defenseShop"></div>
+
+</section>
+
+
+<!-- SETS -->
+
+<section id="page-sets" class="page">
+
+<div class="hero">
+ <div class="heroText">
+  <div class="heroTitle">Наборы 🎁</div>
+  <div class="heroSub">
+   Готовые комплекты для быстрого развития фермы.
+  </div>
+ </div>
+ <div class="heroEmoji">🎁</div>
+</div>
+
+<div id="setsContainer"></div>
 
 </section>
 
@@ -1304,7 +1367,7 @@ button{
  <div class="heroText">
   <div class="heroTitle">Инвентарь 🎒</div>
   <div class="heroSub">
-   Ресурсы и продукция.
+   Все твои ресурсы и продукция.
   </div>
  </div>
  <div class="heroEmoji">🎒</div>
@@ -1312,15 +1375,17 @@ button{
 
 <div class="sectionTitle">📦 Ресурсы</div>
 
-<div id="inventoryGrid" class="grid"></div>
+<div id="inventoryGrid"
+     class="grid">
+</div>
 
 <div class="card">
 
  <div class="sectionTitle">
-  💰 Продать ресурсы
+  💰 Продажа
  </div>
 
- <div id="sellList" class="list"></div>
+ <div id="sellList"></div>
 
 </div>
 
@@ -1334,38 +1399,38 @@ button{
 <nav class="bottomNav">
 
 <button class="navBtn active"
- data-page="farm"
- onclick="navigate('farm',this)">
+        data-page="farm"
+        onclick="navigate('farm',this)">
  <span class="navIcon">🌱</span>
  Ферма
 </button>
 
 <button class="navBtn"
- data-page="animals"
- onclick="navigate('animals',this)">
- <span class="navIcon">🐄</span>
+        data-page="animals"
+        onclick="navigate('animals',this)">
+ <span class="navIcon">🐔</span>
  Животные
 </button>
 
 <button class="navBtn"
- data-page="games"
- onclick="navigate('games',this)">
- <span class="navIcon">🎮</span>
+        data-page="games"
+        onclick="navigate('games',this)">
+ <span class="navIcon">⚔️</span>
  Игры
 </button>
 
 <button class="navBtn"
- data-page="shop"
- onclick="navigate('shop',this)">
+        data-page="shop"
+        onclick="navigate('shop',this)">
  <span class="navIcon">🛒</span>
  Магазин
 </button>
 
 <button class="navBtn"
- data-page="inventory"
- onclick="navigate('inventory',this)">
- <span class="navIcon">🎒</span>
- Инвентарь
+        data-page="sets"
+        onclick="navigate('sets',this)">
+ <span class="navIcon">🎁</span>
+ Наборы
 </button>
 
 </nav>
@@ -1380,7 +1445,9 @@ button{
  <div class="modalBox">
 
   <button class="modalClose"
-   onclick="closeModal()">×</button>
+          onclick="closeModal()">
+   ×
+  </button>
 
   <div id="modalContent"></div>
 
@@ -1402,13 +1469,7 @@ if(tg){
  tg.expand();
 }
 
-
-/* =========================
-   SAVE
-========================= */
-
-const SAVE_KEY="growix_final_v4";
-
+const SAVE_KEY="growix_v4";
 
 const COOLDOWNS={
  pvp:10*60*1000,
@@ -1417,33 +1478,24 @@ const COOLDOWNS={
 };
 
 
-/* =========================
-   DEFAULT
-========================= */
-
 function defaultState(){
 
  return{
 
-  saveVersion:4,
-
   coins:500,
 
   level:1,
-
   xp:0,
 
   pvpPoints:0,
-
   wins:0,
-
   losses:0,
 
   harvested:0,
 
   lastDaily:null,
 
-  firstBonus:true,
+  expansion:9,
 
   cooldowns:{
    pvp:0,
@@ -1452,20 +1504,11 @@ function defaultState(){
 
   bossCooldowns:{},
 
-  quests:{},
-
-  expansion:9,
-
-  field:Array(9).fill(null),
-
-  buildSlots:Array(9).fill(null),
-
   inventory:{
-
-   wheatSeed:5,
-   carrotSeed:3,
-   cornSeed:2,
-   tomatoSeed:0,
+   wheatSeed:8,
+   carrotSeed:5,
+   cornSeed:3,
+   tomatoSeed:2,
    berrySeed:0,
    pumpkinSeed:0,
 
@@ -1482,7 +1525,6 @@ function defaultState(){
   },
 
   animals:{
-
    chicken:{
     count:1,
     production:0,
@@ -1500,100 +1542,29 @@ function defaultState(){
     production:0,
     readyAt:null
    }
-
   },
 
   defense:{
-
-   stones:0,
-   shotgun:0,
-   scarecrow:0,
    fence:0,
+   scarecrow:0,
+   wall:0,
    traps:0
-
   },
 
   army:{
-
    guard1:0,
    guard2:0,
    guard3:0
+  },
 
-  }
+  buildings:Array(9).fill(null),
+
+  field:Array(9).fill(null),
+
+  quests:{}
 
  };
 
-}
-
-
-/* =========================
-   LOAD
-========================= */
-
-function mergeState(old){
-
- const d=defaultState();
-
- const s={
-  ...d,
-  ...old
- };
-
- s.inventory={
-  ...d.inventory,
-  ...(old.inventory||{})
- };
-
- s.animals={
-  ...d.animals,
-  ...(old.animals||{})
- };
-
- s.defense={
-  ...d.defense,
-  ...(old.defense||{})
- };
-
- s.army={
-  ...d.army,
-  ...(old.army||{})
- };
-
- s.cooldowns={
-  ...d.cooldowns,
-  ...(old.cooldowns||{})
- };
-
- s.bossCooldowns={
-  ...(old.bossCooldowns||{})
- };
-
- s.quests={
-  ...(old.quests||{})
- };
-
- s.buildSlots=
-  Array.isArray(old.buildSlots)
-  ? old.buildSlots.slice(0,9)
-  : Array(9).fill(null);
-
- while(s.buildSlots.length<9)
-  s.buildSlots.push(null);
-
- s.expansion=
-  old.expansion ||
-  ((old.field||[]).length) ||
-  9;
-
- s.field=
-  Array.isArray(old.field)
-  ? old.field.slice(0,s.expansion)
-  : [];
-
- while(s.field.length<s.expansion)
-  s.field.push(null);
-
- return s;
 }
 
 
@@ -1604,11 +1575,67 @@ function loadState(){
   const raw=
    localStorage.getItem(SAVE_KEY);
 
-  if(raw)
-   return mergeState(JSON.parse(raw));
+  if(raw){
+
+   const old=JSON.parse(raw);
+   const d=defaultState();
+
+   return {
+
+    ...d,
+    ...old,
+
+    inventory:{
+     ...d.inventory,
+     ...(old.inventory||{})
+    },
+
+    animals:{
+     ...d.animals,
+     ...(old.animals||{})
+    },
+
+    defense:{
+     ...d.defense,
+     ...(old.defense||{})
+    },
+
+    army:{
+     ...d.army,
+     ...(old.army||{})
+    },
+
+    cooldowns:{
+     ...d.cooldowns,
+     ...(old.cooldowns||{})
+    },
+
+    bossCooldowns:{
+     ...(old.bossCooldowns||{})
+    },
+
+    quests:{
+     ...(old.quests||{})
+    },
+
+    buildings:
+     Array.isArray(old.buildings)
+     ? old.buildings
+     : d.buildings,
+
+    field:
+     Array.isArray(old.field)
+     ? old.field
+     : d.field
+
+   };
+
+  }
 
  }catch(e){
-  console.error(e);
+
+  console.log(e);
+
  }
 
  return defaultState();
@@ -1621,38 +1648,29 @@ let state=loadState();
 
 function saveState(){
 
- try{
-  localStorage.setItem(
-   SAVE_KEY,
-   JSON.stringify(state)
-  );
- }catch(e){
-  console.error(e);
- }
+ localStorage.setItem(
+  SAVE_KEY,
+  JSON.stringify(state)
+ );
 
 }
 
 
-/* =========================
-   UI
-========================= */
-
-function notify(message){
+function notify(text){
 
  const t=
   document.getElementById("toast");
 
- t.textContent=message;
+ t.textContent=text;
 
  t.classList.add("show");
 
- clearTimeout(window.toastT);
+ clearTimeout(window.toastTimer);
 
- window.toastT=
-  setTimeout(
-   ()=>t.classList.remove("show"),
-   1800
-  );
+ window.toastTimer=setTimeout(
+  ()=>t.classList.remove("show"),
+  1900
+ );
 
 }
 
@@ -1679,11 +1697,7 @@ function closeModal(){
 }
 
 
-/* =========================
-   NAV
-========================= */
-
-function navigate(page,button){
+function navigate(page,btn){
 
  document
   .querySelectorAll(".page")
@@ -1697,17 +1711,13 @@ function navigate(page,button){
   .querySelectorAll(".navBtn")
   .forEach(x=>x.classList.remove("active"));
 
- if(button)
-  button.classList.add("active");
+ if(btn)
+  btn.classList.add("active");
 
  render();
 
 }
 
-
-/* =========================
-   CROPS
-========================= */
 
 const crops={
 
@@ -1774,10 +1784,6 @@ const crops={
 };
 
 
-/* =========================
-   ANIMALS
-========================= */
-
 const animals={
 
  chicken:{
@@ -1785,7 +1791,6 @@ const animals={
   icon:"🐔",
   feed:"wheat",
   product:"egg",
-  productName:"Яйца",
   productIcon:"🥚",
   time:25,
   price:100
@@ -1796,7 +1801,6 @@ const animals={
   icon:"🐄",
   feed:"corn",
   product:"milk",
-  productName:"Молоко",
   productIcon:"🥛",
   time:40,
   price:300
@@ -1807,7 +1811,6 @@ const animals={
   icon:"🐑",
   feed:"carrot",
   product:"wool",
-  productName:"Шерсть",
   productIcon:"🧶",
   time:55,
   price:500
@@ -1816,14 +1819,10 @@ const animals={
 };
 
 
-/* =========================
-   BOSSES
-========================= */
-
 const bosses=[
 
  {
-  id:"chickenBoss",
+  id:"crow",
   name:"Король Ворон",
   icon:"🐦‍⬛",
   hp:1000,
@@ -1832,7 +1831,7 @@ const bosses=[
  },
 
  {
-  id:"boarBoss",
+  id:"boar",
   name:"Лесной Кабан",
   icon:"🐗",
   hp:1500,
@@ -1841,7 +1840,7 @@ const bosses=[
  },
 
  {
-  id:"giantBoss",
+  id:"giant",
   name:"Фермер-Гигант",
   icon:"👹",
   hp:2200,
@@ -1850,7 +1849,7 @@ const bosses=[
  },
 
  {
-  id:"wolfBoss",
+  id:"wolf",
   name:"Альфа-Волк",
   icon:"🐺",
   hp:3200,
@@ -1859,7 +1858,7 @@ const bosses=[
  },
 
  {
-  id:"dragonBoss",
+  id:"dragon",
   name:"Зелёный Дракон",
   icon:"🐉",
   hp:5000,
@@ -1869,10 +1868,6 @@ const bosses=[
 
 ];
 
-
-/* =========================
-   SELL
-========================= */
 
 const sellables=[
 
@@ -1904,27 +1899,130 @@ const invItems=[
 ];
 
 
-/* =========================
-   TIME
-========================= */
+const quests=[
+
+ {
+  id:"channel",
+  name:"Подпишись на наш канал",
+  icon:"📢",
+  reward:750,
+  special:true
+ },
+
+ {
+  id:"wheat100",
+  name:"Собери 100 пшеницы",
+  icon:"🌾",
+  goal:100,
+  reward:500,
+  type:"harvestWheat"
+ },
+
+ {
+  id:"level5",
+  name:"Достигни 5 уровня",
+  icon:"⭐",
+  goal:5,
+  reward:500,
+  type:"level"
+ },
+
+ {
+  id:"level10",
+  name:"Достигни 10 уровня",
+  icon:"🏆",
+  goal:10,
+  reward:1500,
+  type:"level"
+ },
+
+ {
+  id:"animals3",
+  name:"Заведи 3 животных",
+  icon:"🐄",
+  goal:3,
+  reward:1000,
+  type:"animals"
+ }
+
+];
+
+
+const sets=[
+
+ {
+  id:"starter",
+  name:"Стартовый набор",
+  icon:"🎒",
+  desc:"Всё необходимое для первых дней.",
+  price:500,
+  items:[
+   "🌾 ×10 семян пшеницы",
+   "🥕 ×5 семян моркови",
+   "🌽 ×3 семян кукурузы",
+   "🪙 ×150 монет"
+  ]
+ },
+
+ {
+  id:"farmer",
+  name:"Набор фермера",
+  icon:"🧑‍🌾",
+  desc:"Для серьёзного расширения хозяйства.",
+  price:1500,
+  items:[
+   "🌾 ×20 семян",
+   "🥕 ×15 семян",
+   "🐔 ×1 курица",
+   "🪙 ×500 монет"
+  ]
+ },
+
+ {
+  id:"defender",
+  name:"Защитник фермы",
+  icon:"🛡️",
+  desc:"Комплект для защиты территории.",
+  price:2500,
+  items:[
+   "🧱 ×2 стены",
+   "🧸 ×2 чучела",
+   "🪤 ×2 ловушки",
+   "🪙 ×300 монет"
+  ]
+ },
+
+ {
+  id:"elite",
+  name:"Элитный набор",
+  icon:"👑",
+  desc:"Большой набор для опытных фермеров.",
+  price:5000,
+  items:[
+   "🌾 ×30 семян",
+   "🌽 ×15 семян",
+   "🐔 ×2 курицы",
+   "🛡️ ×1 стражник",
+   "🪙 ×1500 монет"
+  ]
+ }
+
+];
+
 
 function formatTime(ms){
 
- let s=
-  Math.max(
-   0,
-   Math.ceil(ms/1000)
-  );
-
- let m=
-  Math.floor(s/60);
-
  let sec=
-  s%60;
+  Math.max(0,Math.ceil(ms/1000));
 
- return m
-  ? m+"м "+sec+"с"
-  : s+"с";
+ let min=
+  Math.floor(sec/60);
+
+ sec%=60;
+
+ return min
+  ? min+"м "+sec+"с"
+  : sec+"с";
 
 }
 
@@ -1939,548 +2037,15 @@ function cd(type){
 }
 
 
-/* =========================
-   FIELD
-========================= */
+function addXP(amount){
 
-function renderField(){
-
- const f=
-  document.getElementById("field");
-
- f.innerHTML="";
-
- state.field.forEach((p,i)=>{
-
-  const e=
-   document.createElement("div");
-
-  e.className="plot";
-
-  if(!p){
-
-   e.classList.add("empty");
-
-   e.textContent="＋";
-
-   e.onclick=
-    ()=>chooseSeed(i);
-
-  }else{
-
-   const c=
-    crops[p.crop];
-
-   if(!c){
-
-    state.field[i]=null;
-
-    return;
-
-   }
-
-   const r=
-    Math.max(
-     0,
-     Math.ceil(
-      (p.readyAt-Date.now())/1000
-     )
-    );
-
-   if(r<=0){
-
-    e.classList.add("ready");
-
-    e.innerHTML=
-     c.icon+
-     '<div class="plotLabel">ГОТОВО</div>';
-
-    e.onclick=
-     ()=>harvest(i);
-
-   }else{
-
-    e.innerHTML=
-     '🌱'+
-     '<div class="plotTimer">'+
-     formatTime(r*1000)+
-     '</div>';
-
-    e.onclick=
-     ()=>notify(
-      "⏳ Осталось "+
-      formatTime(r*1000)
-     );
-
-   }
-
-  }
-
-  f.appendChild(e);
-
- });
-
-}
-
-
-/* =========================
-   WORLD FIELD
-========================= */
-
-function renderWorldField(){
-
- const el=
-  document.getElementById("worldField");
-
- if(!el)return;
-
- el.innerHTML="";
-
- for(let i=0;i<9;i++){
-
-  const p=
-   state.field[i];
-
-  const d=
-   document.createElement("div");
-
-  d.className="worldPlot";
-
-  if(!p){
-
-   d.textContent="🟫";
-
-  }else{
-
-   const c=
-    crops[p.crop];
-
-   if(c){
-
-    const ready=
-     Date.now()>=p.readyAt;
-
-    d.innerHTML=
-     ready
-     ? c.icon
-     : "🌱";
-
-    if(ready)
-     d.classList.add("ready");
-
-   }
-
-  }
-
-  el.appendChild(d);
-
- }
-
-}
-
-
-/* =========================
-   BUILDING SLOTS
-========================= */
-
-function useBuildSlot(slot){
-
- const current=
-  state.buildSlots[slot];
-
- if(current){
-
-  const names={
-   fence:"🧱 Забор",
-   scarecrow:"🧸 Чучело",
-   guard:"🛡️ Стражник",
-   trap:"🪤 Ловушка"
-  };
-
-  openModal(`
-
-   <div class="center">
-
-    <div style="font-size:55px">
-     ${current==="fence"?"🧱":
-       current==="scarecrow"?"🧸":
-       current==="guard"?"🛡️":"🪤"}
-    </div>
-
-    <h2>${names[current]}</h2>
-
-    <p class="muted">
-     Участок уже занят.
-    </p>
-
-    <button class="btn red"
-     onclick="removeBuild(${slot})">
-     🗑️ Убрать
-    </button>
-
-   </div>
-
-  `);
-
-  return;
-
- }
-
-
- openModal(`
-
-  <div>
-
-   <div class="sectionTitle">
-    🏗️ Что поставить?
-   </div>
-
-   <div class="grid">
-
-    <div class="itemCard">
-     <div class="itemImage">🧱</div>
-     <div class="itemName">Забор</div>
-     <div class="itemCount">
-      Есть: ${state.defense.fence}
-     </div>
-
-     <button class="btn"
-      onclick="placeBuild(${slot},'fence')"
-      ${state.defense.fence<=0?"disabled":""}>
-      ${state.defense.fence>0?"Поставить":"Нет"}
-     </button>
-    </div>
-
-
-    <div class="itemCard">
-     <div class="itemImage">🧸</div>
-     <div class="itemName">Чучело</div>
-     <div class="itemCount">
-      Есть: ${state.defense.scarecrow}
-     </div>
-
-     <button class="btn"
-      onclick="placeBuild(${slot},'scarecrow')"
-      ${state.defense.scarecrow<=0?"disabled":""}>
-      ${state.defense.scarecrow>0?"Поставить":"Нет"}
-     </button>
-    </div>
-
-
-    <div class="itemCard">
-     <div class="itemImage">🛡️</div>
-     <div class="itemName">Стражник</div>
-     <div class="itemCount">
-      Стражников: ${armyTotal()}
-     </div>
-
-     <button class="btn"
-      onclick="placeBuild(${slot},'guard')"
-      ${armyTotal()<=0?"disabled":""}>
-      ${armyTotal()>0?"Поставить":"Нет"}
-     </button>
-    </div>
-
-
-    <div class="itemCard">
-     <div class="itemImage">🪤</div>
-     <div class="itemName">Ловушка</div>
-     <div class="itemCount">
-      Есть: ${state.defense.traps}
-     </div>
-
-     <button class="btn"
-      onclick="placeBuild(${slot},'trap')"
-      ${state.defense.traps<=0?"disabled":""}>
-      ${state.defense.traps>0?"Поставить":"Нет"}
-     </button>
-    </div>
-
-   </div>
-
-  </div>
-
- `);
-
-}
-
-
-function placeBuild(slot,type){
-
- if(state.buildSlots[slot])
-  return notify("❌ Участок занят");
-
- if(type==="fence"){
-
-  if(state.defense.fence<=0)
-   return notify("❌ Нет заборов");
-
-  state.defense.fence--;
-
- }
-
- if(type==="scarecrow"){
-
-  if(state.defense.scarecrow<=0)
-   return notify("❌ Нет чучел");
-
-  state.defense.scarecrow--;
-
- }
-
- if(type==="trap"){
-
-  if(state.defense.traps<=0)
-   return notify("❌ Нет ловушек");
-
-  state.defense.traps--;
-
- }
-
- if(type==="guard"){
-
-  if(armyTotal()<=0)
-   return notify("❌ Нет стражников");
-
- }
-
- state.buildSlots[slot]=type;
-
- saveState();
-
- closeModal();
-
- notify("🏗️ Постройка установлена");
-
- renderBuildSlots();
-
- render();
-
-}
-
-
-function removeBuild(slot){
-
- const type=
-  state.buildSlots[slot];
-
- if(type==="fence")
-  state.defense.fence++;
-
- if(type==="scarecrow")
-  state.defense.scarecrow++;
-
- if(type==="trap")
-  state.defense.traps++;
-
- state.buildSlots[slot]=null;
-
- saveState();
-
- closeModal();
-
- notify("🗑️ Участок освобождён");
-
- render();
-
-}
-
-
-function renderBuildSlots(){
-
- document
-  .querySelectorAll(".buildSlot")
-  .forEach(el=>{
-
-   const slot=
-    Number(el.dataset.slot);
-
-   const type=
-    state.buildSlots[slot];
-
-   el.classList.toggle(
-    "occupied",
-    !!type
-   );
-
-   if(!type){
-
-    el.innerHTML=
-     '＋<small>Участок</small>';
-
-    return;
-
-   }
-
-   const icon=
-    type==="fence"
-    ? "🧱"
-    : type==="scarecrow"
-    ? "🧸"
-    : type==="guard"
-    ? "🛡️"
-    : "🪤";
-
-   el.innerHTML=
-    icon+
-    "<small>Нажми</small>";
-
-  });
-
-}
-
-
-/* =========================
-   SEEDS
-========================= */
-
-function chooseSeed(i){
-
- let h=
-  '<div class="sectionTitle">🌱 Выбери семена</div>'+
-  '<div class="grid">';
-
- Object.entries(crops)
- .forEach(([id,c])=>{
-
-  let n=
-   state.inventory[c.seed]||0;
-
-  h+=`
-
-   <div class="itemCard">
-
-    <div class="itemImage">
-     ${c.icon}
-    </div>
-
-    <div class="itemName">
-     ${c.name}
-    </div>
-
-    <div class="itemCount">
-     Семян: ${n}
-    </div>
-
-    <button class="btn"
-     onclick="plant(${i},'${id}')"
-     ${n<=0?"disabled":""}>
-     ${n?"Посадить":"Нет семян"}
-    </button>
-
-   </div>
-
-  `;
-
- });
-
- openModal(
-  h+
-  "</div>"
- );
-
-}
-
-
-function plant(i,id){
-
- const c=
-  crops[id];
-
- if(
-  !c||
-  state.field[i]||
-  (state.inventory[c.seed]||0)<=0
- )
-  return notify("❌ Нельзя посадить");
-
- state.inventory[c.seed]--;
-
- let growTime=
-  c.grow*1000;
-
- /*
-  Бустер подготовлен,
-  после БД и Telegram Stars
-  здесь можно активировать
-  ×2.
- */
-
- if(state.boosterUntil &&
-    state.boosterUntil>Date.now())
-  growTime/=2;
-
- state.field[i]={
-  crop:id,
-  readyAt:Date.now()+growTime
- };
-
- saveState();
-
- closeModal();
-
- notify("🌱 Посажено");
-
- render();
-
-}
-
-
-function harvest(i){
-
- const p=
-  state.field[i];
-
- const c=
-  p&&crops[p.crop];
-
- if(!c)return;
-
- if(Date.now()<p.readyAt)
-  return notify("⏳ Ещё не готово");
-
- state.inventory[p.crop]+=
-  c.reward;
-
- state.harvested+=
-  c.reward;
-
- addXP(c.xp);
-
- state.field[i]=null;
-
- checkQuests();
-
- saveState();
-
- notify(
-  c.icon+
-  " +"+
-  c.reward+
-  " "+
-  c.name
- );
-
- render();
-
-}
-
-
-/* =========================
-   XP
-========================= */
-
-function addXP(a){
-
- state.xp+=a;
+ state.xp+=amount;
 
  while(
-  state.xp>=
-  state.level*100
+  state.xp>=state.level*100
  ){
 
-  state.xp-=
-   state.level*100;
+  state.xp-=state.level*100;
 
   state.level++;
 
@@ -2495,178 +2060,130 @@ function addXP(a){
 }
 
 
-/* =========================
-   FARM EXPANSION
-========================= */
+function renderWorld(){
 
-function expandFarm(){
+ const box=
+  document.getElementById("worldField");
 
- const n=
-  state.expansion===9
-  ?18
-  :state.expansion===18
-  ?36
-  :state.expansion===36
-  ?54
-  :54;
+ box.innerHTML="";
 
- if(n===state.expansion)
-  return notify(
-   "🏡 Максимум 54 грядки"
-  );
+ state.field.forEach(
+  (plot,index)=>{
 
- const cost=
-  n===18
-  ?7500
-  :n===36
-  ?25000
-  :0;
+   const el=
+    document.createElement("div");
 
- if(
-  n===54
- ){
+   el.className="worldPlot";
 
-  openModal(`
+   if(!plot){
 
-   <div class="center">
+    el.classList.add("empty");
+    el.innerHTML="🌱";
 
-    <div style="font-size:55px">
-     🏡
-    </div>
+    el.onclick=
+     ()=>chooseSeed(index);
 
-    <h2>
-     54 грядки
-    </h2>
+   }else{
 
-    <p class="muted">
-     Максимальное расширение.
-    </p>
+    const crop=
+     crops[plot.crop];
 
-    <button
-     class="btn gold"
-     onclick="
-      notify('⭐ Telegram Stars подключим после БД');
-      closeModal()
-     ">
-     ⭐ 50 Stars
-    </button>
+    if(!crop){
 
-   </div>
+     state.field[index]=null;
+     return;
 
-  `);
+    }
 
-  return;
+    const left=
+     Math.max(
+      0,
+      plot.readyAt-Date.now()
+     );
 
- }
+    if(left<=0){
 
- if(state.coins<cost)
-  return notify(
-   "❌ Нужно "+cost+" 🪙"
-  );
+     el.classList.add("ready");
 
- state.coins-=cost;
+     el.innerHTML=
+      crop.icon+
+      '<span class="plotReady">ГОТОВО</span>';
 
- state.expansion=n;
+     el.onclick=
+      ()=>harvest(index);
 
- while(
-  state.field.length<n
- )
-  state.field.push(null);
+    }else{
 
- saveState();
+     el.innerHTML=
+      "🌱"+
+      '<span class="plotTimer">'+
+      formatTime(left)+
+      "</span>";
 
- notify(
-  "🏡 Ферма расширена до "+n
+     el.onclick=
+      ()=>notify(
+       "⏳ Осталось "+
+       formatTime(left)
+      );
+
+    }
+
+   }
+
+   box.appendChild(el);
+
+  }
  );
 
- render();
+ for(let i=0;i<9;i++){
+
+  const icon=
+   state.buildings[i];
+
+  document.getElementById(
+   "slotIcon"+i
+  ).textContent=
+   icon||"＋";
+
+ }
 
 }
 
 
-/* =========================
-   ANIMALS
-========================= */
+function chooseSeed(index){
 
-function renderAnimals(){
+ let html=
+  '<div class="sectionTitle">🌱 Выбери культуру</div>'+
+  '<div class="grid">';
 
- const c=
-  document.getElementById(
-   "animalsContainer"
-  );
+ Object.entries(crops).forEach(
+  ([id,c])=>{
 
- c.innerHTML="";
+   const count=
+    state.inventory[c.seed]||0;
 
- Object.entries(animals)
- .forEach(([id,a])=>{
+   html+=`
 
-  const d=
-   state.animals[id]||
-   {
-    count:0,
-    production:0,
-    readyAt:null
-   };
+    <div class="itemCard">
 
-  const card=
-   document.createElement("div");
-
-  card.className=
-   "animalCard";
-
-  let prod="";
-
-  if(d.production){
-
-   prod=`
-
-    <div class="production">
-
-     <div>
-      ${a.productIcon}
-      Производится: ×${d.production}
+     <div class="itemImage">
+      ${c.icon}
      </div>
 
-     ${
-      Date.now()>=d.readyAt
-      ?`
-       <button class="btn"
-        onclick="collectAnimal('${id}')">
-        📦 Собрать
-       </button>
-      `
-      :`
-       <div class="muted small"
-        style="margin-top:6px">
-        Готово через
-        ${formatTime(d.readyAt-Date.now())}
-       </div>
-      `
-     }
+     <div class="itemName">
+      ${c.name}
+     </div>
 
-    </div>
-
-   `;
-
-  }else{
-
-   prod=`
-
-    <div class="production">
-
-     <div>
-      ${a.productIcon}
-      Продукция: 0
+     <div class="itemCount">
+      Семян: ${count}
      </div>
 
      <button
       class="btn"
-      onclick="feedAnimal('${id}')">
-
-      ${crops[a.feed].icon}
-      Покормить
-      (${crops[a.feed].name})
-
+      onclick="plant(${index},'${id}')"
+      ${count<=0?"disabled":""}
+     >
+      ${count?"Посадить":"Нет семян"}
      </button>
 
     </div>
@@ -2674,45 +2191,196 @@ function renderAnimals(){
    `;
 
   }
+ );
 
-  card.innerHTML=`
+ openModal(
+  html+
+  "</div>"
+ );
 
-   <div class="animalTop">
+}
 
-    <div class="animalVisual">
-     ${a.icon}
+
+function plant(index,id){
+
+ const crop=crops[id];
+
+ if(
+  !crop||
+  state.field[index]||
+  !state.inventory[crop.seed]
+ )
+  return notify("❌ Нельзя посадить");
+
+ state.inventory[crop.seed]--;
+
+ state.field[index]={
+  crop:id,
+  readyAt:
+   Date.now()+crop.grow*1000
+ };
+
+ saveState();
+
+ closeModal();
+
+ notify("🌱 "+crop.name+" посажена");
+
+ render();
+
+}
+
+
+function harvest(index){
+
+ const plot=
+  state.field[index];
+
+ if(!plot)
+  return;
+
+ const crop=
+  crops[plot.crop];
+
+ if(Date.now()<plot.readyAt)
+  return notify("⏳ Урожай ещё растёт");
+
+ state.inventory[
+  plot.crop
+ ]+=crop.reward;
+
+ state.harvested+=
+  crop.reward;
+
+ if(plot.crop==="wheat"){
+  checkQuests();
+ }
+
+ addXP(crop.xp);
+
+ state.field[index]=null;
+
+ saveState();
+
+ notify(
+  crop.icon+
+  " +"+
+  crop.reward+
+  " "+
+  crop.name
+ );
+
+ render();
+
+}
+
+
+function renderAnimals(){
+
+ const box=
+  document.getElementById(
+   "animalsContainer"
+  );
+
+ box.innerHTML="";
+
+ Object.entries(animals)
+ .forEach(([id,a])=>{
+
+  const d=
+   state.animals[id];
+
+  let html="";
+
+  if(!d.count){
+
+   html=`
+    <button
+     class="btn secondary"
+     onclick="buyAnimal('${id}')">
+     🛒 Купить ${a.name} · ${a.price} 🪙
+    </button>
+   `;
+
+  }else if(d.production){
+
+   if(Date.now()>=d.readyAt){
+
+    html=`
+     <div class="production">
+      ${a.productIcon} Продукция готова
+      <button
+       class="btn"
+       onclick="collectAnimal('${id}')">
+       📦 Собрать
+      </button>
+     </div>
+    `;
+
+   }else{
+
+    html=`
+     <div class="production">
+      ${a.productIcon}
+      Производство...
+      <div class="muted small"
+           style="margin-top:5px">
+       Готово через
+       ${formatTime(d.readyAt-Date.now())}
+      </div>
+     </div>
+    `;
+
+   }
+
+  }else{
+
+   html=`
+    <div class="production">
+     ${crops[a.feed].icon}
+     Корм:
+     ${crops[a.feed].name}
+
+     <button
+      class="btn"
+      onclick="feedAnimal('${id}')">
+      🍽️ Покормить
+     </button>
     </div>
+   `;
 
-    <div>
+  }
 
-     <div class="animalName">
-      ${a.name}
+  box.innerHTML+=`
+
+   <div class="animalCard">
+
+    <div class="animalTop">
+
+     <div class="animalVisual">
+      ${a.icon}
      </div>
 
-     <div class="animalAmount">
-      Количество:
-      <b>${d.count}</b>
+     <div>
+
+      <div class="animalName">
+       ${a.name}
+      </div>
+
+      <div class="animalAmount">
+       Количество:
+       <b>${d.count}</b>
+      </div>
+
      </div>
 
     </div>
+
+    ${html}
 
    </div>
 
-   ${
-    d.count
-    ?prod
-    :`
-     <button
-      class="btn secondary"
-      onclick="navigateToShop()">
-      🛒 Купить животное
-     </button>
-    `
-   }
-
   `;
-
-  c.appendChild(card);
 
  });
 
@@ -2728,7 +2396,7 @@ function feedAnimal(id){
   state.animals[id];
 
  if(!d.count)
-  return notify("❌ Нет животных");
+  return;
 
  if(d.production)
   return notify("⏳ Уже производит");
@@ -2736,12 +2404,11 @@ function feedAnimal(id){
  if(
   (state.inventory[a.feed]||0)<=0
  )
-  return notify("❌ Нужен корм");
+  return notify("❌ Нет корма");
 
  state.inventory[a.feed]--;
 
- d.production=
-  d.count;
+ d.production=d.count;
 
  d.readyAt=
   Date.now()+a.time*1000;
@@ -2767,17 +2434,17 @@ function collectAnimal(id){
   !d.production||
   Date.now()<d.readyAt
  )
-  return notify("⏳ Ещё не готово");
+  return;
 
- state.inventory[a.product]+=
-  d.production;
+ state.inventory[
+  a.product
+ ]+=d.production;
 
  addXP(
   d.production*8
  );
 
  d.production=0;
-
  d.readyAt=null;
 
  checkQuests();
@@ -2794,143 +2461,41 @@ function collectAnimal(id){
 }
 
 
-/* =========================
-   SHOP
-========================= */
-
-function buySeed(id){
-
- const c=
-  crops[id];
-
- if(state.coins<c.price)
-  return notify(
-   "❌ Недостаточно монет"
-  );
-
- state.coins-=c.price;
-
- state.inventory[c.seed]++;
-
- saveState();
-
- render();
-
- notify("🌱 +1 семена");
-
-}
-
-
 function buyAnimal(id){
 
  const a=
   animals[id];
 
  if(state.coins<a.price)
-  return notify(
-   "❌ Недостаточно монет"
-  );
+  return notify("❌ Недостаточно монет");
 
  state.coins-=a.price;
 
  state.animals[id].count++;
 
- saveState();
+ checkQuests();
 
- render();
+ saveState();
 
  notify(
   a.icon+
-  " Животное куплено"
+  " "+a.name+
+  " куплена"
  );
-
-}
-
-
-function buyDefense(type,cost){
-
- if(state.coins<cost)
-  return notify(
-   "❌ Недостаточно монет"
-  );
-
- state.coins-=cost;
-
- state.defense[type]++;
-
- saveState();
 
  render();
 
- notify(
-  "🛡️ Предмет куплен"
- );
-
 }
 
-
-function armyTotal(){
-
- return(
-  state.army.guard1+
-  state.army.guard2+
-  state.army.guard3
- );
-
-}
-
-
-function buyArmy(id,cost){
-
- if(state.coins<cost)
-  return notify(
-   "❌ Недостаточно монет"
-  );
-
- state.coins-=cost;
-
- state.army[id]++;
-
- saveState();
-
- render();
-
- notify(
-  "🪖 Воин нанят"
- );
-
-}
-
-
-function navigateToShop(){
-
- navigate(
-  "shop",
-  document.querySelector(
-   '[data-page="shop"]'
-  )
- );
-
-}
-
-
-/* =========================
-   SHOP RENDER
-========================= */
 
 function renderShop(){
 
- let s=
-  document.getElementById(
-   "seedShop"
-  );
-
- s.innerHTML="";
+ let seed="";
 
  Object.entries(crops)
  .forEach(([id,c])=>{
 
-  s.innerHTML+=`
+  seed+=`
 
    <div class="row">
 
@@ -2941,7 +2506,6 @@ function renderShop(){
      </div>
 
      <div>
-
       <div class="rowName">
        ${c.name}
       </div>
@@ -2950,13 +2514,11 @@ function renderShop(){
        Семян:
        ${state.inventory[c.seed]}
       </div>
-
      </div>
 
     </div>
 
     <div>
-
      <div class="price">
       🪙 ${c.price}
      </div>
@@ -2967,7 +2529,6 @@ function renderShop(){
       onclick="buySeed('${id}')">
       Купить
      </button>
-
     </div>
 
    </div>
@@ -2976,46 +2537,42 @@ function renderShop(){
 
  });
 
+ document.getElementById(
+  "seedShop"
+ ).innerHTML=seed;
 
- let a=
-  document.getElementById(
-   "animalShop"
-  );
 
- a.innerHTML="";
+ let animal="";
 
  Object.entries(animals)
- .forEach(([id,x])=>{
+ .forEach(([id,a])=>{
 
-  a.innerHTML+=`
+  animal+=`
 
    <div class="row">
 
     <div class="rowLeft">
 
      <div class="rowIcon">
-      ${x.icon}
+      ${a.icon}
      </div>
 
      <div>
-
       <div class="rowName">
-       ${x.name}
+       ${a.name}
       </div>
 
       <div class="rowSub">
        Есть:
        ${state.animals[id].count}
       </div>
-
      </div>
 
     </div>
 
     <div>
-
      <div class="price">
-      🪙 ${x.price}
+      🪙 ${a.price}
      </div>
 
      <button
@@ -3024,6 +2581,670 @@ function renderShop(){
       onclick="buyAnimal('${id}')">
       Купить
      </button>
+    </div>
+
+   </div>
+
+  `;
+
+ });
+
+ document.getElementById(
+  "animalShop"
+ ).innerHTML=animal;
+
+
+ const defense=[
+
+  ["fence","🧱","Забор",500],
+
+  ["scarecrow","🧸","Чучело",750],
+
+  ["wall","🪨","Стена",1000],
+
+  ["traps","🪤","Ловушка",700]
+
+ ];
+
+ document.getElementById(
+  "defenseShop"
+ ).innerHTML=
+  defense.map(x=>`
+
+   <div class="row">
+
+    <div class="rowLeft">
+
+     <div class="rowIcon">
+      ${x[1]}
+     </div>
+
+     <div>
+      <div class="rowName">
+       ${x[2]}
+      </div>
+
+      <div class="rowSub">
+       Есть:
+       ${state.defense[x[0]]}
+      </div>
+     </div>
+
+    </div>
+
+    <div>
+     <div class="price">
+      🪙 ${x[3]}
+     </div>
+
+     <button
+      class="btn"
+      style="width:auto;padding:8px 12px"
+      onclick="buyDefense('${x[0]}',${x[3]})">
+      Купить
+     </button>
+    </div>
+
+   </div>
+
+  `).join("");
+
+}
+
+
+function buySeed(id){
+
+ const c=
+  crops[id];
+
+ if(state.coins<c.price)
+  return notify("❌ Недостаточно монет");
+
+ state.coins-=c.price;
+
+ state.inventory[c.seed]++;
+
+ saveState();
+
+ notify("🌱 Семена куплены");
+
+ render();
+
+}
+
+
+function buyDefense(type,cost){
+
+ if(state.coins<cost)
+  return notify("❌ Недостаточно монет");
+
+ state.coins-=cost;
+
+ state.defense[type]++;
+
+ saveState();
+
+ notify("🛡️ Предмет куплен");
+
+ render();
+
+}
+
+
+function openBuild(){
+
+ const items=[
+
+  ["fence","🧱","Забор"],
+  ["scarecrow","🧸","Чучело"],
+  ["wall","🪨","Стена"],
+  ["traps","🪤","Ловушка"]
+
+ ];
+
+ let html=
+  '<div class="sectionTitle">🏗️ Строительство</div>'+
+  '<p class="muted small">Выбери объект и затем участок вокруг поля.</p>'+
+  '<div class="grid">';
+
+ items.forEach(x=>{
+
+  html+=`
+
+   <div class="itemCard">
+
+    <div class="itemImage">
+     ${x[1]}
+    </div>
+
+    <div class="itemName">
+     ${x[2]}
+    </div>
+
+    <div class="itemCount">
+     Есть: ${state.defense[x[0]]}
+    </div>
+
+    <button
+     class="btn"
+     onclick="selectBuilding('${x[0]}','${x[1]}')">
+     Поставить
+    </button>
+
+   </div>
+
+  `;
+
+ });
+
+ openModal(
+  html+
+  "</div>"
+ );
+
+}
+
+
+let selectedBuilding=null;
+
+
+function selectBuilding(type,icon){
+
+ if(!state.defense[type])
+  return notify("❌ Сначала купи объект");
+
+ selectedBuilding={
+  type:type,
+  icon:icon
+ };
+
+ closeModal();
+
+ notify("🏗️ Теперь нажми на свободный участок");
+
+}
+
+
+function buildSlot(index){
+
+ if(!selectedBuilding){
+
+  if(state.buildings[index]){
+
+   return notify(
+    "🏗️ Здесь уже стоит "+
+    state.buildings[index]
+   );
+
+  }
+
+  openBuild();
+
+  return;
+
+ }
+
+ if(state.buildings[index])
+  return notify("❌ Участок занят");
+
+ const type=
+  selectedBuilding.type;
+
+ if(!state.defense[type])
+  return notify("❌ Объект закончился");
+
+ state.defense[type]--;
+
+ state.buildings[index]=
+  selectedBuilding.icon;
+
+ selectedBuilding=null;
+
+ saveState();
+
+ notify("🏗️ Построено!");
+
+ render();
+
+}
+
+
+function openProfile(){
+
+ const user=
+  tg?.initDataUnsafe?.user;
+
+ const name=
+  user?.first_name||
+  "Фермер";
+
+ openModal(`
+
+  <div class="profileHero">
+
+   <div class="avatar">
+    🌱
+   </div>
+
+   <div class="profileName">
+    ${name}
+   </div>
+
+   <div class="muted small">
+    Фермер GROWIX
+   </div>
+
+   <div class="profileStats">
+
+    <div class="profileStat">
+     <b>${state.level}</b>
+     <span>УРОВЕНЬ</span>
+    </div>
+
+    <div class="profileStat">
+     <b>${state.pvpPoints}</b>
+     <span>PVP ОЧКИ</span>
+    </div>
+
+    <div class="profileStat">
+     <b>${state.wins}</b>
+     <span>ПОБЕД</span>
+    </div>
+
+    <div class="profileStat">
+     <b>${state.harvested}</b>
+     <span>УРОЖАЙ</span>
+    </div>
+
+   </div>
+
+  </div>
+
+ `);
+
+}
+
+
+function openArmy(){
+
+ openModal(`
+
+  <div class="sectionTitle">
+   🪖 Моя армия
+  </div>
+
+  <div class="muted small"
+       style="margin-bottom:12px">
+   Твои войска защищают ферму
+   и участвуют в битвах с боссами.
+  </div>
+
+  ${armyHTML()}
+
+  <button
+   class="btn secondary"
+   onclick="closeModal();navigate('shop',document.querySelector('[data-page=shop]'))">
+   🛒 Нанять новых воинов
+  </button>
+
+ `);
+
+}
+
+
+function armyHTML(){
+
+ const army=[
+
+  ["guard1","⚔️","Стражник I",500],
+  ["guard2","🏹","Стражник II",1000],
+  ["guard3","🐎","Стражник III",2000]
+
+ ];
+
+ return army.map(x=>`
+
+  <div class="armyCard">
+
+   <div class="armyIcon">
+    ${x[1]}
+   </div>
+
+   <div style="flex:1">
+
+    <div style="font-weight:900">
+     ${x[2]}
+    </div>
+
+    <div class="muted small">
+     Количество:
+     ${state.army[x[0]]}
+    </div>
+
+   </div>
+
+   <button
+    class="btn"
+    style="width:auto;margin:0;padding:8px 10px"
+    onclick="buyArmy('${x[0]}',${x[3]})">
+    🪙 ${x[3]}
+   </button>
+
+  </div>
+
+ `).join("");
+
+}
+
+
+function buyArmy(id,cost){
+
+ if(state.coins<cost)
+  return notify("❌ Недостаточно монет");
+
+ state.coins-=cost;
+
+ state.army[id]++;
+
+ saveState();
+
+ notify("🪖 Воин нанят");
+
+ openArmy();
+
+}
+
+
+function renderInventory(){
+
+ document.getElementById(
+  "inventoryGrid"
+ ).innerHTML=
+  invItems.map(x=>`
+
+   <div class="itemCard">
+
+    <div class="itemImage">
+     ${x[1]}
+    </div>
+
+    <div class="itemName">
+     ${x[2]}
+    </div>
+
+    <div class="itemCount">
+     ×${state.inventory[x[0]]||0}
+    </div>
+
+   </div>
+
+  `).join("");
+
+
+ document.getElementById(
+  "sellList"
+ ).innerHTML=
+  sellables.map(x=>`
+
+   <div class="row">
+
+    <div class="rowLeft">
+
+     <div class="rowIcon">
+      ${x[1]}
+     </div>
+
+     <div>
+      <div class="rowName">
+       ${x[2]}
+      </div>
+
+      <div class="rowSub">
+       Есть:
+       ${state.inventory[x[0]]||0}
+      </div>
+     </div>
+
+    </div>
+
+    <div>
+
+     <div class="price">
+      🪙 ${x[3]}
+     </div>
+
+     <button
+      class="btn"
+      style="width:auto;padding:8px 12px"
+      onclick="sellResource('${x[0]}',${x[3]})">
+      Продать
+     </button>
+
+    </div>
+
+   </div>
+
+  `).join("");
+
+}
+
+
+function sellResource(id,price){
+
+ if(!(state.inventory[id]||0))
+  return notify("❌ Нет ресурса");
+
+ state.inventory[id]--;
+
+ state.coins+=price;
+
+ saveState();
+
+ notify("💰 Продано");
+
+ render();
+
+}
+
+
+function renderSets(){
+
+ document.getElementById(
+  "setsContainer"
+ ).innerHTML=
+  sets.map(s=>`
+
+   <div class="setCard">
+
+    <div class="setTop">
+
+     <div class="setIcon">
+      ${s.icon}
+     </div>
+
+     <div>
+
+      <div class="setName">
+       ${s.name}
+      </div>
+
+      <div class="setDesc">
+       ${s.desc}
+      </div>
+
+     </div>
+
+    </div>
+
+    <div class="setItems">
+
+     ${s.items.map(i=>
+      `<span class="setItem">${i}</span>`
+     ).join("")}
+
+    </div>
+
+    <button
+     class="btn gold"
+     onclick="buySet('${s.id}')">
+     🎁 Купить · ${s.price} 🪙
+    </button>
+
+   </div>
+
+  `).join("");
+
+}
+
+
+function buySet(id){
+
+ const s=
+  sets.find(x=>x.id===id);
+
+ if(!s)
+  return;
+
+ if(state.coins<s.price)
+  return notify("❌ Недостаточно монет");
+
+ state.coins-=s.price;
+
+ if(id==="starter"){
+
+  state.inventory.wheatSeed+=10;
+  state.inventory.carrotSeed+=5;
+  state.inventory.cornSeed+=3;
+  state.coins+=150;
+
+ }
+
+ if(id==="farmer"){
+
+  state.inventory.wheatSeed+=20;
+  state.inventory.carrotSeed+=15;
+  state.animals.chicken.count++;
+  state.coins+=500;
+
+ }
+
+ if(id==="defender"){
+
+  state.defense.wall+=2;
+  state.defense.scarecrow+=2;
+  state.defense.traps+=2;
+  state.coins+=300;
+
+ }
+
+ if(id==="elite"){
+
+  state.inventory.wheatSeed+=30;
+  state.inventory.cornSeed+=15;
+  state.animals.chicken.count+=2;
+  state.army.guard1++;
+  state.coins+=1500;
+
+ }
+
+ saveState();
+
+ notify("🎁 Набор получен!");
+
+ render();
+
+}
+
+
+function renderQuests(){
+
+ let html="";
+
+ quests.forEach(q=>{
+
+  let value=0;
+
+  if(q.type==="level")
+   value=state.level;
+
+  if(q.type==="harvestWheat")
+   value=state.inventory.wheat;
+
+  if(q.type==="animals"){
+
+   value=
+    Object.values(
+     state.animals
+    ).reduce(
+     (a,x)=>a+x.count,
+     0
+    );
+
+  }
+
+  if(q.special){
+
+   html+=`
+
+    <div class="quest">
+
+     <div class="questTop">
+
+      <div class="questIcon">
+       ${q.icon}
+      </div>
+
+      <div class="questTitle">
+       ${q.name}
+      </div>
+
+      <div class="questReward">
+       +${q.reward} 🪙
+      </div>
+
+     </div>
+
+     <button
+      class="btn"
+      onclick="channelQuest()">
+      📢 Подписаться
+     </button>
+
+    </div>
+
+   `;
+
+   return;
+
+  }
+
+  const done=
+   !!state.quests[q.id];
+
+  html+=`
+
+   <div class="quest">
+
+    <div class="questTop">
+
+     <div class="questIcon">
+      ${q.icon}
+     </div>
+
+     <div class="questTitle">
+      ${q.name}
+
+      <div class="muted small">
+       ${Math.min(value,q.goal)}
+       /
+       ${q.goal}
+      </div>
+
+     </div>
+
+     <div class="questReward">
+      ${done?"✅":"+"+q.reward+" 🪙"}
+     </div>
 
     </div>
 
@@ -3033,658 +3254,69 @@ function renderShop(){
 
  });
 
-
- document.getElementById(
-  "defenseShop"
- ).innerHTML=[
-
-  [
-   "stones",
-   "🪨",
-   "Камень",
-   50
-  ],
-
-  [
-   "shotgun",
-   "🔫",
-   "Дробовик",
-   3333
-  ],
-
-  [
-   "scarecrow",
-   "🧸",
-   "Чучело",
-   750
-  ],
-
-  [
-   "fence",
-   "🧱",
-   "Забор",
-   500
-  ],
-
-  [
-   "traps",
-   "🪤",
-   "Ловушка",
-   700
-  ]
-
- ].map(x=>`
-
-  <div class="row">
-
-   <div class="rowLeft">
-
-    <div class="rowIcon">
-     ${x[1]}
-    </div>
-
-    <div>
-
-     <div class="rowName">
-      ${x[2]}
-     </div>
-
-     <div class="rowSub">
-      Есть:
-      ${state.defense[x[0]]}
-     </div>
-
-    </div>
-
-   </div>
-
-   <div>
-
-    <div class="price">
-     🪙 ${x[3]}
-    </div>
-
-    <button
-     class="btn"
-     style="width:auto;padding:8px 12px"
-     onclick="buyDefense('${x[0]}',${x[3]})">
-     Купить
-    </button>
-
-   </div>
-
-  </div>
-
- `).join("");
+ return html;
 
 }
 
 
-/* =========================
-   INVENTORY
-========================= */
+function channelQuest(){
 
-function renderInventory(){
+ if(state.quests.channel)
+  return notify("✅ Награда уже получена");
 
- document.getElementById(
-  "inventoryGrid"
- ).innerHTML=
+ window.open(
+  "https://t.me/growixfarm",
+  "_blank"
+ );
 
- invItems.map(x=>`
+ state.quests.channel=true;
 
-  <div class="itemCard">
-
-   <div class="itemImage">
-    ${x[1]}
-   </div>
-
-   <div class="itemName">
-    ${x[2]}
-   </div>
-
-   <div class="itemCount">
-    ×${state.inventory[x[0]]||0}
-   </div>
-
-  </div>
-
- `).join("");
-
-
- document.getElementById(
-  "sellList"
- ).innerHTML=
-
- sellables.map(x=>`
-
-  <div class="row">
-
-   <div class="rowLeft">
-
-    <div class="rowIcon">
-     ${x[1]}
-    </div>
-
-    <div>
-
-     <div class="rowName">
-      ${x[2]}
-     </div>
-
-     <div class="rowSub">
-      Есть:
-      ${state.inventory[x[0]]||0}
-     </div>
-
-    </div>
-
-   </div>
-
-   <div>
-
-    <div class="price">
-     🪙 ${x[3]} / шт
-    </div>
-
-    <button
-     class="btn"
-     style="width:auto;padding:8px 12px"
-     onclick="sellResource('${x[0]}',${x[3]})">
-     Продать
-    </button>
-
-   </div>
-
-  </div>
-
- `).join("");
-
-}
-
-
-/* =========================
-   SELL
-========================= */
-
-function sellResource(id,price){
-
- if(
-  (state.inventory[id]||0)<=0
- )
-  return notify(
-   "❌ Нет ресурса"
-  );
-
- state.inventory[id]--;
-
- state.coins+=price;
-
- checkQuests();
+ state.coins+=750;
 
  saveState();
 
- notify(
-  "💰 Продано за "+
-  price+
-  " 🪙"
- );
+ notify("📢 +750 🪙 за подписку");
 
  render();
-
-}
-
-
-/* =========================
-   DAILY
-========================= */
-
-function claimDaily(){
-
- const d=
-  new Date()
-  .toISOString()
-  .slice(0,10);
-
- if(state.lastDaily===d)
-  return notify(
-   "🎁 Уже получено"
-  );
-
- state.lastDaily=d;
-
- state.coins+=
-  100+
-  state.level*25;
-
- saveState();
-
- notify(
-  "🎁 Награда получена"
- );
-
- render();
-
-}
-
-
-/* =========================
-   PROFILE
-========================= */
-
-function openProfile(){
-
- const user=
-  tg?.initDataUnsafe?.user;
-
- openModal(`
-
-  <div>
-
-   <div class="sectionTitle">
-    👤 Профиль
-   </div>
-
-   <div class="profileHeader">
-
-    <div class="profileAvatar">
-     👤
-    </div>
-
-    <div>
-
-     <div style="font-size:19px;font-weight:950">
-      ${user?.first_name||"Фермер"}
-     </div>
-
-     <div class="muted small">
-      @${user?.username||"player"}
-     </div>
-
-     <div class="badge"
-      style="margin-top:5px">
-      ⭐ Уровень ${state.level}
-     </div>
-
-    </div>
-
-   </div>
-
-   <div class="profileStats">
-
-    <div class="profileStat">
-     <b>${state.coins}</b>
-     <span>Монеты</span>
-    </div>
-
-    <div class="profileStat">
-     <b>${state.harvested}</b>
-     <span>Урожай</span>
-    </div>
-
-    <div class="profileStat">
-     <b>${state.wins}</b>
-     <span>Победы</span>
-    </div>
-
-    <div class="profileStat">
-     <b>${state.pvpPoints}</b>
-     <span>PvP очки</span>
-    </div>
-
-   </div>
-
-   <button
-    class="btn secondary"
-    onclick="closeModal()">
-    Закрыть
-   </button>
-
-  </div>
-
- `);
-
-}
-
-
-/* =========================
-   ARMY
-========================= */
-
-function openArmy(){
-
- openModal(`
-
-  <div>
-
-   <div class="sectionTitle">
-    🪖 Моя армия
-   </div>
-
-   <div class="armyHero">
-
-    <div class="armyUnit">
-
-     <div class="armyIcon">
-      ⚔️
-     </div>
-
-     <div>
-
-      <b>
-       Общая армия:
-       ${armyTotal()}
-      </b>
-
-      <div class="muted small">
-       Стражники защищают ферму
-       и участвуют в битвах с боссами
-      </div>
-
-     </div>
-
-    </div>
-
-   </div>
-
-
-   <div class="list">
-
-    ${armyUnitHTML(
-     "guard1",
-     "⚔️",
-     "Стражник I",
-     500,
-     "20 урона"
-    )}
-
-    ${armyUnitHTML(
-     "guard2",
-     "🏹",
-     "Стражник II",
-     1000,
-     "30 урона"
-    )}
-
-    ${armyUnitHTML(
-     "guard3",
-     "🐎",
-     "Стражник III",
-     2000,
-     "50 урона"
-    )}
-
-   </div>
-
-
-   <button
-    class="btn secondary"
-    onclick="closeModal()">
-    Закрыть
-   </button>
-
-  </div>
-
- `);
-
-}
-
-
-function armyUnitHTML(
- id,
- icon,
- name,
- cost,
- power
-){
-
- return `
-
-  <div class="row">
-
-   <div class="rowLeft">
-
-    <div class="rowIcon">
-     ${icon}
-    </div>
-
-    <div>
-
-     <div class="rowName">
-      ${name} ×${state.army[id]}
-     </div>
-
-     <div class="rowSub">
-      ${power}
-     </div>
-
-    </div>
-
-   </div>
-
-   <button
-    class="btn"
-    style="width:auto;padding:8px 10px"
-    onclick="buyArmy('${id}',${cost});openArmy()">
-
-    🪙 ${cost}
-
-   </button>
-
-  </div>
-
- `;
-
-}
-
-
-/* =========================
-   BUILD MODAL
-========================= */
-
-function openBuild(){
-
- openModal(`
-
-  <div>
-
-   <div class="sectionTitle">
-    🏗️ Строительство
-   </div>
-
-   <div class="muted small"
-    style="margin-bottom:12px">
-
-    Выбери предмет, купи его,
-    затем установи на свободный
-    участок вокруг поля.
-
-   </div>
-
-   <div class="buildPanel">
-
-    <div class="buildCard">
-     <div class="big">🧱</div>
-     <b>Забор ×${state.defense.fence}</b>
-     <small>Защита фермы</small>
-    </div>
-
-    <div class="buildCard">
-     <div class="big">🧸</div>
-     <b>Чучело ×${state.defense.scarecrow}</b>
-     <small>Отпугивает вредителей</small>
-    </div>
-
-    <div class="buildCard">
-     <div class="big">🛡️</div>
-     <b>Стражники ×${armyTotal()}</b>
-     <small>Защита и боссы</small>
-    </div>
-
-    <div class="buildCard">
-     <div class="big">🪤</div>
-     <b>Ловушки ×${state.defense.traps}</b>
-     <small>Защита территории</small>
-    </div>
-
-   </div>
-
-   <button
-    class="btn"
-    onclick="closeModal()">
-    🏡 Перейти к участкам
-   </button>
-
-  </div>
-
- `);
-
-}
-
-
-/* =========================
-   BOOSTER
-========================= */
-
-function openBooster(){
-
- openModal(`
-
-  <div class="center">
-
-   <div style="font-size:65px">
-    ⚡
-   </div>
-
-   <h2>
-    Бустер урожая
-   </h2>
-
-   <p class="muted">
-    ×2 скорость выращивания
-    на 24 часа.
-   </p>
-
-   <div class="boosterLocked">
-
-    🔒 Пока недоступно
-
-    <br><br>
-
-    Бустер будет активирован
-    после подключения БД
-    и Telegram Stars.
-
-   </div>
-
-   <button
-    class="btn gold"
-    disabled>
-
-    ⭐ 50 Stars · Скоро
-
-   </button>
-
-  </div>
-
- `);
-
-}
-
-
-/* =========================
-   QUESTS
-========================= */
-
-const questData=[
-
- {
-  id:"telegram",
-  name:"Подпишись на наш Telegram",
-  icon:"📢",
-  goal:1,
-  reward:750,
-  type:"telegram"
- },
-
- {
-  id:"wheat1000",
-  name:"Собери 1000 пшеницы",
-  icon:"🌾",
-  goal:1000,
-  reward:1000,
-  type:"wheat"
- },
-
- {
-  id:"lvl5",
-  name:"Достигни 5 уровня",
-  icon:"⭐",
-  goal:5,
-  reward:500,
-  type:"level"
- },
-
- {
-  id:"lvl10",
-  name:"Достигни 10 уровня",
-  icon:"⭐",
-  goal:10,
-  reward:1000,
-  type:"level"
- },
-
- {
-  id:"lvl25",
-  name:"Достигни 25 уровня",
-  icon:"⭐",
-  goal:25,
-  reward:5000,
-  type:"level"
- },
-
- {
-  id:"lvl50",
-  name:"Достигни 50 уровня",
-  icon:"⭐",
-  goal:50,
-  reward:10000,
-  type:"level"
- }
-
-];
-
-
-function questValue(q){
-
- if(q.type==="level")
-  return state.level;
-
- if(q.type==="telegram")
-  return state.quests[q.id]
-  ?1
-  :0;
-
- return state.harvested;
 
 }
 
 
 function checkQuests(){
 
- questData.forEach(q=>{
+ quests.forEach(q=>{
 
-  if(state.quests[q.id])
+  if(
+   q.special||
+   state.quests[q.id]
+  )
    return;
 
-  let v=
-   questValue(q);
+  let value=0;
 
-  if(v>=q.goal){
+  if(q.type==="level")
+   value=state.level;
+
+  if(q.type==="harvestWheat")
+   value=state.inventory.wheat;
+
+  if(q.type==="animals"){
+
+   value=
+    Object.values(
+     state.animals
+    ).reduce(
+     (sum,a)=>sum+a.count,
+     0
+    );
+
+  }
+
+  if(value>=q.goal){
 
    state.quests[q.id]=true;
 
-   state.coins+=
-    q.reward;
+   state.coins+=q.reward;
 
    notify(
     "🎯 Задание выполнено! +"+
@@ -3701,81 +3333,6 @@ function checkQuests(){
 }
 
 
-function renderQuests(){
-
-}
-
-
-/* =========================
-   TELEGRAM QUEST
-========================= */
-
-function claimTelegramQuest(){
-
- if(state.quests.telegram)
-  return notify(
-   "✅ Задание уже выполнено"
-  );
-
- window.open(
-  "https://t.me/growixfarm",
-  "_blank"
- );
-
- openModal(`
-
-  <div class="center">
-
-   <div style="font-size:60px">
-    📢
-   </div>
-
-   <h2>
-    Подписка на канал
-   </h2>
-
-   <p class="muted">
-    Подпишись на наш Telegram-канал,
-    затем нажми кнопку ниже.
-   </p>
-
-   <button
-    class="btn"
-    onclick="confirmTelegramQuest()">
-
-    ✅ Я подписался
-   </button>
-
-  </div>
-
- `);
-
-}
-
-
-function confirmTelegramQuest(){
-
- state.quests.telegram=true;
-
- state.coins+=750;
-
- saveState();
-
- closeModal();
-
- notify(
-  "📢 +750 🪙"
- );
-
- render();
-
-}
-
-
-/* =========================
-   PVP
-========================= */
-
 function startPVP(){
 
  const left=
@@ -3783,7 +3340,7 @@ function startPVP(){
 
  if(left)
   return notify(
-   "⚔️ PvP будет доступно через "+
+   "⚔️ Следующий бой через "+
    formatTime(left)
   );
 
@@ -3794,7 +3351,7 @@ function startPVP(){
 
   <div class="center">
 
-   <div style="font-size:60px">
+   <div style="font-size:65px">
     ⚔️
    </div>
 
@@ -3802,86 +3359,80 @@ function startPVP(){
     Поиск соперника...
    </h2>
 
-   <p class="muted">
+   <div class="muted small">
     Подбираем противника
-   </p>
+   </div>
 
   </div>
 
  `);
 
- setTimeout(
-  resolvePVP,
-  1200
- );
+ setTimeout(()=>{
 
-}
+  closeModal();
 
-
-function resolvePVP(){
-
- closeModal();
-
- const power=
-  state.level*100+
-  state.wins*15+
-  Math.random()*100;
-
- const enemy=
-  state.level*100+
-  Math.random()*130;
-
- if(power>=enemy){
-
-  let pts=
-   80+
+  const enemy=
+   100+
    Math.floor(
-    Math.random()*51
+    Math.random()*500
    );
 
-  state.wins++;
+  const power=
+   state.level*100+
+   state.army.guard1*40+
+   state.army.guard2*60+
+   state.army.guard3*90+
+   Math.random()*150;
 
-  state.pvpPoints+=pts;
+  if(power>=enemy){
 
-  addXP(25);
+   const points=
+    80+
+    Math.floor(
+     Math.random()*50
+    );
 
-  notify(
-   "🏆 Победа! +"+
-   pts+
-   " PvP"
-  );
+   state.wins++;
 
- }else{
+   state.pvpPoints+=points;
 
-  state.losses++;
+   addXP(25);
 
-  state.pvpPoints+=15;
+   notify(
+    "🏆 Победа! +"+
+    points+
+    " PvP"
+   );
 
-  notify(
-   "⚔️ Поражение, +15 PvP"
-  );
+  }else{
 
- }
+   state.losses++;
 
- saveState();
+   state.pvpPoints+=15;
 
- render();
+   notify(
+    "⚔️ Поражение, +15 PvP"
+   );
+
+  }
+
+  saveState();
+
+  render();
+
+ },1000);
 
 }
 
 
-/* =========================
-   MINI GAME
-========================= */
-
-function startHarvestGame(){
+function startMiniGame(){
 
  const left=
   cd("mini");
 
  if(left)
   return notify(
-   "🎯 Игра будет доступна через "+
+   "🎯 Доступно через "+
    formatTime(left)
   );
 
@@ -3903,39 +3454,36 @@ function startHarvestGame(){
    </h2>
 
    <p class="muted">
-    10 секунд.
-    Кликайте как можно быстрее.
+    Кликни как можно больше за 10 секунд.
    </p>
 
-   <div id="miniScore"
-    style="font-size:45px;font-weight:1000">
+   <div
+    id="miniScore"
+    style="font-size:48px;font-weight:1000">
     0
    </div>
 
    <button
     class="btn"
-    onclick="miniClick()">
-
+    onclick="window.growixMiniClick()">
     🌾 СОБРАТЬ
-
    </button>
 
   </div>
 
  `);
 
- window.miniClick=
- function(){
+ window.growixMiniClick=()=>{
 
   score++;
 
-  const e=
+  const el=
    document.getElementById(
     "miniScore"
    );
 
-  if(e)
-   e.textContent=score;
+  if(el)
+   el.textContent=score;
 
  };
 
@@ -3946,10 +3494,7 @@ function startHarvestGame(){
   const reward=
    Math.min(
     40,
-    Math.max(
-     5,
-     score*2
-    )
+    Math.max(5,score*2)
    );
 
   state.coins+=reward;
@@ -3973,24 +3518,18 @@ function startHarvestGame(){
 }
 
 
-/* =========================
-   BOSS
-========================= */
-
 function fightBoss(id){
 
- const b=
-  bosses.find(
-   x=>x.id===id
-  );
+ const boss=
+  bosses.find(x=>x.id===id);
 
- if(!b)return;
+ if(!boss)
+  return;
 
  const left=
   Math.max(
    0,
-   (state.bossCooldowns[id]||0)
-   -Date.now()
+   (state.bossCooldowns[id]||0)-Date.now()
   );
 
  if(left)
@@ -3999,166 +3538,161 @@ function fightBoss(id){
    formatTime(left)
   );
 
- if(state.coins<b.cost)
+ if(state.coins<boss.cost)
   return notify(
    "❌ Нужно "+
-   b.cost+
+   boss.cost+
    " 🪙"
   );
 
- state.coins-=b.cost;
+ state.coins-=boss.cost;
 
  state.bossCooldowns[id]=
   Date.now()+COOLDOWNS.boss;
 
- saveState();
+ const armyPower=
+  state.army.guard1*20+
+  state.army.guard2*30+
+  state.army.guard3*50+
+  state.level*10;
 
- runBossBattle(b);
+ if(armyPower<=0){
+
+  return notify(
+   "❌ Нужна армия!"
+  );
+
+ }
+
+ startBossAnimation(
+  boss,
+  armyPower
+ );
 
 }
 
 
-/* =========================
-   REAL BOSS ANIMATION
-========================= */
+function startBossAnimation(
+ boss,
+ damage
+){
 
-function runBossBattle(b){
+ let hp=boss.hp;
 
- let hp=b.hp;
-
- const damagePerRound=
-  Math.max(
-   80,
-
-   state.army.guard1*20+
-   state.army.guard2*30+
-   state.army.guard3*50+
-   state.defense.shotgun*15+
-   state.level*10
-  );
-
- let round=0;
+ let ticks=0;
 
  openModal(`
 
   <div class="battleArena">
 
-   <div class="badge">
-    👑 БИТВА С БОССОМ
+   <div style="font-weight:1000">
+    ⚔️ БИТВА
    </div>
 
-   <h2>
-    ${b.name}
-   </h2>
-
-   <div id="bossHPText">
-    ❤️ ${hp} / ${b.hp}
+   <div class="battleBoss">
+    ${boss.icon}
    </div>
 
-   <div class="hp">
+   <div style="font-size:17px;font-weight:1000">
+    ${boss.name}
+   </div>
+
+   <div class="hp"
+        style="margin-top:10px">
     <i id="bossHP"
-     style="width:100%">
+       style="width:100%">
     </i>
+   </div>
+
+   <div
+    id="bossHPText"
+    class="small"
+    style="margin-top:5px">
+    ${boss.hp} / ${boss.hp} HP
    </div>
 
    <div class="battleUnits">
 
-    <div>
-
-     <div
-      class="battleUnit">
-      ⚔️
-     </div>
-
-     <div class="small">
-      ${state.army.guard1}
-      ×
-     </div>
-
+    <div class="battleUnit">
+     ⚔️
     </div>
 
-    <div id="battleDamage"
-     class="damageText">
+    <div class="battleUnit">
+     🏹
     </div>
 
-    <div class="battleBoss">
-     ${b.icon}
+    <div class="battleUnit">
+     🐎
     </div>
 
    </div>
 
-   <div id="battleStatus"
+   <div
+    id="battleText"
     class="muted small">
-    Войска готовятся к атаке...
+    Твои войска атакуют!
    </div>
 
   </div>
 
  `);
 
- let timer=
+ const timer=
   setInterval(()=>{
 
-   round++;
+   ticks++;
 
-   const dmg=
-    Math.min(
-     hp,
+   const hit=
+    Math.max(
+     40,
      Math.floor(
-      damagePerRound*
-      (0.75+
-       Math.random()*.5)
+      damage/4+
+      Math.random()*damage*.3
      )
     );
 
-   hp-=dmg;
+   hp-=hit;
 
-   const hpPercent=
+   const percent=
     Math.max(
      0,
-     hp/b.hp*100
+     hp/boss.hp*100
     );
 
-   const hpBar=
+   const bar=
     document.getElementById(
      "bossHP"
     );
 
-   const hpText=
+   const text=
     document.getElementById(
      "bossHPText"
     );
 
-   const damage=
+   const battle=
     document.getElementById(
-     "battleDamage"
+     "battleText"
     );
 
-   const status=
-    document.getElementById(
-     "battleStatus"
-    );
+   if(bar)
+    bar.style.width=
+     percent+"%";
 
-   if(hpBar)
-    hpBar.style.width=
-     hpPercent+"%";
-
-   if(hpText)
-    hpText.textContent=
-     "❤️ "+
-     Math.max(0,hp)+
+   if(text)
+    text.textContent=
+     Math.max(0,Math.floor(hp))+
      " / "+
-     b.hp;
+     boss.hp+
+     " HP";
 
-   if(damage)
-    damage.textContent=
-     "-"+dmg+" HP";
+   if(battle){
 
-   if(status)
-    status.textContent=
-     "⚔️ Атака №"+
-     round+
-     " — войска атакуют!";
+    battle.textContent=
+     "⚔️ Войска нанесли "+
+     hit+
+     " урона!";
+
+   }
 
    if(hp<=0){
 
@@ -4169,45 +3703,61 @@ function runBossBattle(b){
      closeModal();
 
      state.coins+=
-      b.reward;
+      boss.reward;
 
      state.pvpPoints+=100;
 
      addXP(50);
 
-     saveState();
-
      notify(
-      "👑 Босс побеждён! +"+
-      b.reward+
+      "👑 "+
+      boss.name+
+      " побеждён! +"+
+      boss.reward+
       " 🪙"
      );
 
+     saveState();
+
      render();
 
-    },800);
+    },700);
 
    }
 
-  },1100);
+   if(ticks>=25&&hp>0){
+
+    clearInterval(timer);
+
+    setTimeout(()=>{
+
+     closeModal();
+
+     notify(
+      "⚔️ Босс оказался сильнее. Усиль армию!"
+     );
+
+     saveState();
+
+     render();
+
+    },700);
+
+   }
+
+ },700);
 
 }
 
 
-/* =========================
-   BOSSES RENDER
-========================= */
-
 function renderBosses(){
 
- const el=
+ const box=
   document.getElementById(
    "bossList"
   );
 
- if(!el)return;
-
- el.innerHTML=
+ box.innerHTML=
   bosses.map(b=>{
 
    const left=
@@ -4245,13 +3795,13 @@ function renderBosses(){
 
      <button
       class="btn"
-      style="width:auto;padding:8px 12px"
+      style="width:auto;padding:8px 10px"
       onclick="fightBoss('${b.id}')">
 
       ${
        left
-       ?formatTime(left)
-       :"⚔️ "+b.cost
+       ? formatTime(left)
+       : "⚔️ "+b.cost
       }
 
      </button>
@@ -4265,20 +3815,13 @@ function renderBosses(){
 }
 
 
-/* =========================
-   RANKING
-========================= */
-
 function renderRanking(){
 
- let arr=[
+ const arr=[
 
   ["GreenFox",1280,"🦊"],
-
   ["FarmKing",1040,"👑"],
-
   ["CowMaster",870,"🐮"],
-
   ["Ты",state.pvpPoints,"🌱"]
 
  ];
@@ -4290,123 +3833,102 @@ function renderRanking(){
  document.getElementById(
   "ranking"
  ).innerHTML=
+  arr.map((x,i)=>`
 
- arr.map((x,i)=>`
+   <div class="row"
+        style="margin-bottom:7px">
 
-  <div
-   class="rank ${x[0]==="Ты"?"me":""}"
-   style="margin-bottom:7px">
+    <div class="rowLeft">
 
-   <div class="rankPlace">
-    ${i+1}
+     <div style="width:25px;text-align:center">
+      ${i+1}
+     </div>
+
+     <div class="rowIcon">
+      ${x[2]}
+     </div>
+
+     <div class="rowName">
+      ${x[0]}
+     </div>
+
+    </div>
+
+    <div class="price">
+     ${x[1]}
+    </div>
+
    </div>
 
-   <div class="rankAvatar">
-    ${x[2]}
-   </div>
-
-   <div class="rankName">
-    ${x[0]}
-   </div>
-
-   <div class="rankPoints">
-    ${x[1]}
-   </div>
-
-  </div>
-
- `).join("");
+  `).join("");
 
 }
 
 
-/* =========================
-   MAIN QUESTS BUTTON
-========================= */
+function expandFarm(){
 
-function openQuests(){
+ if(state.expansion>=18)
+  return notify(
+   "🏡 Расширения будут доступны позже"
+  );
 
- openModal(`
+ if(state.coins<7500)
+  return notify(
+   "❌ Нужно 7500 🪙"
+  );
 
-  <div>
+ state.coins-=7500;
 
-   <div class="sectionTitle">
-    📋 Задания
-   </div>
+ state.expansion=18;
 
-   <div class="list">
+ while(
+  state.field.length<18
+ )
+  state.field.push(null);
 
-    ${questData.map(q=>{
+ saveState();
 
-     const value=
-      questValue(q);
+ notify(
+  "🏡 Ферма расширена!"
+ );
 
-     const done=
-      !!state.quests[q.id];
-
-     return `
-
-      <div class="row">
-
-       <div class="rowLeft">
-
-        <div class="rowIcon">
-         ${q.icon}
-        </div>
-
-        <div>
-
-         <div class="rowName">
-          ${q.name}
-         </div>
-
-         <div class="rowSub">
-          ${Math.min(value,q.goal)}
-          /
-          ${q.goal}
-         </div>
-
-        </div>
-
-       </div>
-
-       ${
-        done
-        ?"✅"
-        :`
-         <span class="price">
-          +${q.reward} 🪙
-         </span>
-        `
-       }
-
-      </div>
-
-     `;
-
-    }).join("")}
-
-   </div>
-
-   <button
-    class="btn"
-    onclick="claimTelegramQuest()">
-
-    📢 Подписаться на
-    @growixfarm
-
-   </button>
-
-  </div>
-
- `);
+ render();
 
 }
 
 
-/* =========================
-   RENDER
-========================= */
+function claimDaily(){
+
+ const day=
+  new Date()
+   .toISOString()
+   .slice(0,10);
+
+ if(state.lastDaily===day)
+  return notify(
+   "🎁 Уже получено сегодня"
+  );
+
+ state.lastDaily=day;
+
+ const reward=
+  100+
+  state.level*25;
+
+ state.coins+=reward;
+
+ saveState();
+
+ notify(
+  "🎁 +"+
+  reward+
+  " 🪙"
+ );
+
+ render();
+
+}
+
 
 function render(){
 
@@ -4440,136 +3962,82 @@ function render(){
    100
   )+"%";
 
- document.getElementById(
-  "plotCount"
- ).textContent=
-  state.expansion;
-
- renderField();
-
- renderWorldField();
-
- renderBuildSlots();
-
+ renderWorld();
  renderAnimals();
-
  renderShop();
-
+ renderSets();
  renderInventory();
-
  renderBosses();
-
  renderRanking();
 
- const d=
+ const day=
   new Date()
-  .toISOString()
-  .slice(0,10);
+   .toISOString()
+   .slice(0,10);
 
- const db=
+ const daily=
   document.getElementById(
    "dailyButton"
   );
 
- db.disabled=
-  state.lastDaily===d;
+ daily.disabled=
+  state.lastDaily===day;
 
- db.textContent=
-  db.disabled
-  ?"✅ Награда получена"
+ daily.textContent=
+  daily.disabled
+  ?"✅ Уже получено"
   :"🎁 Забрать награду";
-
- const pvpLeft=
-  cd("pvp");
 
  document.getElementById(
   "pvpCooldown"
  ).textContent=
-  pvpLeft
+  cd("pvp")
   ?"Следующий бой через "+
-   formatTime(pvpLeft)
+   formatTime(cd("pvp"))
   :"✅ PvP доступно";
-
- const miniLeft=
-  cd("mini");
 
  document.getElementById(
   "miniCooldown"
  ).textContent=
-  miniLeft
-  ?"Следующая мини-игра через "+
-   formatTime(miniLeft)
-  :"✅ Доступно";
+  cd("mini")
+  ?"Следующая игра через "+
+   formatTime(cd("mini"))
+  :"✅ Мини-игра доступна";
 
  saveState();
 
 }
 
 
-/* =========================
-   START
-========================= */
-
-checkQuests();
-
-render();
-
-
-/* =========================
-   LIVE UPDATE
-========================= */
-
 setInterval(()=>{
 
- renderField();
-
- renderWorldField();
-
- renderBuildSlots();
-
+ renderWorld();
  renderAnimals();
-
  renderBosses();
 
- const pvpLeft=
-  cd("pvp");
+ document.getElementById(
+  "pvpCooldown"
+ ).textContent=
+  cd("pvp")
+  ?"Следующий бой через "+
+   formatTime(cd("pvp"))
+  :"✅ PvP доступно";
 
- const pvpEl=
-  document.getElementById(
-   "pvpCooldown"
-  );
-
- if(pvpEl){
-
-  pvpEl.textContent=
-   pvpLeft
-   ?"Следующий бой через "+
-    formatTime(pvpLeft)
-   :"✅ PvP доступно";
-
- }
-
- const miniLeft=
-  cd("mini");
-
- const miniEl=
-  document.getElementById(
-   "miniCooldown"
-  );
-
- if(miniEl){
-
-  miniEl.textContent=
-   miniLeft
-   ?"Следующая мини-игра через "+
-    formatTime(miniLeft)
-   :"✅ Доступно";
-
- }
+ document.getElementById(
+  "miniCooldown"
+ ).textContent=
+  cd("mini")
+  ?"Следующая игра через "+
+   formatTime(cd("mini"))
+  :"✅ Мини-игра доступна";
 
 },1000);
+
+
+checkQuests();
+render();
 
 </script>
 
 </body>
-    </html>
+ </html>
