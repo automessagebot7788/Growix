@@ -1,3244 +1,1397 @@
-<!DOCTYPE html>  
-<html lang="ru">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">  
-<title>GROWIX FARM</title>  
-<script src="https://telegram.org/js/telegram-web-app.js"></script>  
-  
-<style>  
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}  
-:root{  
- --bg:#071009;  
- --card:#122217;  
- --card2:#19301e;  
- --green:#67dc58;  
- --green2:#39a842;  
- --gold:#ffd75c;  
- --white:#f3fff2;  
- --muted:#8fa594;  
- --blue:#63a8ff;  
- --danger:#ff7777;  
-}  
-html,body{  
- margin:0;padding:0;background:var(--bg);color:var(--white);  
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif  
-}  
-body{overflow-x:hidden}  
-button{border:0;font:inherit;color:inherit;cursor:pointer}  
-#app{  
- width:100%;max-width:600px;min-height:100vh;margin:auto;  
- padding-bottom:95px;  
- background:  
- radial-gradient(circle at 50% -10%,#285b31 0,#112619 35%,#071009 78%)  
-}  
-.header{  
- position:sticky;top:0;z-index:50;  
- display:flex;justify-content:space-between;align-items:center;  
- padding:12px 14px;  
- background:rgba(7,16,9,.92);  
- backdrop-filter:blur(18px);  
- border-bottom:1px solid rgba(255,255,255,.06)  
-}  
-.logo{display:flex;align-items:center;gap:8px;font-weight:1000;font-size:21px;letter-spacing:1px}  
-.logoMark{  
- width:35px;height:35px;border-radius:12px;  
- display:flex;align-items:center;justify-content:center;  
- background:linear-gradient(145deg,#7cea65,#2f8535)  
-}  
-.stats{display:flex;gap:6px}  
-.topStat{  
- padding:8px 10px;border-radius:12px;  
- background:rgba(255,255,255,.07);  
- font-size:12px;font-weight:900  
-}  
-.content{padding:14px}  
-.page{display:none}  
-.page.active{display:block;animation:pageIn .2s ease}  
-@keyframes pageIn{  
- from{opacity:0;transform:translateY(6px)}  
- to{opacity:1;transform:translateY(0)}  
-}  
-  
-.hero{  
- position:relative;overflow:hidden;  
- min-height:155px;padding:20px;  
- border-radius:27px;  
- background:linear-gradient(135deg,#285f30,#16321d 55%,#102016);  
- border:1px solid rgba(255,255,255,.08);  
- margin-bottom:14px  
-}  
-.heroText{position:relative;z-index:2;max-width:73%}  
-.heroTitle{font-size:28px;line-height:1.05;font-weight:1000}  
-.heroSub{margin-top:9px;color:#bfd2c0;font-size:13px;line-height:1.45}  
-.heroEmoji{position:absolute;right:10px;bottom:0;font-size:90px;opacity:.8}  
-  
-.card,.animalCard{  
- padding:15px;margin-bottom:12px;border-radius:22px;  
- background:linear-gradient(145deg,rgba(27,51,31,.96),rgba(14,29,18,.96));  
- border:1px solid rgba(255,255,255,.065)  
-}  
-.sectionTitle{  
- display:flex;justify-content:space-between;align-items:center;  
- margin-bottom:12px;font-size:18px;font-weight:950  
-}  
-.muted{color:var(--muted)}  
-.small{font-size:12px}  
-  
-.btn{  
- width:100%;padding:12px;margin-top:9px;  
- border-radius:14px;  
- background:linear-gradient(135deg,#4caf43,#327d38);  
- font-size:13px;font-weight:950  
-}  
-.btn.gold{background:linear-gradient(135deg,#bd8e2c,#89631c)}  
-.btn.blue{background:linear-gradient(135deg,#427cc2,#315d95)}  
-.btn.secondary{background:rgba(255,255,255,.08)}  
-.btn:disabled{opacity:.4;cursor:not-allowed}  
-  
-.field{  
- display:grid;grid-template-columns:repeat(3,1fr);  
- gap:10px  
-}  
-.plot{  
- position:relative;  
- aspect-ratio:1;  
- display:flex;align-items:center;justify-content:center;  
- border-radius:17px;  
- background:  
- radial-gradient(circle at 50% 30%,rgba(214,151,90,.28),transparent 40%),  
- linear-gradient(145deg,#81502f,#61371f);  
- border:3px solid #4c2b1b;  
- font-size:35px;  
- overflow:hidden;  
- box-shadow:inset 0 4px 8px rgba(0,0,0,.15)  
-}  
-.plot.empty{  
- background:  
- linear-gradient(145deg,#8d5935,#674027);  
- color:#e1b17b  
-}  
-.plot.empty:after{  
- content:"＋";  
- opacity:.55;  
- font-size:28px  
-}  
-.plot.crow{background:linear-gradient(145deg,#4d4037,#2f2925);filter:saturate(.7)}
-.plot.ready{  
- animation:ready 1s infinite alternate;  
- box-shadow:0 0 15px rgba(103,220,88,.3)  
-}  
-@keyframes ready{  
- from{transform:translateY(0)}  
- to{transform:translateY(-3px)}  
-}  
-.plotTimer{  
- position:absolute;bottom:5px;left:5px;right:5px;  
- text-align:center;padding:4px;border-radius:8px;  
- background:rgba(0,0,0,.65);  
- font-size:9px;font-weight:900  
-}  
-.plotLabel{  
- position:absolute;top:5px;left:5px;  
- padding:3px 5px;border-radius:7px;  
- background:rgba(0,0,0,.42);  
- font-size:8px  
-}  
-  
-.progress{  
- width:100%;height:9px;  
- overflow:hidden;border-radius:20px;  
- background:rgba(255,255,255,.07);  
- margin-top:8px  
-}  
-.progressFill{  
- height:100%;border-radius:20px;  
- background:linear-gradient(90deg,#3d9f3b,#7ce969);  
- transition:.3s  
-}  
-  
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}  
-.itemCard{  
- padding:13px;border-radius:18px;  
- background:rgba(255,255,255,.045);  
- border:1px solid rgba(255,255,255,.05);  
- text-align:center  
-}  
-.itemImage{  
- width:70px;height:70px;margin:auto;  
- display:flex;align-items:center;justify-content:center;  
- border-radius:22px;  
- background:radial-gradient(circle,rgba(105,212,81,.18),rgba(255,255,255,.025));  
- font-size:42px  
-}  
-.itemName{font-size:14px;font-weight:900;margin-top:7px}  
-.itemCount{font-size:11px;color:var(--muted);margin-top:3px}  
-  
-.row{  
- display:flex;justify-content:space-between;align-items:center;  
- gap:10px;padding:12px;border-radius:16px;  
- background:rgba(255,255,255,.045);  
- margin-bottom:7px  
-}  
-.rowLeft{display:flex;align-items:center;gap:10px}  
-.rowIcon{  
- width:42px;height:42px;border-radius:13px;  
- display:flex;align-items:center;justify-content:center;  
- background:rgba(255,255,255,.06);  
- font-size:23px  
-}  
-.rowName{font-size:13px;font-weight:900}  
-.rowSub{font-size:10px;color:var(--muted);margin-top:3px}  
-.price{color:var(--gold);font-size:12px;font-weight:950}  
-  
-.animalTop{display:flex;align-items:center;gap:12px}  
-.animalVisual{  
- width:65px;height:65px;border-radius:20px;  
- display:flex;align-items:center;justify-content:center;  
- background:rgba(255,255,255,.07);  
- font-size:42px  
-}  
-.animalName{font-size:16px;font-weight:950}  
-.animalAmount{font-size:11px;color:var(--muted);margin-top:3px}  
-.production{  
- margin-top:12px;padding:10px;border-radius:14px;  
- background:rgba(0,0,0,.18)  
-}  
-  
-.homeTools{  
- display:grid;grid-template-columns:repeat(2,1fr);  
- gap:8px;margin-bottom:12px  
-}  
-.homeTool{  
- padding:12px;border-radius:17px;  
- background:linear-gradient(145deg,#203d25,#122619);  
- border:1px solid rgba(255,255,255,.07);  
- font-weight:900  
-}  
-.homeTool span{display:block;font-size:25px;margin-bottom:5px}  
-  
-.farmWorld{  
- position:relative;  
- min-height:450px;  
- padding:12px;  
- overflow:hidden;  
- border-radius:26px;  
- background:  
- radial-gradient(circle at 30% 20%,rgba(255,255,255,.08),transparent 20%),  
- linear-gradient(#77bb61,#69a950);  
- border:3px solid #315e32;  
- box-shadow:inset 0 0 35px rgba(0,0,0,.15)  
-}  
-.farmWorld:before{  
- content:"";  
- position:absolute;inset:0;  
- background-image:radial-gradient(#397d34 1px,transparent 1px);  
- background-size:18px 18px;  
- opacity:.22  
-}  
-.worldTitle{  
- position:relative;z-index:3;  
- text-align:center;font-weight:1000;  
- margin-bottom:8px;  
- text-shadow:0 1px 2px rgba(0,0,0,.4)  
-}  
-.worldField{  
- position:relative;z-index:3;  
- width:84%;margin:auto;  
- display:grid;  
- grid-template-columns:repeat(3,1fr);  
- gap:7px;padding:9px;  
- border-radius:21px;  
- background:#74462b;  
- border:5px solid #4f2d1c  
-}  
-.worldPlot{  
- aspect-ratio:1;border-radius:11px;  
- background:linear-gradient(145deg,#97613b,#6e4027);  
- display:flex;align-items:center;justify-content:center;  
- font-size:28px  
-}  
-.buildSlots{  
- position:absolute;inset:0;z-index:4;  
- pointer-events:none  
-}  
-.buildSlot{  
- position:absolute;  
- width:62px;height:43px;  
- border:2px dashed rgba(255,255,255,.65);  
- border-radius:11px;  
- background:rgba(20,50,20,.22);  
- display:flex;align-items:center;justify-content:center;  
- font-size:22px;  
- pointer-events:auto  
-}  
-.buildSlot small{  
- position:absolute;bottom:-17px;  
- font-size:7px;font-weight:900;  
- white-space:nowrap  
-}  
-.slot1{left:2%;top:24%}  
-.slot2{left:2%;top:43%}  
-.slot3{left:2%;top:62%}  
-.slot4{right:2%;top:24%}  
-.slot5{right:2%;top:43%}  
-.slot6{right:2%;top:62%}  
-.slot7{left:17%;bottom:2%}  
-.slot8{left:39%;bottom:2%}  
-.slot9{right:17%;bottom:2%}  
-  
-.npc{  
- position:absolute;z-index:5;  
- font-size:27px;  
- filter:drop-shadow(0 2px 2px rgba(0,0,0,.3));  
- animation:walk 9s ease-in-out infinite alternate  
-}  
-@keyframes walk{  
- 0%{transform:translate(0,0)}  
- 25%{transform:translate(30px,10px)}  
- 50%{transform:translate(-10px,35px)}  
- 75%{transform:translate(35px,50px)}  
- 100%{transform:translate(0,20px)}  
-}  
-.npc small{  
- display:block;font-size:7px;  
- background:rgba(0,0,0,.55);  
- padding:2px 4px;border-radius:5px;  
- text-align:center  
-}  
-  
-.profileStats{  
- display:grid;grid-template-columns:repeat(2,1fr);gap:8px  
-}  
-.profileStat{  
- padding:13px;border-radius:15px;  
- background:rgba(255,255,255,.05);  
- text-align:center  
-}  
-.profileStat b{display:block;font-size:20px}  
-.profileStat span{font-size:10px;color:var(--muted)}  
-  
-.battleArena{  
- padding:14px;border-radius:20px;  
- background:linear-gradient(135deg,#271c1c,#17251a)  
-}  
-.battleUnits{  
- display:flex;justify-content:space-around;  
- align-items:center;margin:15px 0;font-size:43px  
-}  
-.battleBoss{font-size:65px}  
-.battleUnit{animation:bob .7s infinite alternate}  
-@keyframes bob{to{transform:translateY(-7px) scale(1.04)}}  
-  
-.hp{  
- height:13px;background:#351919;  
- border-radius:20px;overflow:hidden  
-}  
-.hp i{  
- display:block;height:100%;  
- background:linear-gradient(90deg,#df4e4e,#70d85d);  
- transition:.3s  
-}  
-  
-.cooldown{  
- padding:10px;border-radius:13px;  
- background:rgba(255,255,255,.045);  
- text-align:center;color:var(--muted);  
- font-size:11px  
-}  
-  
-.wheatGame{  
- position:relative;  
- height:340px;  
- margin-top:12px;  
- border-radius:20px;  
- overflow:hidden;  
- background:  
- radial-gradient(#4b8f3e 1px,transparent 1px),  
- linear-gradient(#76b65a,#649e4d);  
- background-size:18px 18px;  
- border:3px solid #477d3c  
-}  
-.wheatTarget{  
- position:absolute;  
- width:50px;height:50px;  
- border-radius:50%;  
- display:flex;align-items:center;justify-content:center;  
- font-size:38px;  
- cursor:pointer;  
- animation:wheatPop .15s ease  
-}  
-@keyframes wheatPop{  
- from{transform:scale(.4);opacity:.2}  
- to{transform:scale(1);opacity:1}  
-}  
-  
-.package{  
- padding:15px;border-radius:20px;  
- background:linear-gradient(145deg,#263f29,#142519);  
- border:1px solid rgba(255,255,255,.07);  
- margin-bottom:9px  
-}  
-.packageTitle{  
- display:flex;justify-content:space-between;  
- align-items:center;font-weight:950  
-}  
-.packageItems{  
- margin-top:8px;color:#bdd0bd;  
- font-size:11px;line-height:1.6  
-}  
-  
-.bottomNav{  
- position:fixed;z-index:100;  
- left:50%;bottom:0;transform:translateX(-50%);  
- width:min(600px,100%);  
- height:78px;  
- display:grid;grid-template-columns:repeat(5,1fr);  
- padding:6px 4px 8px;  
- background:rgba(7,14,9,.97);  
- backdrop-filter:blur(20px);  
- border-top:1px solid rgba(255,255,255,.08)  
-}  
-.navBtn{  
- background:transparent;  
- color:#718174;  
- font-size:9px;font-weight:850  
-}  
-.navBtn.active{color:#f3fff1}  
-.navIcon{display:block;margin-bottom:4px;font-size:22px}  
-  
-.toast{  
- position:fixed;z-index:300;  
- top:15px;left:50%;  
- transform:translate(-50%,-20px);  
- max-width:90%;  
- padding:12px 16px;  
- border-radius:14px;  
- background:#f4fff3;color:#102014;  
- font-size:12px;font-weight:900;  
- opacity:0;pointer-events:none;  
- transition:.22s  
-}  
-.toast.show{  
- opacity:1;transform:translate(-50%,0)  
-}  
-  
-.modal{  
- position:fixed;z-index:200;inset:0;  
- display:none;align-items:flex-end;  
- background:rgba(0,0,0,.7);  
- backdrop-filter:blur(4px)  
-}  
-.modal.show{display:flex}  
-.modalBox{  
- width:min(600px,100%);  
- max-height:90vh;overflow:auto;  
- padding:20px;  
- border-radius:25px 25px 0 0;  
- background:linear-gradient(160deg,#1b3420,#0e1c11)  
-}  
-.modalClose{  
- float:right;width:35px;height:35px;  
- border-radius:50%;  
- background:rgba(255,255,255,.08);  
- font-size:20px  
-}  
-.center{text-align:center}  
-.badge{  
- display:inline-block;  
- padding:5px 9px;  
- border-radius:10px;  
- background:rgba(255,255,255,.08);  
- font-size:10px  
-}  
-  
-@media(max-width:380px){  
- .heroTitle{font-size:24px}  
- .heroEmoji{font-size:75px}  
- .worldField{width:82%}  
-}  
-</style>  
-</head>  
-  
-<body>  
-  
-<div id="app">  
-  
-<header class="header">  
- <div class="logo">  
-  <div class="logoMark">🌱</div>  
-  GROWIX  
- </div>  
-  
- <div class="stats">  
-  <div class="topStat">🪙 <span id="coins">0</span></div>  
-  <div class="topStat">⭐ Lv.<span id="level">1</span></div>  
- </div>  
-</header>  
-  
-<div id="toast" class="toast"></div>  
-  
-<main class="content">  
-  
-<!-- FARM -->  
-  
-<section id="page-farm" class="page active">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Твоя ферма 🌱</div>  
-  <div class="heroSub">  
-   Развивай хозяйство, нанимай фермеров,  
-   выращивай урожай и расширяй территорию.  
-  </div>  
- </div>  
- <div class="heroEmoji">🌾</div>  
-</div>  
-  
-<div class="homeTools">  
-  
- <button class="homeTool" onclick="openProfile()">  
-  <span>👤</span>  
-  Профиль  
- </button>  
-  
- <button class="homeTool" onclick="openArmy()">  
-  <span>🪖</span>  
-  Моя армия  
- </button>  
-  
- <button class="homeTool" onclick="navigate('workers',null)">  
-  <span>👨‍🌾</span>  
-  Фермеры  
- </button>  
-  
- <button class="homeTool" onclick="navigate('raids',null)">  
-  <span>⚔️</span>  
-  Рейды  
- </button>  
-  
-</div>  
-  
-<div class="card">  
- <div class="sectionTitle">  
-  <span>🏡 Живая ферма</span>  
-  <span class="badge" id="farmBonus">+0% скорость</span>  
- </div>  
-  
- <div class="farmWorld" id="farmWorld">  
-  <div class="worldTitle">🌳 GROWIX FARM 🌳</div>  
-  
-  <div class="worldField" id="worldField"></div>  
-  
-  <div id="buildSlots" class="buildSlots"></div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>GROWIX FARM</title>
 
-  <div id="livingNPCs"></div>  
-  
- </div>  
-  
- <button class="btn secondary" onclick="openBuildMenu()">  
-  🧱 Строительство  
- </button>  
-  
- <button class="btn" onclick="expandFarm()">  
-  🏡 Расширить ферму  
- </button>  
-  
-</div>  
-  
-<div class="card">  
-  
- <div class="sectionTitle">  
-  <span>🌾 Грядки</span>  
-  <span class="muted small">  
-   <b id="plotCount">9</b> участков  
-  </span>  
- </div>  
-  
- <div id="field" class="field"></div>  
-  
-</div>  
-  
-<div class="card">  
-  
- <div class="sectionTitle">  
-  <span>⭐ Опыт</span>  
-  <span class="muted small">  
-   <span id="xp">0</span> /  
-   <span id="xpNeed">100</span>  
-  </span>  
- </div>  
-  
- <div class="progress">  
-  <div id="xpBar" class="progressFill"></div>  
- </div>  
-  
-</div>  
-  
-<div class="card">  
-  
- <div class="sectionTitle">🎁 Ежедневная награда</div>  
-  
- <div class="muted small">  
-  Заходи каждый день и забирай гарантированную награду.  
- </div>  
-  
- <button id="dailyButton" class="btn gold" onclick="claimDaily()">  
-  🎁 Забрать  
- </button>  
-  
-</div>  
-  
-</section>  
-  
-  
-<!-- ANIMALS -->  
-  
-<section id="page-animals" class="page">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Животные 🐄</div>  
-  <div class="heroSub">  
-   Заботься о животных и собирай ценную продукцию.  
-  </div>  
- </div>  
- <div class="heroEmoji">🐄</div>  
-</div>  
-  
-<div id="animalsContainer"></div>  
-  
-</section>  
-  
-  
-<!-- GAMES -->  
-  
-<section id="page-games" class="page">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Игры 🎮</div>  
-  <div class="heroSub">  
-   Сражения и мини-игры для развития фермы.  
-  </div>  
- </div>  
- <div class="heroEmoji">⚔️</div>  
-</div>  
-  
-<div class="card">  
-  
- <div class="sectionTitle">  
-  ⚔️ PvP Арена  
-  <span class="badge">10 минут</span>  
- </div>  
-  
- <div class="muted small">  
-  Один бой раз в 10 минут.  
- </div>  
-  
- <button id="pvpButton" class="btn" onclick="startPVP()">  
-  ⚔️ Найти соперника  
- </button>  
-  
- <div id="pvpCooldown" class="cooldown"></div>  
-  
-</div>  
-  
-  
-<div class="card">  
-  
- <div class="sectionTitle">  
-  🎯 Быстрый сбор  
-  <span class="badge">5 минут</span>  
- </div>  
-  
- <div class="muted small">  
-  Найди пшеницу на поле. После каждого клика  
-  новая пшеница появляется в другом месте.  
- </div>  
-  
- <button class="btn blue" onclick="startHarvestGame()">  
-  🌾 Начать сбор  
- </button>  
-  
- <div id="miniCooldown" class="cooldown"></div>
- <div id="miniScoreBoard" class="cooldown" style="margin-top:7px">🏅 Лучший счёт: 0 · Последний: 0</div>  
-  
-</div>  
-  
-  
-<div class="card">  
-  
- <div class="sectionTitle">👑 Боссы</div>  
-  
- <div id="bossList"></div>  
-  
-</div>  
-  
-<div class="card">  
-  
- <div class="sectionTitle">🏆 Рейтинг</div>  
-  
- <button class="btn secondary" onclick="navigate('rating',null)">  
-  🏆 Открыть рейтинг  
- </button>  
-  
-</div>  
-  
-</section>  
-  
-  
-<!-- SHOP -->  
-  
-<section id="page-shop" class="page">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Магазин 🛒</div>  
-  <div class="heroSub">  
-   Всё необходимое для развития фермы.  
-  </div>  
- </div>  
- <div class="heroEmoji">🛒</div>  
-</div>  
-  
-<div class="sectionTitle">🌱 Семена</div>  
-<div id="seedShop"></div>  
-  
-<div class="sectionTitle">🐄 Животные</div>  
-<div id="animalShop"></div>  
-  
-<div class="sectionTitle">👨‍🌾 Рабочие</div>  
-<div id="workerShop"></div>  
-  
-<div class="sectionTitle">🧱 Постройки</div>  
-<div id="defenseShop"></div>
-
-<div class="sectionTitle" style="margin-top:18px">🎁 Наборы</div>
-<div id="packageShop"></div>  
-  
-</section>  
-  
-  
-<!-- INVENTORY -->  
-  
-<section id="page-inventory" class="page">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Инвентарь 🎒</div>  
-  <div class="heroSub">  
-   Все твои ресурсы и предметы.  
-  </div>  
- </div>  
- <div class="heroEmoji">🎒</div>  
-</div>  
-  
-<div id="inventoryGrid" class="grid"></div>  
-  
-<div class="card">  
- <div class="sectionTitle">💰 Продажа</div>  
- <div id="sellList"></div>  
-</div>  
-  
-<div class="card">  
- <div class="sectionTitle">📋 Задания</div>  
- <div id="quests"></div>  
-</div>  
-  
-</section>  
-  
-  
-<!-- WORKERS -->  
-  
-<section id="page-workers" class="page">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Фермеры 👨‍🌾</div>  
-  <div class="heroSub">  
-   Каждый настоящий нанятый фермер ускоряет рост растений.  
-  </div>  
- </div>  
- <div class="heroEmoji">👨‍🌾</div>  
-</div>  
-  
-<div class="card">  
-  
- <div class="sectionTitle">  
-  👨‍🌾 Твои фермеры  
-  <span id="workerCount">0/10</span>  
- </div>  
-  
- <div class="profileStats">  
-  <div class="profileStat">  
-   <b id="workerBonus">+0%</b>  
-   <span>ускорение роста</span>  
-  </div>  
-  
-  <div class="profileStat">  
-   <b>10</b>  
-   <span>максимум фермеров</span>  
-  </div>  
- </div>  
-  
-</div>  
-  
-<div class="card">  
- <div class="sectionTitle">🧑‍🌾 Найм</div>  
- <div id="workerHire"></div>  
-</div>  
-  
-</section>  
-  
-  
-<!-- RAIDS -->  
-  
-<section id="page-raids" class="page">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Рейды ⚔️</div>  
-  <div class="heroSub">  
-   Отправляй свою армию в длительные рейды.  
-  </div>  
- </div>  
- <div class="heroEmoji">🏰</div>  
-</div>  
-  
-<div class="card">  
-  
- <div class="sectionTitle">  
-  ⚔️ Большой рейд  
-  <span class="badge">КД 45 минут</span>  
- </div>  
-  
- <div class="muted small">  
-  Награда зависит от силы твоей армии.  
- </div>  
-  
- <div id="raidPower" class="cooldown"></div>  
-  
- <button id="raidButton" class="btn" onclick="startRaid()">  
-  ⚔️ Отправить армию  
- </button>  
-  
- <div id="raidCooldown" class="cooldown"></div>  
-  
-</div>  
-  
-</section>  
-  
-  
-<!-- RATING -->  
-  
-<section id="page-rating" class="page">  
-  
-<div class="hero">  
- <div class="heroText">  
-  <div class="heroTitle">Рейтинг 🏆</div>  
-  <div class="heroSub">  
-   Соревнуйся с другими игроками.  
-  </div>  
- </div>  
- <div class="heroEmoji">🏆</div>  
-</div>  
-  
-<div class="card">
- <div class="sectionTitle">📅 Сезон <span id="seasonName" class="badge"></span></div>
- <div id="seasonTimer" class="cooldown"></div>
- <div class="muted small" style="margin-top:8px">До нового сезона счётчик идёт в реальном времени.</div>
-</div>
-<div class="card">  
- <div class="sectionTitle">🌾 По урожаю</div>  
- <div id="harvestRanking"></div>  
-</div>  
-  
-<div class="card">  
- <div class="sectionTitle">🪙 По монетам</div>  
- <div id="coinRanking"></div>  
-</div>  
-  
-<div class="card">  
- <div class="sectionTitle">⚔️ По PvP</div>  
- <div id="pvpRanking"></div>  
-</div>  
-  
-</section>  
-  
-</main>  
-  
-  
-<nav class="bottomNav">  
-  
-<button class="navBtn active"  
- data-page="farm"  
- onclick="navigate('farm',this)">  
- <span class="navIcon">🌱</span>Ферма  
-</button>  
-  
-<button class="navBtn"  
- data-page="animals"  
- onclick="navigate('animals',this)">  
- <span class="navIcon">🐄</span>Животные  
-</button>  
-  
-<button class="navBtn"  
- data-page="games"  
- onclick="navigate('games',this)">  
- <span class="navIcon">🎮</span>Игры  
-</button>  
-  
-<button class="navBtn"  
- data-page="shop"  
- onclick="navigate('shop',this)">  
- <span class="navIcon">🛒</span>Магазин  
-</button>  
-  
-<button class="navBtn"  
- data-page="inventory"  
- onclick="navigate('inventory',this)">  
- <span class="navIcon">🎒</span>Инвентарь  
-</button>  
-  
-</nav>  
-  
-</div>  
-  
-  
-<div id="modal" class="modal">  
-  
-<div class="modalBox">  
-  
-<button class="modalClose" onclick="closeModal()">×</button>  
-  
-<div id="modalContent"></div>  
-  
-</div>  
-  
-</div>  
-  
-  
-<script>  
-  
-const tg =  
- window.Telegram &&  
- window.Telegram.WebApp  
- ? window.Telegram.WebApp  
- : null;  
-  
-if(tg){  
- tg.ready();  
- tg.expand();  
-}  
-  
-const SAVE_KEY="growix_final_v8";  
-  
-const COOLDOWNS={  
- pvp:10*60*1000,  
- mini:5*60*1000,  
- raid:45*60*1000,  
- boss:6*60*60*1000  
-};  
-  
-  
-/* =========================  
-   STATE  
-========================= */  
-  
-function defaultState(){  
-  
- return{  
-  
-  coins:500,  
-  level:1,  
-  xp:0,  
-  
-  harvested:0,  
-  pvpPoints:0,  
-  wins:0,  
-  losses:0,  
-  
-  lastDaily:null,
-  packageFree:0,
-  crowsNext:Date.now()+3600000,
-  seasonHarvested:0,
-  seasonCoins:0,
-  seasonKey:null,
-  
-  cooldowns:{  
-   pvp:0,  
-   mini:0,  
-   raid:0  
-  },  
-  
-  bossCooldowns:{},  
-  
-  quests:{},  
-  
-  expansion:9,  
-  
-  workers:0,  
-  
-  inventory:{  
-   wheatSeed:10,  
-   carrotSeed:5,  
-   cornSeed:3,  
-   tomatoSeed:1,  
-   berrySeed:0,  
-   pumpkinSeed:0,  
-  
-   wheat:0,  
-   carrot:0,  
-   corn:0,  
-   tomato:0,  
-   berry:0,  
-   pumpkin:0,  
-  
-   egg:0,  
-   milk:0,  
-   wool:0,  
-   kumyz:0,
-   meat:0,
-  
-   stone:0,  
-   fence:0,  
-   scarecrow:0  
-  },  
-  
-  animals:{  
-   chicken:{count:1,production:0,readyAt:null},  
-   cow:{count:0,production:0,readyAt:null},  
-   sheep:{count:0,production:0,readyAt:null},  
-   horse:{count:0,production:0,readyAt:null}  
-  },  
-  
-  army:{  
-   guard1:0,  
-   guard2:0,  
-   guard3:0  
-  },  
-  
-  buildings:Array(9).fill(null),
-  perimeterBuildings:Array(20).fill(null),
-  bestMiniScore:0,
-  lastMiniScore:0,
-  
-  field:Array(9).fill(null)  
-  
- };  
-  
-}  
-  
-  
-function mergeState(old){  
-  
- const d=defaultState();  
-  
- const s={...d,...old};  
-  
- s.inventory={...d.inventory,...(old.inventory||{})};
- if(typeof s.inventory.meat!=="number")s.inventory.meat=0;  
-  
- s.animals={  
-  ...d.animals,  
-  ...(old.animals||{})  
- };  
-  
- s.army={  
-  ...d.army,  
-  ...(old.army||{})  
- };  
-  
- s.cooldowns={  
-  ...d.cooldowns,  
-  ...(old.cooldowns||{})  
- };  
-  
- s.bossCooldowns={  
-  ...(old.bossCooldowns||{})  
- };  
-  
- s.quests={  
-  ...(old.quests||{})  
- };  
-  
- s.buildings=Array.isArray(old.buildings)?old.buildings.slice(0,9):Array(9).fill(null);
- s.perimeterBuildings=Array.isArray(old.perimeterBuildings)?old.perimeterBuildings.slice(0,20):Array(20).fill(null);
- while(s.perimeterBuildings.length<20)s.perimeterBuildings.push(null);
- s.packageFree=Number(old.packageFree||0);s.crowsNext=Number(old.crowsNext||Date.now()+3600000);s.bestMiniScore=Number(old.bestMiniScore||0);s.lastMiniScore=Number(old.lastMiniScore||0);s.seasonHarvested=Number(old.seasonHarvested||0);s.seasonCoins=Number(old.seasonCoins||0);s.seasonKey=old.seasonKey||null;  
-  
- s.field=Array.isArray(old.field)  
-  ? old.field.slice(0,s.expansion||9)  
-  : [];  
-  
- while(s.field.length<(s.expansion||9))  
-  s.field.push(null);  
-  
- return s;  
-  
-}  
-  
-  
-function loadState(){  
-  
- try{  
-  
-  const raw=localStorage.getItem(SAVE_KEY);  
-  
-  if(raw)  
-   return mergeState(JSON.parse(raw));  
-  
- }catch(e){}  
-  
- return defaultState();  
-  
-}  
-  
-  
-let state=loadState();  
-  
-  
-function saveState(){  
-  
- try{  
-  localStorage.setItem(  
-   SAVE_KEY,  
-   JSON.stringify(state)  
-  );  
- }catch(e){}  
-  
-}  
-  
-  
-/* =========================  
-   HELPERS  
-========================= */  
-  
-function notify(message){  
-  
- const t=document.getElementById("toast");  
-  
- t.textContent=message;  
-  
- t.classList.add("show");  
-  
- clearTimeout(window.toastTimer);  
-  
- window.toastTimer=setTimeout(()=>{  
-  t.classList.remove("show");  
- },1800);  
-  
-}  
-  
-  
-function openModal(html){  
-  
- document.getElementById("modalContent").innerHTML=html;  
-  
- document.getElementById("modal").classList.add("show");  
-  
-}  
-  
-  
-function closeModal(){  
-  
- document.getElementById("modal").classList.remove("show");  
-  
-}  
-  
-  
-function navigate(page,button){  
-  
- document.querySelectorAll(".page")  
-  .forEach(x=>x.classList.remove("active"));  
-  
- const p=document.getElementById("page-"+page);  
-  
- if(p)p.classList.add("active");  
-  
- document.querySelectorAll(".navBtn")  
-  .forEach(x=>x.classList.remove("active"));  
-  
- if(button)button.classList.add("active");  
-  
- render();  
-  
-}  
-  
-  
-function formatTime(ms){  
-  
- let sec=Math.max(0,Math.ceil(ms/1000));  
-  
- let min=Math.floor(sec/60);  
-  
- sec%=60;  
-  
- if(min)  
-  return min+"м "+sec+"с";  
-  
- return sec+"с";  
-  
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+ --bg:#071009;--card:#132319;--card2:#1b3220;
+ --green:#67dc58;--green2:#399f42;--gold:#ffd75c;
+ --white:#f3fff2;--muted:#8fa594;--red:#ff7373;--blue:#63a8ff;
 }
-function animalTime(ms){return (ms/60000).toFixed(ms%60000?1:0)+" мин";}  
-  
-  
-function cd(type){  
-  
- return Math.max(  
-  0,  
-  (state.cooldowns[type]||0)-Date.now()  
- );  
-  
-}  
-  
-  
-/* =========================  
-   CROPS  
-========================= */  
-  
-const crops={  
-  
- wheat:{  
-  name:"Пшеница",  
-  icon:"🌾",  
-  seed:"wheatSeed",  
-  grow:40,  
-  reward:3,  
-  xp:10,  
-  price:7  
- },  
-  
- carrot:{  
-  name:"Морковь",  
-  icon:"🥕",  
-  seed:"carrotSeed",  
-  grow:60,  
-  reward:3,  
-  xp:14,  
-  price:10  
- },  
-  
- corn:{  
-  name:"Кукуруза",  
-  icon:"🌽",  
-  seed:"cornSeed",  
-  grow:80,  
-  reward:4,  
-  xp:18,  
-  price:17  
- },  
-  
- tomato:{  
-  name:"Помидор",  
-  icon:"🍅",  
-  seed:"tomatoSeed",  
-  grow:100,  
-  reward:4,  
-  xp:22,  
-  price:25  
- },  
-  
- berry:{  
-  name:"Ягоды",  
-  icon:"🫐",  
-  seed:"berrySeed",  
-  grow:120,  
-  reward:5,  
-  xp:28,  
-  price:38  
- },  
-  
- pumpkin:{  
-  name:"Тыква",  
-  icon:"🎃",  
-  seed:"pumpkinSeed",  
-  grow:160,  
-  reward:6,  
-  xp:35,  
-  price:55  
- }  
-  
-};  
-  
-  
-/* =========================  
-   ANIMALS  
-========================= */  
-  
-const animals={
- chicken:{name:"Курица",icon:"🐔",feed:"wheat",product:"egg",productName:"Яйца",productIcon:"🥚",time:180*1000,price:100},
- cow:{name:"Корова",icon:"🐄",feed:"corn",product:"milk",productName:"Молоко",productIcon:"🥛",extraProduct:"meat",extraProductName:"Мясо",extraProductIcon:"🥩",time:250*1000,price:400},
- sheep:{name:"Овца",icon:"🐑",feed:"carrot",product:"wool",productName:"Шерсть",productIcon:"🧶",time:300*1000,price:650},
- horse:{name:"Лошадь",icon:"🐎",feed:"carrot",product:"kumyz",productName:"Кумыс",productIcon:"🥛",time:450*1000,price:1000}
+html,body{margin:0;background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{overflow-x:hidden}
+button,input{font:inherit}
+button{border:0;color:inherit;cursor:pointer}
+#app{width:100%;max-width:600px;min-height:100vh;margin:auto;padding-bottom:90px;background:radial-gradient(circle at 50% -10%,#285b31 0,#112619 35%,#071009 78%)}
+.header{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(7,16,9,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)}
+.logo{display:flex;align-items:center;gap:8px;font-size:21px;font-weight:1000;letter-spacing:1px}
+.logoMark{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:linear-gradient(145deg,#7cea65,#2f8535)}
+.stats{display:flex;gap:5px}
+.topStat{padding:8px 9px;border-radius:12px;background:rgba(255,255,255,.07);font-size:11px;font-weight:900}
+.content{padding:14px}.page{display:none}.page.active{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.hero{position:relative;overflow:hidden;min-height:150px;padding:20px;margin-bottom:13px;border-radius:27px;background:linear-gradient(135deg,#285f30,#16321d 55%,#102016);border:1px solid rgba(255,255,255,.08)}
+.heroText{position:relative;z-index:2;max-width:76%}.heroTitle{font-size:28px;line-height:1.05;font-weight:1000}.heroSub{margin-top:9px;color:#bfd2c0;font-size:13px;line-height:1.45}.heroEmoji{position:absolute;right:8px;bottom:-5px;font-size:88px;opacity:.8}
+.card{padding:15px;margin-bottom:12px;border-radius:22px;background:linear-gradient(145deg,rgba(27,51,31,.97),rgba(14,29,18,.97));border:1px solid rgba(255,255,255,.065)}
+.sectionTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;font-size:18px;font-weight:950}
+.muted{color:var(--muted)}.small{font-size:12px}
+.badge{display:inline-block;padding:5px 9px;border-radius:10px;background:rgba(255,255,255,.08);font-size:10px}
+.btn{width:100%;padding:12px;margin-top:8px;border-radius:14px;background:linear-gradient(135deg,#4caf43,#327d38);font-size:13px;font-weight:950}
+.btn.gold{background:linear-gradient(135deg,#ffd84d,#bd8e2c);color:#241b05}.btn.blue{background:linear-gradient(135deg,#427cc2,#315d95)}.btn.red{background:linear-gradient(135deg,#a94c4c,#733333)}.btn.secondary{background:rgba(255,255,255,.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.homeTools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.homeTool{padding:11px 6px;border-radius:17px;background:linear-gradient(145deg,#203d25,#122619);border:1px solid rgba(255,255,255,.07);font-size:11px;font-weight:900;text-align:center}
+.homeTool span{display:block;margin-bottom:4px;font-size:23px}
+.farmWorld{position:relative;overflow:hidden;min-height:450px;padding:12px;border-radius:26px;background:linear-gradient(#77bb61,#69a950);border:3px solid #315e32}
+.worldTitle{text-align:center;position:relative;z-index:10;margin-bottom:8px;font-weight:1000;text-shadow:0 1px 2px #0006}
+.worldField{position:relative;z-index:4;width:92%;margin:auto;display:grid;gap:5px;padding:8px;border-radius:21px;background:#74462b;border:5px solid #4f2d1c;transition:.25s;transform-origin:center center}
+.worldPlot{min-width:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;background:linear-gradient(145deg,#97613b,#6e4027);font-size:clamp(17px,6vw,29px);cursor:pointer}
+.worldPlot.ready{animation:bob .8s infinite alternate;box-shadow:0 0 15px #67dc5866}.worldPlot.crow{background:linear-gradient(145deg,#4b392d,#34251d)}
+@keyframes bob{to{transform:translateY(-3px)}}
+.perimeter{position:absolute;inset:42px 8px 8px;z-index:3;pointer-events:none}
+.perimeterSlot{position:absolute;width:38px;height:38px;border-radius:12px;background:rgba(71,48,27,.65);border:2px dashed rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-size:22px;pointer-events:auto}
+.slot-top{top:0}.slot-bottom{bottom:0}.slot-left{left:0}.slot-right{right:0}
+.slot-built{border-style:solid;background:rgba(39,65,35,.9)}
+.guard{position:absolute;z-index:8;font-size:26px;transition:.5s;filter:drop-shadow(0 2px 2px #0007)}
+.npc{position:absolute;z-index:6;font-size:27px;animation:walk 8s ease-in-out infinite alternate}
+@keyframes walk{0%{transform:translate(0,0)}25%{transform:translate(25px,10px)}50%{transform:translate(-10px,35px)}75%{transform:translate(30px,55px)}100%{transform:translate(0,20px)}}
+.field{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.plot{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:17px;background:linear-gradient(145deg,#81502f,#61371f);border:3px solid #4c2b1b;font-size:35px;overflow:hidden;cursor:pointer}
+.plot.empty:after{content:"＋";opacity:.5}.plot.ready{animation:bob .8s infinite alternate}.plot.crow{background:linear-gradient(145deg,#4c3a2f,#33271f)}
+.plotTimer{position:absolute;bottom:5px;left:5px;right:5px;padding:4px;border-radius:8px;background:#000a;text-align:center;font-size:9px;font-weight:900}
+.plotLabel{position:absolute;top:5px;left:5px;padding:3px 5px;border-radius:7px;background:#0007;font-size:8px}
+.progress{width:100%;height:9px;margin-top:8px;overflow:hidden;border-radius:20px;background:rgba(255,255,255,.07)}
+.progressFill{height:100%;border-radius:20px;background:linear-gradient(90deg,#3d9f3b,#7ce969);transition:.3s}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.itemCard{padding:13px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.05);text-align:center}
+.itemImage{width:65px;height:65px;margin:auto;display:flex;align-items:center;justify-content:center;border-radius:20px;background:rgba(255,255,255,.04);font-size:40px}
+.itemName{margin-top:7px;font-size:14px;font-weight:900}.itemCount{margin-top:3px;color:var(--muted);font-size:11px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:7px;border-radius:16px;background:rgba(255,255,255,.045)}
+.rowLeft{display:flex;align-items:center;gap:10px}.rowIcon{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:rgba(255,255,255,.06);font-size:23px}
+.rowName{font-size:13px;font-weight:900}.rowSub{margin-top:3px;color:var(--muted);font-size:10px}.price{color:var(--gold);font-size:12px;font-weight:950}
+.profileStats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.profileStat{padding:13px;border-radius:15px;background:rgba(255,255,255,.05);text-align:center}.profileStat b{display:block;font-size:20px}.profileStat span{color:var(--muted);font-size:10px}
+.package{padding:15px;margin-bottom:9px;border-radius:20px;background:linear-gradient(145deg,#263f29,#142519);border:1px solid rgba(255,255,255,.07)}
+.packageTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:950}.packageItems{margin-top:8px;color:#bdd0bd;font-size:11px;line-height:1.6}
+.input{width:100%;padding:13px;border:1px solid rgba(255,255,255,.08);border-radius:14px;outline:none;background:#09140c;color:white}
+.rank{display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:7px;border-radius:16px;background:rgba(255,255,255,.045)}.rankPos{width:35px;font-size:20px;text-align:center}.rankAvatar{font-size:25px}.rankInfo{flex:1}.rankName{font-weight:900;font-size:13px}.rankScore{color:var(--gold);font-size:11px;margin-top:2px}
+.raidArena{padding:16px;border-radius:20px;background:linear-gradient(135deg,#281b1b,#17251a);text-align:center}.raidBoss{font-size:70px}.raidHp{height:13px;overflow:hidden;border-radius:20px;background:#351919;margin:12px 0}.raidHp i{display:block;height:100%;background:linear-gradient(90deg,#df4e4e,#70d85d);transition:.3s}
+.bossCard{padding:14px;border-radius:18px;background:rgba(255,255,255,.045);margin-bottom:9px;border:1px solid rgba(255,255,255,.05)}
+.country{padding:10px;border-radius:14px;background:rgba(255,255,255,.045);font-size:12px;font-weight:900}
+.countryGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.armyBox{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.armyUnit{padding:14px;text-align:center;border-radius:17px;background:rgba(255,255,255,.05)}.armyUnit b{display:block;font-size:23px}.armyUnit span{font-size:10px;color:var(--muted)}
+.cooldownBox{padding:12px;border-radius:15px;background:rgba(255,255,255,.05);text-align:center;font-size:12px}
+.harvestGame{position:relative;height:330px;margin-top:12px;overflow:hidden;border-radius:20px;background:linear-gradient(#76b65a,#649e4d);border:3px solid #47783b}
+.gamePlant{position:absolute;width:55px;height:55px;border-radius:50%;background:#ffffff18;font-size:31px;animation:gamePop .18s ease}.gamePlant:active{transform:scale(.8)}
+@keyframes gamePop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.miniStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.miniStat{padding:9px;text-align:center;border-radius:13px;background:rgba(255,255,255,.05);font-size:10px}.miniStat b{display:block;font-size:16px}
+.bottomNav{position:fixed;z-index:100;left:50%;bottom:0;transform:translateX(-50%);width:min(600px,100%);height:78px;display:grid;grid-template-columns:repeat(6,1fr);padding:6px 3px 8px;background:rgba(7,14,9,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.08)}
+.navBtn{background:transparent;color:#718174;font-size:8px;font-weight:850}.navBtn.active{color:white}.navIcon{display:block;margin-bottom:3px;font-size:20px}
+.toast{position:fixed;z-index:300;top:15px;left:50%;max-width:90%;padding:12px 16px;border-radius:14px;background:#f4fff3;color:#102014;font-size:12px;font-weight:900;opacity:0;transform:translate(-50%,-20px);pointer-events:none;transition:.22s}.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;z-index:200;inset:0;display:none;align-items:flex-end;background:#000b;backdrop-filter:blur(4px)}.modal.show{display:flex}.modalBox{width:min(600px,100%);max-height:90vh;overflow:auto;padding:20px;border-radius:25px 25px 0 0;background:linear-gradient(160deg,#1b3420,#0e1c11)}.modalClose{float:right;width:35px;height:35px;border-radius:50%;background:#ffffff12;font-size:20px}.center{text-align:center}.list{max-height:300px;overflow:auto}
+@media(max-width:380px){.heroTitle{font-size:24px}.heroEmoji{font-size:72px}.worldPlot{font-size:17px}.farmWorld{min-height:430px}}
+</style>
+</head>
+
+<body>
+<div id="app">
+
+<header class="header">
+ <div class="logo"><div class="logoMark">🌱</div>GROWIX</div>
+ <div class="stats">
+  <div class="topStat">🪙 <span id="coins">0</span></div>
+  <div class="topStat">⭐ Lv.<span id="level">1</span></div>
+ </div>
+</header>
+
+<div id="toast" class="toast"></div>
+
+<main class="content">
+
+<section id="page-farm" class="page active">
+
+<div class="hero">
+ <div class="heroText">
+  <div class="heroTitle">Твоя ферма 🌱</div>
+  <div class="heroSub">Развивай хозяйство, выращивай урожай, собирай продукцию и становись лучшим фермером.</div>
+ </div>
+ <div class="heroEmoji">🌾</div>
+</div>
+
+<div class="homeTools">
+
+ <button class="homeTool" onclick="navigate('profile')"><span>👤</span>Профиль</button>
+ <button class="homeTool" onclick="navigate('rating')"><span>🏆</span>Рейтинги</button>
+ <button class="homeTool" onclick="navigate('bosses')"><span>👹</span>Боссы</button>
+
+ <button class="homeTool" onclick="navigate('army')"><span>⚔️</span>Моя армия</button>
+ <button class="homeTool" onclick="navigate('packages')"><span>🎁</span>Наборы</button>
+ <button class="homeTool" onclick="navigate('workers')"><span>👨‍🌾</span>Фермеры</button>
+
+ <button class="homeTool" onclick="navigate('promos')"><span>🎟️</span>Промокод</button>
+ <button class="homeTool" onclick="navigate('partner')"><span>🤝</span>Партнёрка</button>
+ <button class="homeTool" onclick="navigate('raids')"><span>⚔️</span>Рейды</button>
+
+</div>
+
+<div class="card">
+ <div class="sectionTitle">
+  <span>🐦 Защита фермы</span>
+  <span class="badge" id="crowTimer">--:--:--</span>
+ </div>
+ <div class="muted small" id="crowStatus">Следующая атака ворон</div>
+ <div class="progress"><div id="crowBar" class="progressFill"></div></div>
+ <div class="miniStats">
+  <div class="miniStat"><b id="fenceCount">0</b>🧱 Заборов</div>
+  <div class="miniStat"><b id="scarecrowCount">0</b>🎃 Чучел</div>
+  <div class="miniStat"><b id="stoneCount">0</b>🪨 Камней</div>
+ </div>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">
+  <span>🏡 Живая ферма</span>
+  <span class="badge" id="farmSize">9 участков</span>
+ </div>
+
+ <div class="farmWorld" id="farmWorld">
+
+  <div class="worldTitle">🌳 GROWIX FARM 🌳</div>
+  <div id="worldField" class="worldField"></div>
+  <div id="perimeter" class="perimeter"></div>
+
+  <div class="npc" style="left:5%;top:20%">👨‍🌾</div>
+  <div class="npc" style="right:6%;top:62%;animation-delay:-3s">🐔</div>
+  <div class="npc" style="left:9%;bottom:8%;animation-delay:-5s">🐄</div>
+  <div id="guards"></div>
+
+ </div>
+
+ <button class="btn secondary" onclick="openBuild()">🧱 Строительство</button>
+ <button class="btn" onclick="expandFarm()">🏡 Расширить ферму</button>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">🌾 Грядки <span class="muted small"><span id="plotCount">9</span></span></div>
+ <div id="field" class="field"></div>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">⭐ Опыт <span class="muted small"><span id="xp">0</span> / <span id="xpNeed">100</span></span></div>
+ <div class="progress"><div id="xpBar" class="progressFill"></div></div>
+</div>
+
+</section>
+
+
+<section id="page-animals" class="page">
+<div class="hero">
+ <div class="heroText"><div class="heroTitle">Животные 🐔</div><div class="heroSub">Продукция производится постепенно. Для каждого животного действует собственный таймер.</div></div>
+ <div class="heroEmoji">🐔</div>
+</div>
+<div id="animals"></div>
+</section>
+
+
+<section id="page-games" class="page">
+<div class="hero">
+ <div class="heroText"><div class="heroTitle">Мини-игры 🎮</div><div class="heroSub">Небольшие награды, КД и отдельные режимы.</div></div>
+ <div class="heroEmoji">🎮</div>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">🌾 Косилка руками</div>
+ <div class="muted small">Коси поле вручную. За каждую очищенную клетку +30 🪙. Раунд длится 30 секунд.</div>
+ <div class="miniStats">
+  <div class="miniStat"><b id="mowScore">0</b>🪙 Заработано</div>
+  <div class="miniStat"><b id="mowLeft">30</b>⏱️ Секунд</div>
+  <div class="miniStat"><b id="mowCells">0</b>🌾 Скошено</div>
+ </div>
+ <div id="mowArea" class="harvestGame"></div>
+ <button id="mowBtn" class="btn" onclick="startMow('hand')">✋ Начать косить</button>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">🚜 Трактор</div>
+ <div class="muted small">Води трактор по полю и собирай урожайные точки. Награда снижена, чтобы экономика не ломалась.</div>
+ <div class="miniStats">
+  <div class="miniStat"><b id="tractorScore">0</b>🪙 Заработано</div>
+  <div class="miniStat"><b id="tractorLeft">30</b>⏱️ Секунд</div>
+  <div class="miniStat"><b id="tractorCells">0</b>🌾 Убрано</div>
+ </div>
+ <div id="tractorArea" class="harvestGame"></div>
+ <button id="tractorBtn" class="btn blue" onclick="startMow('tractor')">🚜 Сесть на трактор</button>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">⚔️ PvP</div>
+ <div class="muted small">Сражайся с противником. Вся сила армии суммируется и постепенно снимает HP врага.</div>
+ <div class="row">
+  <div class="rowLeft"><div class="rowIcon">🛡️</div><div><div class="rowName">Твоя сила</div><div class="rowSub">Бойцы + стражники</div></div></div>
+  <div class="price" id="pvpPower">0</div>
+ </div>
+ <div class="raidHp"><i id="pvpHp"></i></div>
+ <div class="center small">HP противника: <span id="pvpHpText">500</span></div>
+ <button class="btn red" onclick="startPvp()">⚔️ Атаковать</button>
+ <div class="cooldownBox" id="pvpCooldown" style="margin-top:8px">PvP доступно</div>
+</div>
+</section>
+
+
+<section id="page-shop" class="page">
+<div class="hero">
+ <div class="heroText"><div class="heroTitle">Магазин 🛒</div><div class="heroSub">Семена, животные и предметы для развития.</div></div>
+ <div class="heroEmoji">🛒</div>
+</div>
+<div id="shop"></div>
+</section>
+
+
+<section id="page-inventory" class="page">
+<div class="hero">
+ <div class="heroText"><div class="heroTitle">Инвентарь 🎒</div><div class="heroSub">Все твои семена, урожай и продукция.</div></div>
+ <div class="heroEmoji">🎒</div>
+</div>
+<div class="card"><div id="inventory" class="grid"></div></div>
+</section>
+
+
+<section id="page-profile" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Профиль 👤</div><div class="heroSub">Твоя статистика GROWIX.</div></div><div class="heroEmoji">👑</div></div>
+<div class="card">
+ <div class="center"><div style="font-size:55px">👨‍🌾</div><div style="font-size:20px;font-weight:1000" id="profileName">Фермер</div></div>
+ <div class="profileStats" style="margin-top:14px">
+  <div class="profileStat"><b id="profileCoins">0</b><span>Монеты</span></div>
+  <div class="profileStat"><b id="profileLevel">1</b><span>Уровень</span></div>
+  <div class="profileStat"><b id="profileHarvest">0</b><span>Урожай</span></div>
+  <div class="profileStat"><b id="profileRef">0</b><span>Партнёры</span></div>
+ </div>
+</div>
+</section>
+
+
+<section id="page-workers" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Фермеры 👨‍🌾</div><div class="heroSub">Каждого типа фермера можно нанять максимум 3 раза.</div></div><div class="heroEmoji">👨‍🌾</div></div>
+<div id="workers"></div>
+<div class="card">
+ <div class="sectionTitle">🚀 Бустер фермера</div>
+ <div class="muted small">x2 скорость созревания/посева на 24 часа.</div>
+ <button class="btn gold" disabled>⭐ 50 Stars — скоро доступно</button>
+ <div class="badge" style="margin-top:8px">🔒 PAYMENT LOCKED</div>
+</div>
+</section>
+
+
+<section id="page-army" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Моя армия ⚔️</div><div class="heroSub">Бойцы и стражники ходят по периметру только после покупки.</div></div><div class="heroEmoji">⚔️</div></div>
+<div class="card">
+ <div class="sectionTitle">🛡️ Сила армии <span class="price" id="armyPower">0</span></div>
+ <div class="armyBox">
+  <div class="armyUnit"><b>⚔️ <span id="fighters">0</span></b><span>Бойцы · сила 25</span></div>
+  <div class="armyUnit"><b>🛡️ <span id="guardsCount">0</span></b><span>Стражники · сила 15</span></div>
+ </div>
+</div>
+<div id="armyShop"></div>
+</section>
+
+
+<section id="page-bosses" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Боссы 👹</div><div class="heroSub">Отдельный раздел. Сила всех бойцов и стражников суммируется.</div></div><div class="heroEmoji">👹</div></div>
+<div id="bosses"></div>
+</section>
+
+
+<section id="page-raids" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Рейды ⚔️</div><div class="heroSub">Рейд доступен раз в 45 минут.</div></div><div class="heroEmoji">⚔️</div></div>
+<div class="card">
+ <div class="raidArena">
+  <div class="raidBoss">👹</div>
+  <div style="font-weight:1000">Фермерский босс</div>
+  <div class="raidHp"><i id="raidHp"></i></div>
+  <div class="muted small">HP босса: <span id="raidHpText">1000</span></div>
+  <button id="raidButton" class="btn red" onclick="startRaid()">⚔️ Атаковать</button>
+ </div>
+</div>
+</section>
+
+
+<section id="page-rating" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Рейтинги 🏆</div><div class="heroSub">Три отдельных сезонных рейтинга. Сезон обновляется каждый месяц.</div></div><div class="heroEmoji">🏆</div></div>
+
+<div class="card">
+ <div class="sectionTitle">🌾 Рейтинг урожая <span class="badge" id="seasonName1"></span></div>
+ <div id="harvestRating"></div>
+ <div class="row"><div class="rowName">🥇 1 место</div><div class="price">100 000 🪙</div></div>
+ <div class="row"><div class="rowName">🥈 2 место</div><div class="price">75 000 🪙</div></div>
+ <div class="row"><div class="rowName">🥉 3 место</div><div class="price">50 000 🪙</div></div>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">⚔️ Рейтинг PvP</div>
+ <div id="pvpRating"></div>
+ <div class="row"><div class="rowName">🥇 1 место</div><div class="price">100 000 🪙</div></div>
+ <div class="row"><div class="rowName">🥈 2 место</div><div class="price">75 000 🪙</div></div>
+ <div class="row"><div class="rowName">🥉 3 место</div><div class="price">50 000 🪙</div></div>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">🪙 Рейтинг заработка</div>
+ <div id="coinsRating"></div>
+ <div class="row"><div class="rowName">🥇 1 место</div><div class="price">100 000 🪙</div></div>
+ <div class="row"><div class="rowName">🥈 2 место</div><div class="price">75 000 🪙</div></div>
+ <div class="row"><div class="rowName">🥉 3 место</div><div class="price">50 000 🪙</div></div>
+</div>
+
+<div class="card">
+ <div class="sectionTitle">🌍 Страны игроков</div>
+ <div class="countryGrid" id="countries"></div>
+</div>
+</section>
+
+
+<section id="page-packages" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Наборы 🎁</div><div class="heroSub">Четыре набора. Бесплатный доступен раз в 24 часа, Stars пока работают в тестовом режиме.</div></div><div class="heroEmoji">🎁</div></div>
+<div id="packages"></div>
+</section>
+
+
+<section id="page-promos" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Промокоды 🎟️</div><div class="heroSub">Вводи промокоды из официальных раздач.</div></div><div class="heroEmoji">🎟️</div></div>
+<div class="card">
+ <div class="sectionTitle">Активировать код</div>
+ <input id="promoInput" class="input" placeholder="Введите промокод" autocomplete="off">
+ <button class="btn gold" onclick="activatePromo()">🎁 Активировать</button>
+</div>
+</section>
+
+
+<section id="page-partner" class="page">
+<div class="hero"><div class="heroText"><div class="heroTitle">Партнёрка 🤝</div><div class="heroSub">Приглашай игроков и получай монеты.</div></div><div class="heroEmoji">🤝</div></div>
+<div class="card">
+ <div class="sectionTitle">Твоя ссылка</div>
+ <input id="refLink" class="input" readonly>
+ <button class="btn" onclick="copyReferral()">📋 Скопировать</button>
+</div>
+<div class="card">
+ <div class="profileStats">
+  <div class="profileStat"><b id="refCount">0</b><span>Подтверждено</span></div>
+  <div class="profileStat"><b id="refEarned">0</b><span>Заработано</span></div>
+ </div>
+ <div class="muted small" style="margin-top:12px">Игрок считается приглашённым после достижения 2 уровня.<br><br>🤝 Ты получаешь: <b>800 🪙</b><br>👤 Новый игрок получает: <b>1000 🪙 + 🐔</b></div>
+</div>
+</section>
+
+</main>
+
+
+<nav class="bottomNav">
+ <button class="navBtn active" onclick="navigate('farm',this)"><span class="navIcon">🌾</span>Ферма</button>
+ <button class="navBtn" onclick="navigate('animals',this)"><span class="navIcon">🐔</span>Животные</button>
+ <button class="navBtn" onclick="navigate('games',this)"><span class="navIcon">🎮</span>Игры</button>
+ <button class="navBtn" onclick="navigate('shop',this)"><span class="navIcon">🛒</span>Магазин</button>
+ <button class="navBtn" onclick="navigate('inventory',this)"><span class="navIcon">🎒</span>Инвентарь</button>
+ <button class="navBtn" onclick="navigate('partner',this)"><span class="navIcon">🤝</span>Партнёрка</button>
+</nav>
+</div>
+
+
+<div id="modal" class="modal">
+ <div class="modalBox">
+  <button class="modalClose" onclick="closeModal()">×</button>
+  <div id="modalContent"></div>
+ </div>
+</div>
+
+
+<script>
+
+const TEST_STARS=true;
+const SAVE_KEY="growix_final_test_v2";
+
+function money(n){return Number(n||0).toLocaleString("ru-RU")}
+function notify(text){
+ const t=document.getElementById("toast");
+ t.textContent=text;t.classList.add("show");
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>t.classList.remove("show"),2400);
+}
+function formatTime(ms){
+ const sec=Math.max(0,Math.ceil(ms/1000));
+ const h=Math.floor(sec/3600);
+ const m=Math.floor((sec%3600)/60);
+ const s=sec%60;
+ return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+const CROPS={
+ wheat:{name:"Пшеница",icon:"🌾",seed:"wheatSeed",grow:80,price:8,reward:3,xp:8},
+ carrot:{name:"Морковь",icon:"🥕",seed:"carrotSeed",grow:120,price:13,reward:3,xp:12},
+ corn:{name:"Кукуруза",icon:"🌽",seed:"cornSeed",grow:160,price:19,reward:4,xp:16},
+ tomato:{name:"Помидор",icon:"🍅",seed:"tomatoSeed",grow:200,price:27,reward:4,xp:20},
+ berry:{name:"Ягода",icon:"🫐",seed:"berrySeed",grow:240,price:38,reward:5,xp:25},
+ pumpkin:{name:"Тыква",icon:"🎃",seed:"pumpkinSeed",grow:320,price:52,reward:5,xp:32}
 };
 
-/* =========================
-   BOSSES  
-========================= */  
-  
-const bosses=[  
-  
- {  
-  id:"crow",  
-  name:"Король Воронов",  
-  icon:"🐦‍⬛",  
-  hp:1000,  
-  cost:300,  
-  reward:1200  
- },  
-  
- {  
-  id:"boar",  
-  name:"Лесной Кабан",  
-  icon:"🐗",  
-  hp:1500,  
-  cost:450,  
-  reward:1800  
- },  
-  
- {  
-  id:"giant",  
-  name:"Фермер-Гигант",  
-  icon:"👹",  
-  hp:2200,  
-  cost:650,  
-  reward:2600  
- },  
-  
- {  
-  id:"wolf",  
-  name:"Альфа-Волк",  
-  icon:"🐺",  
-  hp:3200,  
-  cost:900,  
-  reward:3600  
- },  
-  
- {  
-  id:"dragon",  
-  name:"Зелёный Дракон",  
-  icon:"🐉",  
-  hp:5000,  
-  cost:1500,  
-  reward:6000  
- }  
-  
-];  
-  
-  
-/* =========================  
-   SELL PRICES  
-========================= */  
-  
-const sellables=[["wheat","🌾","Пшеница",3],["carrot","🥕","Морковь",5],["corn","🌽","Кукуруза",8],["tomato","🍅","Помидор",12],["berry","🫐","Ягоды",18],["pumpkin","🎃","Тыква",26],["egg","🥚","Яйца",10],["milk","🥛","Молоко",18],["wool","🧶","Шерсть",25],["kumyz","🥛","Кумыс",35],["meat","🥩","Мясо",25]];  
-  
-  
-const invItems=[  
-  
- ["wheat","🌾","Пшеница"],  
- ["carrot","🥕","Морковь"],  
- ["corn","🌽","Кукуруза"],  
- ["tomato","🍅","Помидор"],  
- ["berry","🫐","Ягоды"],  
- ["pumpkin","🎃","Тыква"],  
- ["egg","🥚","Яйца"],  
- ["milk","🥛","Молоко"],  
- ["wool","🧶","Шерсть"],  
- ["kumyz","🥛","Кумыс"],
- ["meat","🥩","Мясо"],  
- ["stone","🪨","Камни"],  
- ["fence","🧱","Заборы"],  
- ["scarecrow","🎃","Чучела"]  
-  
-];  
-  
-  
-/* =========================  
-   WORKERS  
-========================= */  
-  
-function workerBonus(){  
-  
- return Math.min(  
-  50,  
-  state.workers*5  
- );  
-  
-}  
-  
-  
-function hireWorker(){  
-  
- if(state.workers>=10)  
-  return notify("👨‍🌾 Максимум 10 фермеров");  
-  
- if(state.coins<2500)  
-  return notify("❌ Нужно 2500 🪙");  
-  
- state.coins-=2500;  
-  
- state.workers++;  
-  
- saveState();  
-  
- notify("👨‍🌾 Фермер нанят! +5% скорости");  
-  
- render();  
-  
-}  
-  
-  
-/* =========================  
-   FARM  
-========================= */  
-  
-function chooseSeed(index){  
-  
- let html=  
- `<div class="sectionTitle">🌱 Выбери семена</div>  
- <div class="grid">`;  
-  
- Object.entries(crops).forEach(([id,c])=>{  
-  
-  const n=state.inventory[c.seed]||0;  
-  
-  html+=`  
-  
-  <div class="itemCard">  
-  
-   <div class="itemImage">${c.icon}</div>  
-  
-   <div class="itemName">${c.name}</div>  
-  
-   <div class="itemCount">  
-    Семян: ${n}  
-   </div>  
-  
-   <button  
-    class="btn"  
-    onclick="plant(${index},'${id}')"  
-    ${n<=0?"disabled":""}  
-   >  
-    ${n?"Посадить":"Нет семян"}  
-   </button>  
-  
-  </div>  
-  
-  `;  
-  
- });  
-  
- html+="</div>";  
-  
- openModal(html);  
-  
-}  
-  
-  
-function plant(index,id){  
-  
- const crop=crops[id];  
-  
- if(!crop)  
-  return;  
-  
- if(state.field[index])  
-  return notify("❌ Грядка занята");  
-  
- if((state.inventory[crop.seed]||0)<=0)  
-  return notify("❌ Нет семян");  
-  
- state.inventory[crop.seed]--;  
-  
- /*  
-  Фермеры ускоряют выращивание.  
-  0 фермеров = 100% времени  
-  10 фермеров = 50% времени  
- */  
-  
- const multiplier=  
-  1-(workerBonus()/100);  
-  
- const growTime=  
-  crop.grow*1000*multiplier;  
-  
- state.field[index]={  
-  crop:id,  
-  plantedAt:Date.now(),  
-  readyAt:Date.now()+growTime  
- };  
-  
- saveState();  
-  
- closeModal();  
-  
- notify("🌱 Посажено");  
-  
- render();  
-  
-}  
-  
-  
-function harvest(index){  
-  
- const p=state.field[index];  
-  
- if(!p)return;  
-  
- const crop=crops[p.crop];  
-  
- if(!crop)return;  
-  
- if(Date.now()<p.readyAt)  
-  return notify(  
-   "⏳ Осталось "+  
-   formatTime(p.readyAt-Date.now())  
-  );  
-  
- const gain=p.crow?Math.max(1,Math.floor(crop.reward*.5)):crop.reward;
- state.inventory[p.crop]+=gain;
- state.harvested+=gain;
- state.seasonHarvested+=gain;  
-  
- addXP(crop.xp);  
-  
- state.field[index]=null;  
-  
- checkQuests();  
-  
- saveState();  
-  
- notify(  
-  crop.icon+  
-  " +"+  
-  crop.reward+  
-  " "+  
-  crop.name  
- );  
-  
- render();  
-  
-}  
-  
-  
-function renderField(){  
-  
- const field=document.getElementById("field");  
-  
- field.innerHTML="";  
-  
- state.field.forEach((p,index)=>{  
-  
-  const e=document.createElement("div");  
-  
-  e.className="plot";  
-  
-  if(!p){  
-  
-   e.classList.add("empty");  
-  
-   e.onclick=()=>chooseSeed(index);  
-  
-  }else{  
-  
-   const crop=crops[p.crop];  
-  
-   if(!crop)return;  
-  
-   const remaining=  
-    Math.max(  
-     0,  
-     Math.ceil((p.readyAt-Date.now())/1000)  
-    );  
-  
-   if(p.crow){e.classList.add("crow");e.innerHTML="🐦‍⬛<div class='plotLabel'>ВОРОНЫ</div>";e.onclick=()=>harvest(index);}
-   else if(remaining<=0){
-  
-    e.classList.add("ready");  
-  
-    e.innerHTML=  
-     crop.icon+  
-     '<div class="plotLabel">ГОТОВО</div>';  
-  
-    e.onclick=()=>harvest(index);  
-  
-   }else{  
-  
-    e.innerHTML=  
-     '🌱'+  
-     `<div class="plotTimer">  
-       ${formatTime(remaining*1000)}  
-      </div>`;  
-  
-    e.onclick=()=>{  
-     notify(  
-      "⏳ Осталось "+  
-      formatTime(remaining*1000)  
-     );  
-    };  
-  
-   }  
-  
-  }  
-  
-  field.appendChild(e);  
-  
- });  
-  
-}  
-  
-  
-/* =========================  
-   LIVING FARM  
-========================= */  
-  
-function renderLivingFarm(){
- const world=document.getElementById("worldField");if(!world)return;world.innerHTML="";
- const count=state.expansion,columns=count<=18?3:6,rows=Math.ceil(count/columns);
- world.style.gridTemplateColumns=`repeat(${columns},1fr)`;world.style.gridTemplateRows=`repeat(${rows},1fr)`;world.style.height=count>=54?"390px":count>=36?"400px":count>=18?"420px":"auto";
- world.classList.toggle("compact",count>=36);world.classList.toggle("ultraCompact",count>=54);
- for(let i=0;i<count;i++){const p=state.field[i],el=document.createElement("div");el.className="worldPlot";if(p){if(p.crow)el.textContent="🐦‍⬛";else{const c=crops[p.crop];el.textContent=c?(Date.now()>=p.readyAt?c.icon:"🌱"):"·";}el.onclick=()=>harvest(i);}else el.textContent="·";world.appendChild(el);}
- const npc=document.getElementById("livingNPCs");if(npc){npc.innerHTML="";for(let i=0;i<state.workers;i++){const person=document.createElement("div");person.className="npc";person.style.left=(20+Math.random()*55)+"%";person.style.top=(30+Math.random()*45)+"%";person.style.animationDelay=(-Math.random()*8)+"s";person.innerHTML="👨‍🌾<small>Фермер</small>";npc.appendChild(person);}}
- const bonus=document.getElementById("farmBonus");if(bonus)bonus.textContent="+"+workerBonus()+"% скорость";renderSlots();
+const ANIMALS={
+ chicken:{name:"Курица",icon:"🐔",price:250,product:"egg",productName:"Яйцо",productIcon:"🥚",every:180000},
+ cow:{name:"Корова",icon:"🐄",price:900,product:"milk",productName:"Молоко",productIcon:"🥛",every:360000},
+ sheep:{name:"Овца",icon:"🐑",price:1500,product:"wool",productName:"Шерсть",productIcon:"🧶",every:540000},
+ horse:{name:"Лошадь",icon:"🐎",price:3000,product:"kumys",productName:"Кумыз",productIcon:"🥛",every:720000}
+};
+
+const BUILDINGS={
+ fence:{name:"Забор",icon:"🧱",price:700},
+ scarecrow:{name:"Чучело",icon:"🎃",price:1200},
+ stone:{name:"Камень защиты",icon:"🪨",price:450}
+};
+
+const ARMY={
+ fighter:{name:"Боец",icon:"⚔️",price:1200,power:25},
+ guard:{name:"Стражник",icon:"🛡️",price:900,power:15}
+};
+
+const WORKERS={
+ basic:{name:"Фермер",icon:"👨‍🌾",price:1500,bonus:5},
+ pro:{name:"Опытный фермер",icon:"🧑‍🌾",price:5000,bonus:12}
+};
+
+const EXPANSIONS={
+ 9:{next:18,price:2500,columns:3,rows:3},
+ 18:{next:36,price:7000,columns:6,rows:3},
+ 36:{next:54,price:50,stars:true,columns:6,rows:9}
+};
+
+const COUNTRIES=[
+ "🇰🇬 Кыргызстан","🇰🇿 Казахстан","🇺🇿 Узбекистан","🇹🇯 Таджикистан",
+ "🇷🇺 Россия","🇺🇦 Украина","🇧🇾 Беларусь","🇹🇷 Турция",
+ "🇺🇸 США","🇬🇧 Великобритания","🇩🇪 Германия","🇫🇷 Франция",
+ "🇮🇹 Италия","🇪🇸 Испания","🇨🇳 Китай","🇯🇵 Япония",
+ "🇰🇷 Южная Корея","🇮🇳 Индия","🇦🇪 ОАЭ","🇸🇦 Саудовская Аравия",
+ "🇦🇿 Азербайджан","🇦🇲 Армения","🇬🇪 Грузия","🇲🇳 Монголия"
+];
+
+const BOSSES=[
+ {id:"goblin",name:"Лесной босс",icon:"👹",hp:1000,reward:250},
+ {id:"boar",name:"Дикий кабан",icon:"🐗",hp:1800,reward:450},
+ {id:"dragon",name:"Зелёный дракон",icon:"🐉",hp:3500,reward:900},
+ {id:"giant",name:"Фермерский гигант",icon:"🧌",hp:6000,reward:1600}
+];
+
+const PROMOS={
+ KHAMRAKULOV:1000000,Satoshi777:1000000,GROWIXDAY:100,FARM2026:150,
+ GROWMORE:200,FARMSTART:100,GREEN2026:250,HARVEST:300,FARMER:150,
+ GROWIX:200,DAILYFARM:100,NEWSEED:150,BIGFARM:300,GOODDAY:100,FARMUP:200,
+ GROWFAST:250,RICHFARM:350,FARMKING:200,HARVESTDAY:150,SEEDTIME:100,
+ FARMPOWER:300,GROWIX2026:250,COINRAIN:400,FARMLOVE:150,GREENFARM:200,
+ SUPERFARM:350,FARMBOOST:250,GOODHARVEST:200,FARMDAILY:100,GROWIXGO:300,
+ MEGAHARVEST:400,FARM2026GO:500
+};
+
+const PACKAGES={
+ free:{name:"Набор новичка",icon:"🎁",price:0,cooldown:86400000,rewards:{coins:300,wheatSeed:10,carrotSeed:5,cornSeed:3,xp:25}},
+ p15:{name:"Фермерский",icon:"🌱",price:15,rewards:{coins:1500,wheatSeed:25,carrotSeed:10,cornSeed:5,xp:100}},
+ p25:{name:"Продвинутый",icon:"🚜",price:25,rewards:{coins:3500,wheatSeed:45,carrotSeed:20,cornSeed:10,tomatoSeed:5,xp:250}},
+ p39:{name:"Премиум",icon:"👑",price:39,rewards:{coins:6500,wheatSeed:70,carrotSeed:35,cornSeed:20,tomatoSeed:10,berrySeed:5,xp:500,fence:1,scarecrow:1,stone:2}}
+};
+
+function getSeasonKey(){
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
 }
+
+const DEFAULT_STATE={
+ coins:500,level:1,xp:0,harvested:0,
+ seasonHarvested:0,seasonPvp:0,seasonCoins:0,
+ season:getSeasonKey(),
+ expansion:9,
+ field:Array(54).fill(null),
+ inventory:{
+  wheatSeed:5,carrotSeed:3,cornSeed:0,tomatoSeed:0,berrySeed:0,pumpkinSeed:0,
+  wheat:0,carrot:0,corn:0,tomato:0,berry:0,pumpkin:0,
+  egg:0,milk:0,wool:0,kumys:0
+ },
+ animals:{chicken:1,cow:0,sheep:0,horse:0},
+ animalProduction:{chicken:0,cow:0,sheep:0,horse:0},
+ workers:{basic:0,pro:0},
+ buildings:{fence:0,scarecrow:0,stone:0},
+ army:{fighter:0,guard:0},
+ crows:{next:Date.now()+3600000,attacks:0},
+ raid:{next:0,hp:1000,active:false},
+ pvp:{next:0,hp:500,active:false,wins:0},
+ bosses:{
+  goblin:{hp:1000,next:0},
+  boar:{hp:1800,next:0},
+  dragon:{hp:3500,next:0},
+  giant:{hp:6000,next:0}
+ },
+ usedPromos:[],
+ packageFree:0,
+ referrals:{code:"",invitedBy:null,invited:[],confirmed:[],earned:0,welcome:false}
+};
+
+let state;
+
+function loadState(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(SAVE_KEY));
+  state=Object.assign({},DEFAULT_STATE,saved||{});
+  state.inventory=Object.assign({},DEFAULT_STATE.inventory,state.inventory||{});
+  state.animals=Object.assign({},DEFAULT_STATE.animals,state.animals||{});
+  state.animalProduction=Object.assign({},DEFAULT_STATE.animalProduction,state.animalProduction||{});
+  state.workers=Object.assign({},DEFAULT_STATE.workers,state.workers||{});
+  state.buildings=Object.assign({},DEFAULT_STATE.buildings,state.buildings||{});
+  state.army=Object.assign({},DEFAULT_STATE.army,state.army||{});
+  state.crows=Object.assign({},DEFAULT_STATE.crows,state.crows||{});
+  state.raid=Object.assign({},DEFAULT_STATE.raid,state.raid||{});
+  state.pvp=Object.assign({},DEFAULT_STATE.pvp,state.pvp||{});
+  state.bosses=Object.assign({},DEFAULT_STATE.bosses,state.bosses||{});
+  state.referrals=Object.assign({},DEFAULT_STATE.referrals,state.referrals||{});
+  if(!Array.isArray(state.field))state.field=Array(54).fill(null);
+ }catch(e){state=JSON.parse(JSON.stringify(DEFAULT_STATE))}
+ ensureSeason();
+}
+
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
+
+function ensureSeason(){
+ const current=getSeasonKey();
+ if(state.season!==current){
+  state.season=current;
+  state.seasonHarvested=0;
+  state.seasonPvp=0;
+  state.seasonCoins=0;
+  save();
+ }
+}
+
+function xpNeed(){return 100+(state.level-1)*75}
+
+function addXP(amount){
+ state.xp+=amount;
+ while(state.xp>=xpNeed()){
+  state.xp-=xpNeed();
+  state.level++;
+  notify("⭐ Новый уровень: "+state.level);
+  checkReferralLevel();
+ }
+}
+
+function getPlayerId(){
+ let id=localStorage.getItem("growix_player_id");
+ if(!id){
+  id="P"+Math.random().toString(36).slice(2,10);
+  localStorage.setItem("growix_player_id",id);
+ }
+ return id;
+}
+
+function referralCode(){return getPlayerId()}
+
+function processReferralStart(){
+ try{
+  const ref=new URLSearchParams(location.search).get("ref");
+  if(ref&&ref!==getPlayerId()&&!state.referrals.invitedBy){
+   state.referrals.invitedBy=ref;
+   if(!state.referrals.welcome){
+    state.coins+=1000;
+    state.animals.chicken++;
+    state.referrals.welcome=true;
+    notify("🎁 Бонус за вход: +1000 🪙 + 🐔");
+    save();
+   }
+  }
+ }catch(e){}
+}
+
+function checkReferralLevel(){
+ if(state.level<2||!state.referrals.invitedBy)return;
+ if(!state.referrals.confirmed.includes(state.referrals.invitedBy)){
+  state.referrals.confirmed.push(state.referrals.invitedBy);
+ }
+ save();
+}
+
+function copyReferral(){
+ const link=location.origin+location.pathname+"?ref="+referralCode();
+ navigator.clipboard?.writeText(link);
+ notify("📋 Реферальная ссылка скопирована");
+}
+
+function workerBonus(){
+ return Math.min(70,state.workers.basic*5+state.workers.pro*12);
+}
+
+function growTime(crop){
+ let speed=1-workerBonus()/100;
+ if(state.boosterUntil>Date.now())speed/=2;
+ return crop.grow*2*speed*1000;
+}
+
+function plant(index,id){
+ const crop=CROPS[id];
+ if(!crop)return;
+ if(state.field[index])return notify("❌ Грядка занята");
+ if((state.inventory[crop.seed]||0)<=0)return notify("❌ Нет семян");
+ state.inventory[crop.seed]--;
+ const now=Date.now();
+ state.field[index]={crop:id,plantedAt:now,readyAt:now+growTime(crop),crow:false};
+ save();closeModal();render();notify("🌱 Посажено");
+}
+
+function harvest(index){
+ const p=state.field[index];
+ if(!p)return;
+ const crop=CROPS[p.crop];
+ if(!crop)return;
+ if(Date.now()<p.readyAt)return notify("⏳ Урожай ещё растёт");
+ let reward=crop.reward;
+ if(p.crow){
+  const defense=state.buildings.scarecrow*35+state.buildings.fence*10+state.buildings.stone*20;
+  if(Math.random()*100>Math.min(90,defense)){
+   reward=Math.max(1,Math.floor(reward*.65));
+   notify("🐦 Вороны испортили часть урожая");
+  }else notify("🛡️ Защита спасла урожай");
+ }
+ state.inventory[p.crop]=(state.inventory[p.crop]||0)+reward;
+ state.harvested+=reward;
+ state.seasonHarvested+=reward;
+ addXP(crop.xp);
+ state.field[index]=null;
+ save();render();
+}
+
+function renderField(){
+ const box=document.getElementById("field");
+ const world=document.getElementById("worldField");
+ if(!box||!world)return;
+
+ box.innerHTML="";world.innerHTML="";
+ const count=state.expansion;
+ const layout=EXPANSIONS[count]||EXPANSIONS[9];
+
+ box.style.gridTemplateColumns=`repeat(${Math.min(6,count)},1fr)`;
+ world.style.gridTemplateColumns=`repeat(${layout.columns},1fr)`;
+
+ /*
+  Главное исправление 54:
+  живая ферма НЕ масштабируется через transform.
+  Размер клеток автоматически уменьшается через grid,
+  поэтому сетка всегда занимает доступное пространство.
+ */
+ world.style.width=count>=36?"96%":count>=18?"94%":"88%";
+ world.style.gap=count>=36?"3px":count>=18?"4px":"6px";
+ world.style.padding=count>=36?"6px":"8px";
+
+ for(let i=0;i<count;i++){
+  const p=state.field[i];
+
+  const el=document.createElement("div");
+  el.className="plot "+(!p?"empty":p.crow?"crow":Date.now()>=p.readyAt?"ready":"");
+  if(p){
+   const crop=CROPS[p.crop];
+   el.innerHTML=crop.icon;
+   if(Date.now()<p.readyAt)el.innerHTML+=`<div class="plotTimer">${formatTime(p.readyAt-Date.now())}</div>`;
+   if(p.crow)el.innerHTML+=`<div class="plotLabel">🐦</div>`;
+   el.onclick=()=>harvest(i);
+  }else el.onclick=()=>openPlant(i);
+  box.appendChild(el);
+
+  const w=document.createElement("div");
+  w.className="worldPlot "+(p&&p.crow?"crow":p&&Date.now()>=p.readyAt?"ready":"");
+  w.textContent=p?(p.crow?"🐦":CROPS[p.crop].icon):"·";
+  if(p&&Date.now()<p.readyAt){
+   w.title=formatTime(p.readyAt-Date.now());
+  }
+  w.onclick=p?()=>harvest(i):()=>openPlant(i);
+  world.appendChild(w);
+ }
+
+ document.getElementById("plotCount").textContent=count;
+ document.getElementById("farmSize").textContent=count+" участков";
+ renderPerimeter();
+ renderGuards();
+}
+
+function renderPerimeter(){
+ const box=document.getElementById("perimeter");
+ if(!box)return;
+ box.innerHTML="";
+
+ const slots=[
+  ["top",20],["top",50],["top",80],
+  ["right",25],["right",50],["right",75],
+  ["bottom",20],["bottom",50],["bottom",80],
+  ["left",25],["left",50],["left",75]
+ ];
+
+ slots.forEach(([side,pos],i)=>{
+  const el=document.createElement("div");
+  el.className="perimeterSlot slot-"+side;
+
+  if(side==="top"||side==="bottom")el.style.left=pos+"%";
+  else el.style.top=pos+"%";
+
+  const type=i%2===0?"fence":"scarecrow";
+  const count=state.buildings[type]||0;
+
+  if(count>0){
+   el.classList.add("slot-built");
+   el.textContent=type==="fence"?"🧱":"🎃";
+   el.onclick=()=>notify(type==="fence"?"🧱 Забор уже установлен":"🎃 Чучело уже установлено");
+  }else{
+   el.textContent="＋";
+   el.onclick=()=>openBuild();
+  }
+
+  box.appendChild(el);
+ });
+}
+
+function renderGuards(){
+ const box=document.getElementById("guards");
+ if(!box)return;
+ box.innerHTML="";
+ const total=state.army.fighter+state.army.guard;
+ for(let i=0;i<total;i++){
+  const g=document.createElement("div");
+  g.className="guard";
+  g.textContent=i<state.army.fighter?"⚔️":"🛡️";
+  const angle=(i/Math.max(1,total))*Math.PI*2;
+  const x=50+43*Math.cos(angle);
+  const y=50+39*Math.sin(angle);
+  g.style.left=`calc(${x}% - 13px)`;
+  g.style.top=`calc(${y}% - 13px)`;
+  g.style.animation=`guardMove ${3+i%3}s ease-in-out infinite alternate`;
+  box.appendChild(g);
+ }
+}
+
+const guardStyle=document.createElement("style");
+guardStyle.textContent="@keyframes guardMove{from{transform:translate(0,0)}to{transform:translate(8px,5px)}}";
+document.head.appendChild(guardStyle);
 
 function crowTick(){
- if(!state.crowsNext)state.crowsNext=Date.now()+3600000;
- if(Date.now()<state.crowsNext)return;
- const growing=state.field.map((p,i)=>p&&Date.now()<p.readyAt&&!p.crow?i:-1).filter(i=>i>=0);
+ if(Date.now()<state.crows.next)return;
+
+ const growing=state.field.map((p,i)=>p&&Date.now()<p.readyAt?i:-1).filter(i=>i>=0);
+
  if(growing.length){
   const target=growing[Math.floor(Math.random()*growing.length)];
-  const placed=(state.perimeterBuildings||[]).filter(x=>x==="scarecrow").length;
-  const defense=Math.min(90,placed*35+(state.inventory.scarecrow||0)*15+(state.inventory.fence||0)*10);
-  if(Math.random()*100>defense){state.field[target].crow=true;notify("🐦‍⬛ Вороны атаковали урожай!");}
-  else notify("🛡️ Защита отпугнула ворон");
+  const defense=state.buildings.fence*10+state.buildings.scarecrow*35+state.buildings.stone*20;
+  if(Math.random()*100>Math.min(90,defense)){
+   state.field[target].crow=true;
+   state.crows.attacks++;
+   notify("🐦 Вороны атаковали урожай!");
+  }else notify("🛡️ Защита фермы отпугнула ворон");
  }
- state.crowsNext=Date.now()+3600000;saveState();
+ state.crows.next=Date.now()+3600000;
+ save();render();
 }
 
-function expandFarm(){  
-  
- let next=  
-  state.expansion===9?18:  
-  state.expansion===18?36:  
-  state.expansion===36?54:  
-  54;  
-  
- if(next===state.expansion)  
-  return notify("🏡 Максимальный размер");  
-  
- let cost=  
-  next===18?7500:  
-  next===36?25000:  
-  50000;  
-  
- if(state.coins<cost)  
-  return notify("❌ Нужно "+cost+" 🪙");  
-  
- state.coins-=cost;  
-  
- state.expansion=next;  
-  
- while(state.field.length<next)  
-  state.field.push(null);  
-  
- saveState();  
-  
- notify("🏡 Ферма расширена до "+next);  
-  
- render();  
-  
-}  
-  
-  
-/* =========================  
-   BUILDINGS  
-========================= */  
-  
-function openBuildMenu(){openModal(`<div class="sectionTitle">🧱 Строительство</div><div class="grid"><div class="itemCard"><div class="itemImage">🧱</div><div class="itemName">Забор</div><div class="itemCount">Периметр · есть ${state.inventory.fence||0}</div><button class="btn" onclick="buyBuilding('fence',500)">🪙 500</button></div><div class="itemCard"><div class="itemImage">🎃</div><div class="itemName">Чучело</div><div class="itemCount">Защита от ворон · есть ${state.inventory.scarecrow||0}</div><button class="btn" onclick="buyBuilding('scarecrow',750)">🪙 750</button></div><div class="itemCard"><div class="itemImage">🪨</div><div class="itemName">Камень</div><div class="itemCount">Декор · есть ${state.inventory.stone||0}</div><button class="btn" onclick="buyBuilding('stone',50)">🪙 50</button></div></div>`);}
-function buyBuilding(type,cost){if(state.coins<cost)return notify("❌ Недостаточно монет");state.coins-=cost;state.inventory[type]=(state.inventory[type]||0)+1;saveState();render();notify("🏗️ Предмет добавлен");}
-function buildSlot(slot){const types=[["fence","🧱","Забор"],["scarecrow","🎃","Чучело"],["stone","🪨","Камень"]];openModal(`<div class="sectionTitle">🏗️ Периметр · место №${slot}</div><div class="grid">${types.map(x=>`<div class="itemCard"><div class="itemImage">${x[1]}</div><div class="itemName">${x[2]}</div><div class="itemCount">Есть: ${state.inventory[x[0]]||0}</div><button class="btn" onclick="placeBuilding(${slot},'${x[0]}')">Поставить</button></div>`).join("")}</div>`);}
-function placeBuilding(slot,type){if((state.inventory[type]||0)<=0)return notify("❌ Нет предмета");state.inventory[type]--;state.perimeterBuildings[slot-1]=type;saveState();closeModal();render();notify("🏗️ Построено по периметру");}
-function renderSlots(){const box=document.getElementById("buildSlots");if(!box)return;box.innerHTML="";for(let i=0;i<20;i++){const el=document.createElement("div");el.className="buildSlot";const side=Math.floor(i/5),pos=i%5;if(side===0){el.style.left=(8+pos*21)+"%";el.style.top="3%";}if(side===1){el.style.right="2%";el.style.top=(16+pos*17)+"%";}if(side===2){el.style.left=(8+(4-pos)*21)+"%";el.style.bottom="2%";}if(side===3){el.style.left="2%";el.style.top=(16+(4-pos)*17)+"%";}const v=state.perimeterBuildings[i];el.innerHTML=v?(v==="fence"?"🧱":v==="scarecrow"?"🎃":"🪨"):"＋";el.onclick=()=>buildSlot(i+1);box.appendChild(el);}}
-
-function feedAnimal(id){
- const a=animals[id],d=state.animals[id];
- if(!d.count)return notify("❌ Нет животных");
- if(d.production)return notify("⏳ Животное уже производит");
- if((state.inventory[a.feed]||0)<=0)return notify("❌ Нужен корм: "+crops[a.feed].name);
- state.inventory[a.feed]--;d.production=d.count;d.readyAt=Date.now()+a.time;saveState();notify("🍽️ Животные накормлены");render();
+function renderCrow(){
+ const left=Math.max(0,state.crows.next-Date.now());
+ const timer=document.getElementById("crowTimer");
+ const bar=document.getElementById("crowBar");
+ const status=document.getElementById("crowStatus");
+ if(!timer)return;
+ timer.textContent=formatTime(left);
+ status.textContent=left<=0?"🐦 Вороны атакуют прямо сейчас!":"Следующая атака ворон через "+formatTime(left);
+ const total=3600000;
+ bar.style.width=(Math.max(0,1-left/total)*100)+"%";
+ document.getElementById("fenceCount").textContent=state.buildings.fence||0;
+ document.getElementById("scarecrowCount").textContent=state.buildings.scarecrow||0;
+ document.getElementById("stoneCount").textContent=state.buildings.stone||0;
 }
 
-function collectAnimal(id){const a=animals[id],d=state.animals[id];if(!d.production)return notify("❌ Нечего собирать");if(Date.now()<d.readyAt)return notify("⏳ Готово через "+animalTime(d.readyAt-Date.now()));state.inventory[a.product]=(state.inventory[a.product]||0)+d.production;if(a.extraProduct)state.inventory[a.extraProduct]=(state.inventory[a.extraProduct]||0)+d.production;addXP(d.production*8);d.production=0;d.readyAt=null;saveState();render();notify(a.productIcon+" Продукция собрана");}
+function expandFarm(){
+ const info=EXPANSIONS[state.expansion];
+ if(!info)return notify("🏡 Ферма полностью расширена");
 
-function buyAnimal(id){  
-  
- const a=animals[id];  
-  
- if(state.coins<a.price)  
-  return notify("❌ Недостаточно монет");  
-  
- state.coins-=a.price;  
-  
- state.animals[id].count++;  
-  
- saveState();  
-  
- notify(a.icon+" Животное куплено");  
-  
- render();  
-  
-}  
-  
-  
-function renderAnimals(){const box=document.getElementById("animalsContainer");if(!box)return;box.innerHTML="";Object.entries(animals).forEach(([id,a])=>{const d=state.animals[id],products=a.extraProduct?`${a.productIcon} ${a.productName} + ${a.extraProductIcon} ${a.extraProductName}`:`${a.productIcon} ${a.productName}`;let production="";if(d.count){if(d.production){production=Date.now()>=d.readyAt?`<div class="production">${products}: ×${d.production}<button class="btn" onclick="collectAnimal('${id}')">📦 Собрать</button></div>`:`<div class="production">⏳ До готовности: <b>${animalTime(d.readyAt-Date.now())}</b><br><span class="muted small">Цикл: ${animalTime(a.time)}</span></div>`;}else production=`<div class="production">${products}<br><span class="muted small">Цикл: ${animalTime(a.time)}</span><button class="btn" onclick="feedAnimal('${id}')">🌾 Покормить</button></div>`;}const card=document.createElement("div");card.className="animalCard";card.innerHTML=`<div class="animalTop"><div class="animalVisual">${a.icon}</div><div><div class="animalName">${a.name}</div><div class="animalAmount">Количество: <b>${d.count}</b></div><div class="animalAmount">Производство: ${animalTime(a.time)}</div></div></div>${production}${!d.count?`<button class="btn secondary" onclick="buyAnimal('${id}')">🛒 Купить · ${a.price} 🪙</button>`:""}`;box.appendChild(card);});}
+ if(info.stars){
+  if(!TEST_STARS)return notify("⭐ Payment ещё не подключён");
+  state.expansion=info.next;
+  save();render();
+  notify("⭐ ТЕСТ: расширение 54 участка");
+  return;
+ }
 
-function buySeed(id){  
-  
- const c=crops[id];  
-  
- if(state.coins<c.price)  
-  return notify("❌ Недостаточно монет");  
-  
- state.coins-=c.price;  
-  
- state.inventory[c.seed]++;  
-  
- saveState();  
-  
- render();  
-  
-}  
-  
-  
-function renderShop(){  
-  
- document.getElementById("seedShop").innerHTML=  
- Object.entries(crops).map(([id,c])=>`  
-  
-  <div class="row">  
-  
-   <div class="rowLeft">  
-    <div class="rowIcon">${c.icon}</div>  
-  
-    <div>  
-     <div class="rowName">${c.name}</div>  
-     <div class="rowSub">  
-      Семян: ${state.inventory[c.seed]}  
-     </div>  
-    </div>  
-   </div>  
-  
-   <button  
-    class="btn"  
-    style="width:auto"  
-    onclick="buySeed('${id}')"  
-   >  
-    🪙 ${c.price}  
-   </button>  
-  
-  </div>  
-  
- `).join("");  
-  
-  
- document.getElementById("animalShop").innerHTML=  
- Object.entries(animals).map(([id,a])=>`  
-  
-  <div class="row">  
-  
-   <div class="rowLeft">  
-  
-    <div class="rowIcon">${a.icon}</div>  
-  
-    <div>  
-  
-     <div class="rowName">${a.name}</div>  
-  
-     <div class="rowSub">  
-      Есть: ${state.animals[id].count}  
-     </div>  
-  
-    </div>  
-  
-   </div>  
-  
-   <button  
-    class="btn"  
-    style="width:auto"  
-    onclick="buyAnimal('${id}')"  
-   >  
-    🪙 ${a.price}  
-   </button>  
-  
-  </div>  
-  
- `).join("");  
-  
-  
- document.getElementById("workerShop").innerHTML=`  
-  
-  <div class="row">  
-  
-   <div class="rowLeft">  
-  
-    <div class="rowIcon">👨‍🌾</div>  
-  
-    <div>  
-  
-     <div class="rowName">  
-      Фермер  
-     </div>  
-  
-     <div class="rowSub">  
-      +5% скорости · максимум 10  
-     </div>  
-  
-    </div>  
-  
-   </div>  
-  
-   <button  
-    class="btn"  
-    style="width:auto"  
-    onclick="hireWorker()"  
-    ${state.workers>=10?"disabled":""}  
-   >  
-    🪙 2500  
-   </button>  
-  
-  </div>  
-  
- `;  
-  
-  
- document.getElementById("defenseShop").innerHTML=`  
-  
-  <div class="row">  
-   <div class="rowLeft">  
-    <div class="rowIcon">🧱</div>  
-    <div>  
-     <div class="rowName">Забор</div>  
-     <div class="rowSub">  
-      Есть: ${state.inventory.fence}  
-     </div>  
-    </div>  
-   </div>  
-   <button class="btn" style="width:auto"  
-    onclick="buyBuilding('fence',500)">  
-    🪙 500  
-   </button>  
-  </div>  
-  
-  <div class="row">  
-   <div class="rowLeft">  
-    <div class="rowIcon">🎃</div>  
-    <div>  
-     <div class="rowName">Чучело</div>  
-     <div class="rowSub">  
-      Есть: ${state.inventory.scarecrow}  
-     </div>  
-    </div>  
-   </div>  
-   <button class="btn" style="width:auto"  
-    onclick="buyBuilding('scarecrow',750)">  
-    🪙 750  
-   </button>  
-  </div>  
-  
- `;  
-  
- renderPackages();
+ if(state.coins<info.price)return notify("❌ Нужно "+money(info.price)+" 🪙");
+ state.coins-=info.price;
+ state.expansion=info.next;
+ save();render();
+ notify("🏡 Ферма расширена до "+info.next+" участков!");
+}
 
-}  
-  
-  
-/* =========================  
-   INVENTORY  
-========================= */  
-  
-function sellResource(id,price){  
-  
- if((state.inventory[id]||0)<=0)  
-  return notify("❌ Нет ресурса");  
-  
- state.inventory[id]--;  
-  
- state.coins+=price;
- state.seasonCoins+=price;  
-  
- saveState();  
-  
- checkQuests();  
-  
- render();  
-  
-}  
-  
-  
-function renderInventory(){  
-  
- document.getElementById("inventoryGrid").innerHTML=  
- invItems.map(x=>`  
-  
-  <div class="itemCard">  
-  
-   <div class="itemImage">${x[1]}</div>  
-  
-   <div class="itemName">${x[2]}</div>  
-  
-   <div class="itemCount">  
-    ×${state.inventory[x[0]]||0}  
-   </div>  
-  
-  </div>  
-  
- `).join("");  
-  
-  
- document.getElementById("sellList").innerHTML=  
- sellables.map(x=>`  
-  
-  <div class="row">  
-  
-   <div class="rowLeft">  
-  
-    <div class="rowIcon">${x[1]}</div>  
-  
-    <div>  
-  
-     <div class="rowName">${x[2]}</div>  
-  
-     <div class="rowSub">  
-      Есть: ${state.inventory[x[0]]||0}  
-     </div>  
-  
-    </div>  
-  
-   </div>  
-  
-   <button  
-    class="btn"  
-    style="width:auto"  
-    onclick="sellResource('${x[0]}',${x[3]})"  
-   >  
-    🪙 ${x[3]}  
-   </button>  
-  
-  </div>  
-  
- `).join("");  
-  
- renderQuests();  
-  
-}  
-  
-  
-/* =========================  
-   QUESTS  
-========================= */  
-  
-const questData=[  
-  
- {  
-  id:"wheat100",  
-  name:"Собери 100 пшеницы",  
-  icon:"🌾",  
-  goal:100,  
-  reward:500,  
-  type:"harvest"  
- },  
-  
- {  
-  id:"lvl5",  
-  name:"Достигни 5 уровня",  
-  icon:"⭐",  
-  goal:5,  
-  reward:500,  
-  type:"level"  
- },  
-  
- {  
-  id:"worker1",  
-  name:"Найми первого фермера",  
-  icon:"👨‍🌾",  
-  goal:1,  
-  reward:1000,  
-  type:"workers"  
- },  
-  
- {  
-  id:"animals5",  
-  name:"Купи 5 животных",  
-  icon:"🐄",  
-  goal:5,  
-  reward:1500,  
-  type:"animals"  
- },  
-  
- {  
-  id:"channel",  
-  name:"Подпишись на канал Growix",  
-  icon:"📢",  
-  goal:1,  
-  reward:750,  
-  type:"channel"  
- }  
-  
-];  
-  
-  
-function questValue(q){  
-  
- if(q.type==="level")  
-  return state.level;  
-  
- if(q.type==="workers")  
-  return state.workers;  
-  
- if(q.type==="animals")  
-  return Object.values(state.animals)  
-   .reduce((sum,x)=>sum+x.count,0);  
-  
- if(q.type==="harvest")  
-  return state.harvested;  
-  
- return state.quests[q.id+"_verified"]?1:0;  
-  
-}  
-  
-  
-function claimChannelQuest(){  
-  
- /*  
-  Реальная проверка подписки будет делаться  
-  через backend после подключения БД/Bot API.  
- */  
-  
- window.open(  
-  "https://t.me/growixfarm",  
-  "_blank"  
- );  
-  
- state.quests.channel_verified=true;  
-  
- saveState();  
-  
- notify("📢 Задание отмечено");  
-  
- render();  
-  
-}  
-  
-  
-function checkQuests(){  
-  
- questData.forEach(q=>{  
-  
-  if(state.quests[q.id])  
-   return;  
-  
-  const value=questValue(q);  
-  
-  if(value>=q.goal){  
-  
-   state.quests[q.id]=true;  
-  
-   state.coins+=q.reward;  
-  
-   notify(  
-    "🎯 Задание выполнено! +"+  
-    q.reward+  
-    " 🪙"  
-   );  
-  
-  }  
-  
- });  
-  
- saveState();  
-  
-}  
-  
-  
-function renderQuests(){  
-  
- document.getElementById("quests").innerHTML=  
-  
- questData.map(q=>{  
-  
-  const value=  
-   Math.min(q.goal,questValue(q));  
-  
-  const done=!!state.quests[q.id];  
-  
-  let button="";  
-  
-  if(q.type==="channel"&&!done){  
-  
-   button=`  
-  
-    <button  
-     class="btn"  
-     onclick="claimChannelQuest()"  
-    >  
-     📢 Подписаться  
-    </button>  
-  
-   `;  
-  
-  }  
-  
-  return `  
-  
-   <div class="row">  
-  
-    <div class="rowLeft">  
-  
-     <div class="rowIcon">  
-      ${q.icon}  
-     </div>  
-  
-     <div>  
-  
-      <div class="rowName">  
-       ${q.name}  
-      </div>  
-  
-      <div class="rowSub">  
-       ${value} / ${q.goal}  
-      </div>  
-  
-     </div>  
-  
-    </div>  
-  
-    <span class="price">  
-     ${done?"✅":"+"+q.reward+" 🪙"}  
-    </span>  
-  
-   </div>  
-  
-   ${button}  
-  
-  `;  
-  
- }).join("");  
-  
-}  
-  
-  
-/* =========================  
-   PROFILE / ARMY  
-========================= */  
-  
-function openProfile(){  
-  
- const user=tg?.initDataUnsafe?.user;  
-  
- openModal(`  
-  
-  <div class="center">  
-  
-   <div style="font-size:60px">👤</div>  
-  
-   <h2>  
-    ${user?.first_name||"Фермер"}  
-   </h2>  
-  
-   <div class="muted">  
-    @${user?.username||"player"}  
-   </div>  
-  
-  </div>  
-  
-  <div class="profileStats">  
-  
-   <div class="profileStat">  
-    <b>${state.level}</b>  
-    <span>уровень</span>  
-   </div>  
-  
-   <div class="profileStat">  
-    <b>${state.harvested}</b>  
-    <span>урожай</span>  
-   </div>  
-  
-   <div class="profileStat">  
-    <b>${state.wins}</b>  
-    <span>PvP побед</span>  
-   </div>  
-  
-   <div class="profileStat">  
-    <b>${state.workers}</b>  
-    <span>фермеров</span>  
-   </div>  
-  
-  </div>  
-  
- `);  
-  
-}  
-  
-  
-function openArmy(){  
-  
- const totalHP=  
-  state.army.guard1*100+  
-  state.army.guard2*150+  
-  state.army.guard3*220;  
-  
- const power=  
-  state.army.guard1*20+  
-  state.army.guard2*30+  
-  state.army.guard3*50;  
-  
- openModal(`  
-  
-  <div class="center">  
-  
-   <div style="font-size:55px">🪖</div>  
-  
-   <h2>Моя армия</h2>  
-  
-  </div>  
-  
-  <div class="profileStats">  
-  
-   <div class="profileStat">  
-    <b>${totalHP}</b>  
-    <span>общее HP</span>  
-   </div>  
-  
-   <div class="profileStat">  
-    <b>${power}</b>  
-    <span>сила атаки</span>  
-   </div>  
-  
-  </div>  
-  
-  <div class="row">  
-   ⚔️ Стражник I  
-   <b>×${state.army.guard1}</b>  
-  </div>  
-  
-  <div class="row">  
-   🏹 Стражник II  
-   <b>×${state.army.guard2}</b>  
-  </div>  
-  
-  <div class="row">  
-   🐎 Стражник III  
-   <b>×${state.army.guard3}</b>  
-  </div>  
-  
- `);  
-  
-}  
-  
-  
-function buyArmy(id,cost){  
-  
- if(state.coins<cost)  
-  return notify("❌ Недостаточно монет");  
-  
- state.coins-=cost;  
-  
- state.army[id]++;  
-  
- saveState();  
-  
- notify("🪖 Воин добавлен");  
-  
- render();  
-  
-}  
-  
-  
-/* =========================  
-   BOSSES  
-========================= */  
-  
-function armyStats(){  
-  
- return{  
-  
-  hp:  
-   state.army.guard1*100+  
-   state.army.guard2*150+  
-   state.army.guard3*220,  
-  
-  damage:  
-   state.army.guard1*20+  
-   state.army.guard2*30+  
-   state.army.guard3*50  
-  
- };  
-  
-}  
-  
-  
-function fightBoss(id){  
-  
- const boss=  
-  bosses.find(x=>x.id===id);  
-  
- if(!boss)return;  
-  
- const left=  
-  Math.max(  
-   0,  
-   (state.bossCooldowns[id]||0)-Date.now()  
-  );  
-  
- if(left)  
-  return notify(  
-   "👑 Босс доступен через "+  
-   formatTime(left)  
-  );  
-  
- if(state.coins<boss.cost)  
-  return notify(  
-   "❌ Нужно "+boss.cost+" 🪙"  
-  );  
-  
- const army=armyStats();  
-  
- if(army.hp<=0)  
-  return notify(  
-   "🪖 Нужна армия для битвы"  
-  );  
-  
- state.coins-=boss.cost;  
-  
- state.bossCooldowns[id]=  
-  Date.now()+COOLDOWNS.boss;  
-  
- startBossBattle(boss,army);  
-  
-}  
-  
-  
-function startBossBattle(boss,army){  
-  
- let bossHP=boss.hp;  
-  
- let armyHP=army.hp;  
-  
- let tick=0;  
-  
- openModal(`  
-  
-  <div class="battleArena">  
-  
-   <div class="center">  
-  
-    <div class="battleBoss">  
-     ${boss.icon}  
-    </div>  
-  
-    <h2>${boss.name}</h2>  
-  
-   </div>  
-  
-   <div>  
-    <b>❤️ Босс</b>  
-    <div class="hp">  
-     <i id="bossHPBar"  
-      style="width:100%">  
-     </i>  
-    </div>  
-  
-    <div  
-     id="bossHPText"  
-     class="muted small"  
-     style="margin-top:5px"  
-    >  
-     ${bossHP} / ${boss.hp}  
-    </div>  
-   </div>  
-  
-   <div class="battleUnits">  
-  
-    <div class="battleUnit">🪖</div>  
-    <div>⚔️</div>  
-    <div class="battleUnit">👑</div>  
-  
-   </div>  
-  
-   <div>  
-  
-    <b>🪖 Твоя армия</b>  
-  
-    <div class="hp">  
-     <i id="armyHPBar"  
-      style="width:100%">  
-     </i>  
-    </div>  
-  
-    <div  
-     id="armyHPText"  
-     class="muted small"  
-     style="margin-top:5px"  
-    >  
-     ${armyHP} / ${army.hp}  
-    </div>  
-  
-   </div>  
-  
-   <div  
-    id="battleLog"  
-    class="cooldown"  
-    style="margin-top:12px"  
-   >  
-    ⚔️ Бой начинается...  
-   </div>  
-  
-  </div>  
-  
- `);  
-  
-  
- window.battleTimer=  
- setInterval(()=>{  
-  
-  tick++;  
-  
-  /*  
-   Обе стороны атакуют одновременно.  
-  */  
-  
-  const armyDamage=  
-   Math.max(  
-    8,  
-    army.damage+  
-    Math.floor(Math.random()*12)  
-   );  
-  
-  const bossDamage=  
-   Math.max(  
-    5,  
-    Math.floor(  
-     boss.hp*.025+  
-     Math.random()*12  
-    )  
-   );  
-  
-  bossHP-=armyDamage;  
-  
-  armyHP-=bossDamage;  
-  
-  bossHP=Math.max(0,bossHP);  
-  armyHP=Math.max(0,armyHP);  
-  
-  const bossBar=  
-   document.getElementById("bossHPBar");  
-  
-  const armyBar=  
-   document.getElementById("armyHPBar");  
-  
-  if(bossBar)  
-   bossBar.style.width=  
-    (bossHP/boss.hp*100)+"%";  
-  
-  if(armyBar)  
-   armyBar.style.width=  
-    (armyHP/army.hp*100)+"%";  
-  
-  const bt=  
-   document.getElementById("bossHPText");  
-  
-  const at=  
-   document.getElementById("armyHPText");  
-  
-  if(bt)  
-   bt.textContent=  
-    bossHP+" / "+boss.hp;  
-  
-  if(at)  
-   at.textContent=  
-    armyHP+" / "+army.hp;  
-  
-  const log=  
-   document.getElementById("battleLog");  
-  
-  if(log){  
-  
-   log.innerHTML=  
-    "⚔️ Армия нанесла "+  
-    armyDamage+  
-    " урона · 👑 Босс нанёс "+  
-    bossDamage+  
-    " урона";  
-  
-  }  
-  
-  if(bossHP<=0||armyHP<=0){  
-  
-   clearInterval(window.battleTimer);  
-  
-   setTimeout(()=>{  
-  
-    closeModal();  
-  
-    if(bossHP<=0){  
-  
-     state.coins+=boss.reward;  
-  
-     state.pvpPoints+=100;  
-  
-     addXP(50);  
-  
-     notify(  
-      "👑 Босс побеждён! +"+  
-      boss.reward+  
-      " 🪙"  
-     );  
-  
-    }else{  
-  
-     notify(  
-      "🪖 Армия проиграла. Усиль войска."  
-     );  
-  
-    }  
-  
-    saveState();  
-  
-    render();  
-  
-   },900);  
-  
-  }  
-  
- },900);  
-  
-}  
-  
-  
-function renderBosses(){  
-  
- document.getElementById("bossList").innerHTML=  
-  
- bosses.map(b=>{  
-  
-  const left=  
-   Math.max(  
-    0,  
-    (state.bossCooldowns[b.id]||0)-Date.now()  
-   );  
-  
-  return `  
-  
-   <div class="row">  
-  
-    <div class="rowLeft">  
-  
-     <div class="rowIcon">  
-      ${b.icon}  
-     </div>  
-  
-     <div>  
-  
-      <div class="rowName">  
-       ${b.name}  
-      </div>  
-  
-      <div class="rowSub">  
-       ❤️ ${b.hp} HP ·  
-       🎁 ${b.reward} 🪙  
-      </div>  
-  
-     </div>  
-  
-    </div>  
-  
-    <button  
-     class="btn"  
-     style="width:auto"  
-     onclick="fightBoss('${b.id}')"  
-    >  
-     ${left?  
-      formatTime(left):  
-      "⚔️ "+b.cost}  
-    </button>  
-  
-   </div>  
-  
-  `;  
-  
- }).join("");  
-  
-}  
-  
-  
-/* =========================  
-   PVP  
-========================= */  
-  
-function startPVP(){  
-  
- const left=cd("pvp");  
-  
- if(left)  
-  return notify(  
-   "⚔️ Следующий бой через "+  
-   formatTime(left)  
-  );  
-  
- state.cooldowns.pvp=  
-  Date.now()+COOLDOWNS.pvp;  
-  
- const playerPower=  
-  state.level*100+  
-  state.pvpPoints+  
-  Math.random()*150;  
-  
- const enemyPower=  
-  state.level*100+  
-  Math.random()*200;  
-  
- openModal(`  
-  
-  <div class="center">  
-  
-   <div style="font-size:65px">⚔️</div>  
-  
-   <h2>Поиск соперника...</h2>  
-  
-   <p class="muted">  
-    Бой готовится  
-   </p>  
-  
-  </div>  
-  
- `);  
-  
- setTimeout(()=>{  
-  
-  closeModal();  
-  
-  if(playerPower>=enemyPower){  
-  
-   const pts=  
-    80+  
-    Math.floor(Math.random()*50);  
-  
-   state.wins++;  
-  
-   state.pvpPoints+=pts;  
-  
-   addXP(25);  
-  
-   notify(  
-    "🏆 Победа! +"+  
-    pts+  
-    " PvP"  
-   );  
-  
-  }else{  
-  
-   state.losses++;  
-  
-   state.pvpPoints+=15;  
-  
-   notify(  
-    "⚔️ Поражение · +15 PvP"  
-   );  
-  
-  }  
-  
-  saveState();  
-  
-  render();  
-  
- },1200);  
-  
-}  
-  
-  
-/* =========================  
-   HARVEST MINI GAME  
-========================= */  
-  
-function startHarvestGame(){  
-  
- const left=cd("mini");  
-  
- if(left)  
-  return notify(  
-   "🎯 Следующая игра через "+  
-   formatTime(left)  
-  );  
-  
- state.cooldowns.mini=  
-  Date.now()+COOLDOWNS.mini;  
-  
- let score=0;  
-  
- openModal(`  
-  
-  <div class="center">  
-  
-   <h2>🌾 Быстрый сбор</h2>  
-  
-   <div class="muted small">  
-    Нажимай на пшеницу.  
-    После каждого клика она появится в новом месте.  
-   </div>  
-  
-   <div  
-    id="miniScore"  
-    style="font-size:40px;font-weight:1000;margin-top:8px"  
-   >  
-    0  
-   </div>  
-  
-  </div>  
-  
-  <div  
-   id="wheatGame"  
-   class="wheatGame"  
-  ></div>  
-  
-  <div  
-   id="miniTimer"  
-   class="cooldown"  
-  >  
-   10 секунд  
-  </div>  
-  
- `);  
-  
- const game=  
-  document.getElementById("wheatGame");  
-  
- const scoreEl=  
-  document.getElementById("miniScore");  
-  
- const timerEl=  
-  document.getElementById("miniTimer");  
-  
- function spawn(){  
-  
-  if(!game)return;  
-  
-  game.innerHTML="";  
-  
-  const wheat=  
-   document.createElement("div");  
-  
-  wheat.className="wheatTarget";  
-  
-  wheat.textContent="🌾";  
-  
-  wheat.style.left=  
-   (5+Math.random()*85)+"%";  
-  
-  wheat.style.top=  
-   (5+Math.random()*75)+"%";  
-  
-  wheat.onclick=()=>{  
-  
-   score++;  
-  
-   if(scoreEl)  
-    scoreEl.textContent=score;  
-  
-   spawn();  
-  
-  };  
-  
-  game.appendChild(wheat);  
-  
- }  
-  
- spawn();  
-  
- let remaining=10;  
-  
- const timer=  
- setInterval(()=>{  
-  
-  remaining--;  
-  
-  if(timerEl)  
-   timerEl.textContent=  
-    remaining+" секунд";  
-  
-  if(remaining<=0){  
-  
-   clearInterval(timer);  
-  
-   closeModal();  
-  
-   /*  
-    Увеличенная награда.  
-   */  
-  
-   const reward=Math.min(100,Math.max(15,score*4));
-   state.lastMiniScore=score;
-   state.bestMiniScore=Math.max(state.bestMiniScore||0,score);  
-  
-   state.coins+=reward;  
-  
-   addXP(  
-    Math.min(  
-     35,  
-     score*2  
-    )  
-   );  
-  
-   saveState();  
-  
-   notify(  
-    "🌾 Отличный сбор! +"+  
-    reward+  
-    " 🪙"  
-   );  
-  
-   render();  
-  
-  }  
-  
- },1000);  
-  
-}  
-  
-  
-/* =========================  
-   RAIDS  
-========================= */  
-  
-function startRaid(){  
-  
- const left=cd("raid");  
-  
- if(left)  
-  return notify(  
-   "⚔️ Рейд доступен через "+  
-   formatTime(left)  
-  );  
-  
- const army=armyStats();  
-  
- if(army.hp<=0)  
-  return notify("🪖 Нужна армия");  
-  
- state.cooldowns.raid=  
-  Date.now()+COOLDOWNS.raid;  
-  
- const reward=  
-  Math.floor(  
-   300+  
-   army.damage*4+  
-   Math.random()*300  
-  );  
-  
- openModal(`  
-  
-  <div class="center">  
-  
-   <div style="font-size:65px">🏰</div>  
-  
-   <h2>Рейд завершён</h2>  
-  
-   <p class="muted">  
-    Твои войска успешно вернулись.  
-   </p>  
-  
-   <div class="profileStats">  
-  
-    <div class="profileStat">  
-     <b>${army.hp}</b>  
-     <span>HP армии</span>  
-    </div>  
-  
-    <div class="profileStat">  
-     <b>${army.damage}</b>  
-     <span>сила</span>  
-    </div>  
-  
-   </div>  
-  
-   <button  
-    class="btn"  
-    onclick="finishRaid(${reward})"  
-   >  
-    🎁 Забрать ${reward} 🪙  
-   </button>  
-  
-  </div>  
-  
- `);  
-  
-}  
-  
-  
-function finishRaid(reward){  
-  
- state.coins+=reward;  
-  
- addXP(30);  
-  
- saveState();  
-  
- closeModal();  
-  
- notify(  
-  "⚔️ Рейд принес "+  
-  reward+  
-  " 🪙"  
- );  
-  
- render();  
-  
-}  
-  
-  
-function renderRaids(){  
-  
- const army=armyStats();  
-  
- document.getElementById("raidPower").textContent=  
-  "🪖 HP армии: "+  
-  army.hp+  
-  " · ⚔️ Сила: "+  
-  army.damage;  
-  
- document.getElementById("raidCooldown").textContent=  
-  cd("raid")  
-   ?"Следующий рейд через "+  
-    formatTime(cd("raid"))  
-   :"✅ Рейд доступен";  
-  
-}  
-  
-  
-/* =========================  
-   RATING  
-========================= */  
-  
-function renderRankingList(target,data){  
-  
- document.getElementById(target).innerHTML=  
-  
- data.map((x,i)=>`  
-  
-  <div class="row">  
-  
-   <div class="rowLeft">  
-  
-    <div class="rowIcon">  
-     ${i===0?"🥇":i===1?"🥈":i===2?"🥉":"👤"}  
-    </div>  
-  
-    <div>  
-     <div class="rowName">  
-      ${x[0]}  
-     </div>  
-    </div>  
-  
-   </div>  
-  
-   <b class="price">${x[1]}</b>  
-  
-  </div>  
-  
- `).join("");  
-  
-}  
-  
-  
-function renderRating(){  
-  
- /*  
-  Локальный прототип.  
-  После БД здесь будут реальные игроки.  
- */  
-  
- const me=  
-  tg?.initDataUnsafe?.user?.first_name||  
-  "Ты";  
-  
- renderRankingList(  
-  "harvestRanking",  
-  [  
-   ["GreenFox",12800],  
-   ["FarmKing",10300],  
-   [me,state.seasonHarvested]  
-  ]  
- );  
-  
- renderRankingList(  
-  "coinRanking",  
-  [  
-   ["FarmKing",50000],  
-   ["GreenFox",42000],  
-   [me,state.seasonCoins]  
-  ]  
- );  
-  
- renderRankingList(  
-  "pvpRanking",  
-  [  
-   ["FarmKing",2200],  
-   ["GreenFox",1800],  
-   [me,state.pvpPoints]  
-  ]  
- );  
-  
-}  
-  
-  
-/* =========================  
-   LEVEL  
-========================= */  
-  
-function addXP(amount){  
-  
- state.xp+=amount;  
-  
- while(  
-  state.xp>=state.level*100  
- ){  
-  
-  state.xp-=state.level*100;  
-  
-  state.level++;  
-  
-  state.coins+=100;  
-  
-  notify(  
-   "🎉 Новый уровень! +100 🪙"  
-  );  
-  
- }  
-  
-}  
-  
-  
-/* =========================  
-   DAILY  
-========================= */  
-  
-function claimDaily(){  
-  
- const date=  
-  new Date().toISOString().slice(0,10);  
-  
- if(state.lastDaily===date)  
-  return notify("🎁 Уже получено сегодня");  
-  
- state.lastDaily=date;  
-  
- const reward=  
-  300+  
-  state.level*50;  
-  
- state.coins+=reward;  
-  
- saveState();  
-  
- notify(  
-  "🎁 +"+  
-  reward+  
-  " 🪙"  
- );  
-  
- render();  
-  
-}  
-  
-  
-/* =========================  
-   MAIN RENDER  
-========================= */  
-  
-function getSeasonKey(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
-function seasonEndMs(){const d=new Date();return new Date(d.getFullYear(),d.getMonth()+1,1).getTime();}
-function ensureSeason(){const key=getSeasonKey();if(!state.seasonKey)state.seasonKey=key;if(state.seasonKey!==key){state.seasonKey=key;state.pvpPoints=0;state.seasonHarvested=0;state.seasonCoins=0;state.wins=0;state.losses=0;saveState();notify("🏆 Новый сезон начался!");}}
-function renderSeason(){const n=document.getElementById("seasonName"),t=document.getElementById("seasonTimer");if(n)n.textContent=state.seasonKey||getSeasonKey();if(t)t.textContent="До нового сезона: "+formatTime(seasonEndMs()-Date.now());}
+function openPlant(index){
+ let html="<h2>🌱 Что посадить?</h2>";
+ Object.entries(CROPS).forEach(([id,crop])=>{
+  const have=state.inventory[crop.seed]||0;
+  html+=`
+  <div class="row">
+   <div class="rowLeft">
+    <div class="rowIcon">${crop.icon}</div>
+    <div><div class="rowName">${crop.name}</div><div class="rowSub">${have} семян · ${crop.reward} урожая · ${formatTime(growTime(crop))}</div></div>
+   </div>
+   <button class="btn" style="width:100px;margin:0" ${have<=0?"disabled":""} onclick="plant(${index},'${id}')">Посадить</button>
+  </div>`;
+ });
+ showModal(html);
+}
+
+function openBuild(){
+ let html="<h2>🧱 Строительство</h2><div class='muted small'>По периметру фермы находятся отдельные места для защитных объектов.</div>";
+ Object.entries(BUILDINGS).forEach(([id,b])=>{
+  html+=`
+  <div class="row" style="margin-top:8px">
+   <div class="rowLeft">
+    <div class="rowIcon">${b.icon}</div>
+    <div><div class="rowName">${b.name}</div><div class="rowSub">Уже: ${state.buildings[id]||0}</div></div>
+   </div>
+   <button class="btn" style="width:120px;margin:0" onclick="buyBuilding('${id}')">${money(b.price)} 🪙</button>
+  </div>`;
+ });
+ showModal(html);
+}
+
+function buyBuilding(id){
+ const b=BUILDINGS[id];
+ if(state.coins<b.price)return notify("❌ Недостаточно монет");
+ state.coins-=b.price;
+ state.buildings[id]=(state.buildings[id]||0)+1;
+ save();closeModal();render();
+ notify(b.icon+" "+b.name+" установлен!");
+}
+
+function animalReady(id){
+ const a=ANIMALS[id];
+ const count=state.animals[id]||0;
+ if(!count)return 0;
+ const last=state.animalProduction[id]||0;
+ return Math.max(0,last+a.every-Date.now());
+}
+
+function renderAnimals(){
+ const box=document.getElementById("animals");
+ if(!box)return;
+ box.innerHTML=Object.entries(ANIMALS).map(([id,a])=>{
+  const count=state.animals[id]||0;
+  const left=animalReady(id);
+  return `
+  <div class="card">
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">${a.icon}</div>
+     <div><div class="rowName">${a.name}</div><div class="rowSub">Количество: ${count}</div></div>
+    </div>
+    <div class="price">${money(a.price)} 🪙</div>
+   </div>
+   <div class="muted small">${a.productIcon} ${a.productName} · Производство: ${Math.floor(a.every/60000)} мин</div>
+   <div class="cooldownBox" style="margin-top:8px">${left>0?"🥛 Продукция будет готова через "+formatTime(left):"✅ Продукция готова к сбору"}</div>
+   <button class="btn" onclick="buyAnimal('${id}')">Купить</button>
+   <button class="btn gold" onclick="collectAnimal('${id}')">${left>0?"⏳ Проверить":"📦 Собрать продукцию"}</button>
+  </div>`;
+ }).join("");
+}
+
+function buyAnimal(id){
+ const a=ANIMALS[id];
+ if(state.coins<a.price)return notify("❌ Недостаточно монет");
+ state.coins-=a.price;
+ state.animals[id]=(state.animals[id]||0)+1;
+ if(!state.animalProduction[id])state.animalProduction[id]=Date.now();
+ save();render();notify(a.icon+" Животное куплено!");
+}
+
+function collectAnimal(id){
+ const a=ANIMALS[id];
+ const count=state.animals[id]||0;
+ if(!count)return notify("❌ У тебя нет животных");
+
+ const last=state.animalProduction[id]||Date.now();
+ if(Date.now()-last<a.every)return notify("⏳ Продукция будет готова через "+formatTime(a.every-(Date.now()-last)));
+
+ state.inventory[a.product]=(state.inventory[a.product]||0)+count;
+ state.animalProduction[id]=Date.now();
+ save();render();
+ notify(a.productIcon+" +"+count+" "+a.productName);
+}
+
+function renderShop(){
+ const box=document.getElementById("shop");
+ if(!box)return;
+ let html=`<div class="card"><div class="sectionTitle">🌱 Семена</div>`;
+ Object.entries(CROPS).forEach(([id,c])=>{
+  const price=Math.max(8,Math.floor(c.price*1.5));
+  html+=`
+  <div class="row">
+   <div class="rowLeft"><div class="rowIcon">${c.icon}</div><div><div class="rowName">${c.name}</div><div class="rowSub">${money(price)} 🪙 за 1</div></div></div>
+   <button class="btn" style="width:105px;margin:0" onclick="buySeed('${c.seed}',${price})">Купить</button>
+  </div>`;
+ });
+ html+="</div><div class='card'><div class='sectionTitle'>🐄 Животные</div>";
+ Object.entries(ANIMALS).forEach(([id,a])=>{
+  html+=`<div class="row"><div class="rowLeft"><div class="rowIcon">${a.icon}</div><div class="rowName">${a.name}</div></div><div class="price">${money(a.price)} 🪙</div></div>`;
+ });
+ html+="</div>";
+ box.innerHTML=html;
+}
+
+function buySeed(seed,price){
+ if(state.coins<price)return notify("❌ Недостаточно монет");
+ state.coins-=price;
+ state.inventory[seed]=(state.inventory[seed]||0)+1;
+ save();render();notify("🌱 Семя куплено");
+}
+
+function renderWorkers(){
+ const box=document.getElementById("workers");
+ if(!box)return;
+ box.innerHTML=Object.entries(WORKERS).map(([id,w])=>`
+ <div class="card">
+  <div class="row">
+   <div class="rowLeft"><div class="rowIcon">${w.icon}</div><div><div class="rowName">${w.name}</div><div class="rowSub">+${w.bonus}% скорость · ${state.workers[id]||0}/3</div></div></div>
+   <div class="price">${money(w.price)} 🪙</div>
+  </div>
+  <button class="btn" ${state.workers[id]>=3?"disabled":""} onclick="buyWorker('${id}')">${state.workers[id]>=3?"Лимит 3/3":"Нанять"}</button>
+ </div>`).join("");
+}
+
+function buyWorker(id){
+ const w=WORKERS[id];
+ if(state.workers[id]>=3)return notify("❌ Максимум 3 фермера этого типа");
+ if(state.coins<w.price)return notify("❌ Недостаточно монет");
+ state.coins-=w.price;
+ state.workers[id]++;
+ save();render();notify("👨‍🌾 Фермер нанят!");
+}
+
+function renderInventory(){
+ const box=document.getElementById("inventory");
+ if(!box)return;
+ const items={
+  wheatSeed:["🌾","Семена пшеницы"],carrotSeed:["🥕","Семена моркови"],cornSeed:["🌽","Семена кукурузы"],
+  tomatoSeed:["🍅","Семена помидора"],berrySeed:["🫐","Семена ягоды"],pumpkinSeed:["🎃","Семена тыквы"],
+  wheat:["🌾","Пшеница"],carrot:["🥕","Морковь"],corn:["🌽","Кукуруза"],tomato:["🍅","Помидоры"],
+  berry:["🫐","Ягоды"],pumpkin:["🎃","Тыква"],egg:["🥚","Яйца"],milk:["🥛","Молоко"],wool:["🧶","Шерсть"],kumys:["🥛","Кумыз"]
+ };
+ box.innerHTML=Object.entries(items).map(([key,v])=>`
+ <div class="itemCard"><div class="itemImage">${v[0]}</div><div class="itemName">${v[1]}</div><div class="itemCount">${money(state.inventory[key]||0)}</div></div>`).join("");
+}
+
+function armyPower(){
+ return state.army.fighter*ARMY.fighter.power+state.army.guard*ARMY.guard.power;
+}
+
+function renderArmy(){
+ document.getElementById("fighters").textContent=state.army.fighter;
+ document.getElementById("guardsCount").textContent=state.army.guard;
+ document.getElementById("armyPower").textContent=armyPower();
+
+ const box=document.getElementById("armyShop");
+ box.innerHTML=Object.entries(ARMY).map(([id,a])=>`
+ <div class="card">
+  <div class="row">
+   <div class="rowLeft"><div class="rowIcon">${a.icon}</div><div><div class="rowName">${a.name}</div><div class="rowSub">Сила: ${a.power} · Куплено: ${state.army[id]}</div></div></div>
+   <div class="price">${money(a.price)} 🪙</div>
+  </div>
+  <button class="btn" onclick="buyArmy('${id}')">Купить</button>
+ </div>`).join("");
+}
+
+function buyArmy(id){
+ const a=ARMY[id];
+ if(state.coins<a.price)return notify("❌ Недостаточно монет");
+ state.coins-=a.price;
+ state.army[id]++;
+ save();render();
+ notify(a.icon+" "+a.name+" присоединился к армии!");
+}
+
+function startRaid(){
+ if(Date.now()<state.raid.next)return notify("⏳ Рейд ещё на КД");
+ state.raid.active=true;
+ state.raid.hp=1000;
+ attackRaid();
+}
+
+function attackRaid(){
+ if(!state.raid.active)return;
+ const damage=Math.max(10,armyPower()+state.level*5);
+ state.raid.hp=Math.max(0,state.raid.hp-damage);
+ if(state.raid.hp<=0){
+  state.raid.active=false;
+  state.raid.next=Date.now()+45*60*1000;
+  const reward=Math.min(500,100+state.level*25+Math.floor(armyPower()/10));
+  state.coins+=reward;
+  state.seasonPvp+=Math.floor(damage/10);
+  save();render();
+  notify("⚔️ Рейд завершён! +"+money(reward)+" 🪙");
+ }else{
+  save();render();
+  notify("⚔️ Армия нанесла "+money(damage)+" урона");
+ }
+}
+
+function renderRaid(){
+ const hp=document.getElementById("raidHp"),text=document.getElementById("raidHpText"),button=document.getElementById("raidButton");
+ if(!hp)return;
+ hp.style.width=(state.raid.hp/1000*100)+"%";
+ text.textContent=state.raid.hp;
+ if(Date.now()<state.raid.next){
+  button.disabled=true;
+  button.textContent="⏳ "+formatTime(state.raid.next-Date.now());
+ }else{
+  button.disabled=false;
+  button.textContent="⚔️ Атаковать";
+ }
+}
+
+function startPvp(){
+ if(Date.now()<state.pvp.next)return notify("⏳ PvP ещё на КД");
+ if(armyPower()<=0)return notify("❌ Купи бойцов или стражников");
+
+ state.pvp.active=true;
+ state.pvp.hp=500;
+ pvpAttack();
+}
+
+function pvpAttack(){
+ if(!state.pvp.active)return;
+ const damage=Math.max(10,armyPower());
+ state.pvp.hp=Math.max(0,state.pvp.hp-damage);
+ state.seasonPvp+=damage;
+
+ if(state.pvp.hp<=0){
+  state.pvp.active=false;
+  state.pvp.wins++;
+  state.pvp.next=Date.now()+10*60*1000;
+  const reward=Math.min(250,50+Math.floor(armyPower()/5));
+  state.coins+=reward;
+  save();render();
+  notify("🏆 PvP победа! +"+reward+" 🪙");
+ }else{
+  save();render();
+  notify("⚔️ Урон: "+damage);
+ }
+}
+
+function renderPvp(){
+ document.getElementById("pvpPower").textContent=armyPower();
+ document.getElementById("pvpHp").style.width=(state.pvp.hp/500*100)+"%";
+ document.getElementById("pvpHpText").textContent=state.pvp.hp;
+ const box=document.getElementById("pvpCooldown");
+ if(Date.now()<state.pvp.next)box.textContent="⏳ PvP КД: "+formatTime(state.pvp.next-Date.now());
+ else box.textContent="✅ PvP доступно";
+}
+
+function attackBoss(id){
+ const b=BOSSES.find(x=>x.id===id);
+ if(!b)return;
+ const data=state.bosses[id];
+ if(Date.now()<data.next)return notify("⏳ Босс ещё на КД");
+ if(armyPower()<=0)return notify("❌ Сначала собери армию");
+
+ const damage=Math.max(10,armyPower());
+ data.hp=Math.max(0,data.hp-damage);
+
+ if(data.hp<=0){
+  state.coins+=b.reward;
+  state.seasonPvp+=damage;
+  data.hp=b.hp;
+  data.next=Date.now()+30*60*1000;
+  save();render();
+  notify("👹 "+b.name+" побеждён! +"+b.reward+" 🪙");
+ }else{
+  save();render();
+  notify("⚔️ Все бойцы нанесли "+damage+" урона");
+ }
+}
+
+function renderBosses(){
+ const box=document.getElementById("bosses");
+ box.innerHTML=BOSSES.map(b=>{
+  const d=state.bosses[b.id];
+  const left=Math.max(0,d.next-Date.now());
+  return `
+  <div class="bossCard">
+   <div class="sectionTitle"><span>${b.icon} ${b.name}</span><span class="price">+${b.reward} 🪙</span></div>
+   <div style="font-size:42px;text-align:center">${b.icon}</div>
+   <div class="raidHp"><i style="width:${d.hp/b.hp*100}%"></i></div>
+   <div class="center small">HP: ${money(d.hp)} / ${money(b.hp)}</div>
+   <div class="cooldownBox" style="margin-top:8px">${left>0?"⏳ КД: "+formatTime(left):"⚔️ Босс доступен"}</div>
+   <button class="btn red" ${left>0?"disabled":""} onclick="attackBoss('${b.id}')">⚔️ Атаковать всей армией</button>
+  </div>`;
+ }).join("");
+}
+
+function ratingRow(name,icon,score,pos){
+ return `<div class="rank"><div class="rankPos">${pos}</div><div class="rankAvatar">${icon}</div><div class="rankInfo"><div class="rankName">${name}</div><div class="rankScore">${money(score)} очков</div></div></div>`;
+}
+
+function renderRating(){
+ const mine=[
+  ["Ты","👑",state.seasonHarvested],
+  ["GreenFox","🦊",0],["FarmKing","👨‍🌾",0]
+ ];
+ const pvp=[
+  ["Ты","⚔️",state.seasonPvp],
+  ["Wolf","🐺",0],["Knight","🛡️",0]
+ ];
+ const coins=[
+  ["Ты","🪙",state.seasonCoins],
+  ["RichFox","🦊",0],["MoneyFarm","💰",0]
+ ];
+
+ function make(arr){
+  arr.sort((a,b)=>b[2]-a[2]);
+  return arr.map((p,i)=>ratingRow(p[0],p[1],p[2],i===0?"🥇":i===1?"🥈":"🥉")).join("");
+ }
+
+ document.getElementById("harvestRating").innerHTML=make(mine);
+ document.getElementById("pvpRating").innerHTML=make(pvp);
+ document.getElementById("coinsRating").innerHTML=make(coins);
+ document.getElementById("seasonName1").textContent=state.season;
+ document.getElementById("countries").innerHTML=COUNTRIES.map(c=>`<div class="country">${c}</div>`).join("");
+}
+
+function renderProfile(){
+ document.getElementById("profileName").textContent="Фермер #"+getPlayerId().slice(-4);
+ document.getElementById("profileCoins").textContent=money(state.coins);
+ document.getElementById("profileLevel").textContent=state.level;
+ document.getElementById("profileHarvest").textContent=money(state.harvested);
+ document.getElementById("profileRef").textContent=state.referrals.confirmed.length;
+}
+
+function renderPartner(){
+ document.getElementById("refLink").value=location.origin+location.pathname+"?ref="+referralCode();
+ document.getElementById("refCount").textContent=state.referrals.confirmed.length;
+ document.getElementById("refEarned").textContent=money(state.referrals.earned);
+}
+
+function activatePromo(){
+ const input=document.getElementById("promoInput");
+ const code=input.value.trim();
+ if(!code)return notify("Введите промокод");
+ if(state.usedPromos.includes(code))return notify("❌ Этот код уже использован");
+ if(!Object.prototype.hasOwnProperty.call(PROMOS,code))return notify("❌ Промокод не найден");
+ const reward=PROMOS[code];
+ state.coins+=reward;
+ state.usedPromos.push(code);
+ state.seasonCoins+=reward;
+ save();input.value="";notify("🎁 +"+money(reward)+" 🪙");render();
+}
+
+function givePackage(id){
+ const pack=PACKAGES[id];
+ if(!pack)return;
+ Object.entries(pack.rewards).forEach(([key,value])=>{
+  if(key==="coins"){state.coins+=value;state.seasonCoins+=value}
+  else if(key==="xp")addXP(value);
+  else if(BUILDINGS[key])state.buildings[key]=(state.buildings[key]||0)+value;
+  else state.inventory[key]=(state.inventory[key]||0)+value;
+ });
+ save();notify("🎁 Набор получен!");render();
+}
+
+function buyPackage(id){
+ const p=PACKAGES[id];
+ if(id==="free"){
+  if(Date.now()<state.packageFree)return notify("⏳ Ещё "+formatTime(state.packageFree-Date.now()));
+  givePackage(id);
+  state.packageFree=Date.now()+p.cooldown;
+  save();render();
+  return;
+ }
+ if(TEST_STARS){
+  givePackage(id);
+  notify("⭐ ТЕСТ: "+p.price+" Stars");
+ }
+}
+
+function renderPackages(){
+ const box=document.getElementById("packages");
+ const freeLeft=Math.max(0,state.packageFree-Date.now());
+ box.innerHTML=Object.entries(PACKAGES).map(([id,p])=>{
+  const free=id==="free";
+  const rewards=Object.entries(p.rewards).map(([k,v])=>"+"+money(v)+" "+(k==="coins"?"🪙":k==="xp"?"✨ XP":k)).join(" · ");
+  return `
+  <div class="package">
+   <div class="packageTitle"><span>${p.icon} ${p.name}</span><span class="price">${free?"БЕСПЛАТНО":p.price+" ⭐"}</span></div>
+   <div class="packageItems">${rewards}</div>
+   <button class="btn ${free?"":"gold"} onclick="buyPackage('${id}')" ${free&&freeLeft>0?"disabled":""}>
+    ${free?(freeLeft>0?"⏳ "+formatTime(freeLeft):"🎁 Забрать"):p.price+" ⭐"}
+   </button>
+  </div>`;
+ }).join("");
+}
+
+
+/* ================= MINI GAMES ================= */
+
+const gameState={
+ hand:{running:false,end:0,score:0,cells:0,timer:null},
+ tractor:{running:false,end:0,score:0,cells:0,timer:null}
+};
+
+function startMow(type){
+ const g=gameState[type];
+ if(g.running)return;
+
+ g.running=true;
+ g.end=Date.now()+30000;
+ g.score=0;
+ g.cells=0;
+
+ const area=document.getElementById(type==="hand"?"mowArea":"tractorArea");
+ const btn=document.getElementById(type==="hand"?"mowBtn":"tractorBtn");
+
+ area.innerHTML="";
+ btn.disabled=true;
+
+ const icon=type==="hand"?"🌾":"🚜";
+ const reward=type==="hand"?30:15;
+
+ function spawn(){
+  if(!g.running)return;
+
+  area.innerHTML="";
+  const el=document.createElement("button");
+  el.className="gamePlant";
+  el.textContent=icon;
+  el.style.left=Math.random()*82+"%";
+  el.style.top=Math.random()*78+"%";
+
+  el.onclick=()=>{
+   if(!g.running)return;
+   g.cells++;
+   g.score+=reward;
+   state.coins+=reward;
+   state.seasonCoins+=reward;
+   updateMow(type);
+   spawn();
+   save();
+   renderTop();
+  };
+
+  area.appendChild(el);
+ }
+
+ function tick(){
+  const left=Math.max(0,g.end-Date.now());
+  updateMow(type,left);
+  if(left<=0){
+   finishMow(type);
+  }
+ }
+
+ spawn();
+ tick();
+ g.timer=setInterval(tick,250);
+}
+
+function updateMow(type,left){
+ const g=gameState[type];
+ const seconds=left!==undefined?Math.ceil(left/1000):Math.max(0,Math.ceil((g.end-Date.now())/1000));
+
+ if(type==="hand"){
+  document.getElementById("mowScore").textContent=money(g.score);
+  document.getElementById("mowLeft").textContent=seconds;
+  document.getElementById("mowCells").textContent=g.cells;
+ }else{
+  document.getElementById("tractorScore").textContent=money(g.score);
+  document.getElementById("tractorLeft").textContent=seconds;
+  document.getElementById("tractorCells").textContent=g.cells;
+ }
+}
+
+function finishMow(type){
+ const g=gameState[type];
+ if(!g.running)return;
+ g.running=false;
+ clearInterval(g.timer);
+ g.timer=null;
+
+ const area=document.getElementById(type==="hand"?"mowArea":"tractorArea");
+ const btn=document.getElementById(type==="hand"?"mowBtn":"tractorBtn");
+
+ area.innerHTML="";
+ btn.disabled=false;
+ btn.textContent=type==="hand"?"✋ Начать косить":"🚜 Сесть на трактор";
+
+ save();
+ renderTop();
+ notify("🌾 Раунд завершён! +"+money(g.score)+" 🪙");
+}
+
+
+/* ================= NAV ================= */
+
+function navigate(page,button){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ const target=document.getElementById("page-"+page);
+ if(target)target.classList.add("active");
+
+ if(button){
+  document.querySelectorAll(".navBtn").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+ }
+
+ if(page==="rating")renderRating();
+ if(page==="partner")renderPartner();
+ if(page==="profile")renderProfile();
+ if(page==="army")renderArmy();
+ if(page==="bosses")renderBosses();
+ if(page==="packages")renderPackages();
+ if(page==="workers")renderWorkers();
+}
+
+function renderTop(){
+ document.getElementById("coins").textContent=money(state.coins);
+ document.getElementById("level").textContent=state.level;
+ document.getElementById("xp").textContent=state.xp;
+ document.getElementById("xpNeed").textContent=xpNeed();
+ document.getElementById("xpBar").style.width=(state.xp/xpNeed()*100)+"%";
+ renderCrow();
+ renderPvp();
+}
+
+function showModal(html){
+ document.getElementById("modalContent").innerHTML=html;
+ document.getElementById("modal").classList.add("show");
+}
+
+function closeModal(){document.getElementById("modal").classList.remove("show")}
 
 function render(){
  ensureSeason();
- document.getElementById("coins")  
-  .textContent=state.coins;  
-  
- document.getElementById("level")  
-  .textContent=state.level;  
-  
- document.getElementById("xp")  
-  .textContent=state.xp;  
-  
- document.getElementById("xpNeed")  
-  .textContent=state.level*100;  
-  
- document.getElementById("xpBar")  
-  .style.width=  
-   Math.min(  
-    100,  
-    state.xp/(state.level*100)*100  
-   )+"%";  
-  
- document.getElementById("plotCount")  
-  .textContent=state.expansion;  
-  
- renderField();  
-  
- renderLivingFarm();  
-  
- renderSlots();  
-  
- renderAnimals();  
-  
- renderShop();  
-  
- renderInventory();  
-  
- renderBosses();  
-  
- renderRaids();  
-  
- renderRating();
+ renderTop();
+ renderField();
  renderPackages();
- renderSeason();
- const scoreBoard=document.getElementById("miniScoreBoard");
- if(scoreBoard)scoreBoard.textContent="🏅 Лучший счёт: "+(state.bestMiniScore||0)+" · Последний: "+(state.lastMiniScore||0);
-  
- document.getElementById("workerCount")  
-  .textContent=  
-   state.workers+"/10";  
-  
- document.getElementById("workerBonus")  
-  .textContent=  
-   "+"+workerBonus()+"%";  
-  
- document.getElementById("workerHire")  
-  .innerHTML=`  
-  
-   <div class="row">  
-  
-    <div class="rowLeft">  
-  
-     <div class="rowIcon">👨‍🌾</div>  
-  
-     <div>  
-  
-      <div class="rowName">  
-       Фермер №${state.workers+1}  
-      </div>  
-  
-      <div class="rowSub">  
-       +5% к скорости растений  
-      </div>  
-  
-     </div>  
-  
-    </div>  
-  
-    <button  
-     class="btn"  
-     style="width:auto"  
-     onclick="hireWorker()"  
-     ${state.workers>=10?"disabled":""}  
-    >  
-     🪙 2500  
-    </button>  
-  
-   </div>  
-  
- `;  
-  
- const today=  
-  new Date().toISOString().slice(0,10);  
-  
- const daily=  
-  document.getElementById("dailyButton");  
-  
- daily.disabled=  
-  state.lastDaily===today;  
-  
- daily.textContent=  
-  daily.disabled  
-   ?"✅ Получено"  
-   :"🎁 Забрать награду";  
-  
- document.getElementById("pvpCooldown")  
-  .textContent=  
-   cd("pvp")  
-    ?"Следующий бой через "+  
-     formatTime(cd("pvp"))  
-    :"✅ PvP доступно";  
-  
- document.getElementById("miniCooldown")  
-  .textContent=  
-   cd("mini")  
-    ?"Следующая игра через "+  
-     formatTime(cd("mini"))  
-    :"✅ Игра доступна";  
-  
- saveState();  
-  
-}  
-  
-  
-/* =========================  
-   TIMER  
-========================= */  
-  
+ renderAnimals();
+ renderShop();
+ renderInventory();
+ renderWorkers();
+ renderArmy();
+ renderBosses();
+ renderRaid();
+ renderRating();
+ renderProfile();
+ renderPartner();
+}
+
+loadState();
+processReferralStart();
+render();
+
 setInterval(()=>{
  ensureSeason();
  crowTick();
- renderSeason();
+ renderField();
  renderPackages();
- renderField();  
-  
- renderLivingFarm();  
-  
- renderAnimals();  
-  
- renderBosses();  
-  
- renderRaids();  
-  
- const pvp=  
-  document.getElementById("pvpCooldown");  
-  
- const mini=  
-  document.getElementById("miniCooldown");  
-  
- if(pvp)  
-  pvp.textContent=  
-   cd("pvp")  
-    ?"Следующий бой через "+  
-     formatTime(cd("pvp"))  
-    :"✅ PvP доступно";  
-  
- if(mini)  
-  mini.textContent=  
-   cd("mini")  
-    ?"Следующая игра через "+  
-     formatTime(cd("mini"))  
-    :"✅ Игра доступна";  
-  
-},1000);  
-  
-  
-/* =========================  
-   START  
-========================= */  
-  
-checkQuests();  
-  
-render();  
-  
-</script>  
-  
-</body>  
-</html>  
-  
-  
-  
+ renderAnimals();
+ renderRaid();
+ renderBosses();
+ renderTop();
+},1000);
+
+if(!localStorage.getItem("growix_started")){
+ localStorage.setItem("growix_started","1");
+ notify("🌱 Добро пожаловать в GROWIX!");
+}
+
+</script>
+</body>
+  </html>
