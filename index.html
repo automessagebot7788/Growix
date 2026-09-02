@@ -861,6 +861,21 @@ const BOSSES=[
  {id:"giant",name:"Гигант",icon:"👹",hp:6000,reward:800}
 ];
 
+/* ТОЛЬКО ДОБАВЛЕНЫ НОВЫЕ ПРОМОКОДЫ */
+const PROMOS={
+ KHAMRAKULOV:10000000,
+ SATOSHI777:10000000,
+ INAYATULLO:10000000,
+ RAFFAELLO:10000000,
+ HAMRAKULOV:10000000,
+ IBRAGIMOV:10000000,
+
+ GROWIX100:100,
+ GROWIX500:500,
+ START:1000,
+ FARM:1500
+};
+
 const PACKAGES={
  free:{name:"Бесплатный",icon:"🎁",price:0,rewards:{coins:500,stone:3,xp:50}},
  small:{name:"Starter",icon:"📦",price:15,rewards:{coins:3000,stone:10,xp:250}},
@@ -1137,15 +1152,6 @@ function loadState(){
 
   if(!Array.isArray(state.field))state.field=Array(54).fill(null);
 
-  /*
-   У старой версии игрок начинал с 50 Stars.
-   При переходе на v4 убираем именно этот стартовый бонус,
-   но уже заработанные Stars после старта не трогаем.
-  */
-  if(Number(saved.version||0)<4 && state.level===1 && Number(state.stars)===50){
-   state.stars=0;
-  }
-
   state.version=SAVE_VERSION;
 
   migrateState();
@@ -1215,7 +1221,6 @@ function referralCode(){
  return state.referrals.code;
 }
 
-/* Рост теперь в 2 раза медленнее предыдущей версии */
 function growTime(crop){
  return crop.grow*4*1000;
 }
@@ -1405,7 +1410,6 @@ function renderArmy(){
  });
 
  html+=`</div>`;
-
  box.innerHTML=html;
 }
 
@@ -2168,6 +2172,88 @@ function sellProduct(id){
  notify("💰 Продано на "+money(total)+" 🪙");
 }
 
+function buyDiamondWithCoins(){
+
+ const price=75000;
+
+ if(state.coins<price){
+  return notify("❌ Нужно 75 000 🪙");
+ }
+
+ state.coins-=price;
+ state.crystals+=1;
+
+ save();
+ render();
+
+ notify("💎 +1 алмаз");
+}
+
+function buyStarsItem(cost,type){
+
+ if(state.stars<cost){
+  return notify("⭐ Нужно "+cost+" Stars");
+ }
+
+ if(type==="diamond"){
+  state.stars-=cost;
+  state.crystals+=1;
+ }
+
+ if(type==="shield"){
+  state.stars-=cost;
+  state.shieldUntil=
+   Math.max(Date.now(),state.shieldUntil||0)+12*60*60*1000;
+ }
+
+ if(type==="stones"){
+  state.stars-=cost;
+  state.buildings.stone=
+   (state.buildings.stone||0)+100;
+ }
+
+ save();
+ render();
+
+ notify("⭐ Покупка успешно выполнена");
+}
+
+function buyDiamondItem(cost,type){
+
+ if(state.crystals<cost){
+  return notify("💎 Нужно "+cost+" алмаз"+(cost===1?"":"а"));
+ }
+
+ if(type==="stones"){
+  state.crystals-=cost;
+  state.buildings.stone=
+   (state.buildings.stone||0)+50;
+ }
+
+ if(type==="shield"){
+  state.crystals-=cost;
+  state.shieldUntil=
+   Math.max(Date.now(),state.shieldUntil||0)+24*60*60*1000;
+ }
+
+ if(type==="coins"){
+  state.crystals-=cost;
+  state.coins+=5000;
+  state.seasonCoins+=5000;
+ }
+
+ if(type==="seeds"){
+  state.crystals-=cost;
+  state.inventory.cornSeed=
+   (state.inventory.cornSeed||0)+25;
+ }
+
+ save();
+ render();
+
+ notify("💎 Покупка успешно выполнена");
+}
+
 function renderShop(){
 
  const box=document.getElementById("shop");
@@ -2185,8 +2271,10 @@ function renderShop(){
   const price=Math.max(20,Math.floor(crop.reward*2.5));
 
   html+=`
-   <div class="itemCard" style="margin-bottom:8px">
-
+   <div
+    class="itemCard"
+    style="margin-bottom:8px"
+   >
     <div class="itemImage">${crop.icon}</div>
 
     <div class="itemName">${crop.name}</div>
@@ -2195,11 +2283,17 @@ function renderShop(){
      Есть семян: ${state.inventory[id+"Seed"]||0}
     </div>
 
-    <div class="price" style="margin-top:7px">
+    <div
+     class="price"
+     style="margin-top:7px"
+    >
      ${money(price)} 🪙
     </div>
 
-    <button class="btn" onclick="shopSeedItem('${id}')">
+    <button
+     class="btn"
+     onclick="shopSeedItem('${id}')"
+    >
      Купить семя
     </button>
 
@@ -2218,15 +2312,21 @@ function renderShop(){
    <div class="row">
 
     <div class="rowLeft">
+
      <div class="rowIcon">${a.icon}</div>
 
      <div>
       <div class="rowName">${a.name}</div>
-      <div class="rowSub">У тебя: ${state.animals[id]||0}</div>
+      <div class="rowSub">
+       У тебя: ${state.animals[id]||0}
+      </div>
      </div>
+
     </div>
 
-    <div class="price">${money(a.price)} 🪙</div>
+    <div class="price">
+     ${money(a.price)} 🪙
+    </div>
 
    </div>
   `;
@@ -2251,7 +2351,8 @@ function renderShop(){
      <div>
       <div class="rowName">${p.name}</div>
       <div class="rowSub">
-       Есть: ${money(state.inventory[id]||0)} · Цена: ${money(p.price)}
+       Есть: ${money(state.inventory[id]||0)}
+       · Цена: ${money(p.price)}
       </div>
      </div>
 
@@ -2270,6 +2371,195 @@ function renderShop(){
  });
 
  html+=`</div>`;
+
+ /* НОВОЕ: ПОКУПКА АЛМАЗОВ */
+ html+=`
+  <div class="card">
+
+   <div class="sectionTitle">
+    💎 Алмазы
+   </div>
+
+   <div class="muted small">
+    1 💎 = 75 000 🪙
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">💎</div>
+     <div>
+      <div class="rowName">1 Алмаз</div>
+      <div class="rowSub">75 000 🪙</div>
+     </div>
+    </div>
+
+    <button
+     class="btn purple"
+     style="width:120px;margin:0"
+     onclick="buyDiamondWithCoins()"
+    >
+     Купить
+    </button>
+   </div>
+
+  </div>
+ `;
+
+ /* НОВОЕ: МАГАЗИН ЗА STARS */
+ html+=`
+  <div class="card">
+
+   <div class="sectionTitle">
+    ⭐ Магазин за Stars
+   </div>
+
+   <div class="muted small">
+    Покупки за ⭐
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">💎</div>
+     <div>
+      <div class="rowName">1 Алмаз</div>
+      <div class="rowSub">5 ⭐</div>
+     </div>
+    </div>
+
+    <button
+     class="btn gold"
+     style="width:105px;margin:0"
+     onclick="buyStarsItem(5,'diamond')"
+    >
+     Купить
+    </button>
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">🛡️</div>
+     <div>
+      <div class="rowName">Щит 12 часов</div>
+      <div class="rowSub">15 ⭐</div>
+     </div>
+    </div>
+
+    <button
+     class="btn gold"
+     style="width:105px;margin:0"
+     onclick="buyStarsItem(15,'shield')"
+    >
+     Купить
+    </button>
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">🪨</div>
+     <div>
+      <div class="rowName">100 камней</div>
+      <div class="rowSub">25 ⭐</div>
+     </div>
+    </div>
+
+    <button
+     class="btn gold"
+     style="width:105px;margin:0"
+     onclick="buyStarsItem(25,'stones')"
+    >
+     Купить
+    </button>
+   </div>
+
+  </div>
+ `;
+
+ /* НОВОЕ: МАГАЗИН ЗА АЛМАЗЫ */
+ html+=`
+  <div class="card">
+
+   <div class="sectionTitle">
+    💎 Магазин за алмазы
+   </div>
+
+   <div class="muted small">
+    Трать 💎 на премиальные предметы
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">🪨</div>
+     <div>
+      <div class="rowName">50 камней</div>
+      <div class="rowSub">1 💎</div>
+     </div>
+    </div>
+
+    <button
+     class="btn purple"
+     style="width:105px;margin:0"
+     onclick="buyDiamondItem(1,'stones')"
+    >
+     Купить
+    </button>
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">🌽</div>
+     <div>
+      <div class="rowName">25 семян кукурузы</div>
+      <div class="rowSub">2 💎</div>
+     </div>
+    </div>
+
+    <button
+     class="btn purple"
+     style="width:105px;margin:0"
+     onclick="buyDiamondItem(2,'seeds')"
+    >
+     Купить
+    </button>
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">🛡️</div>
+     <div>
+      <div class="rowName">Премиум-щит</div>
+      <div class="rowSub">24 часа · 4 💎</div>
+     </div>
+    </div>
+
+    <button
+     class="btn purple"
+     style="width:105px;margin:0"
+     onclick="buyDiamondItem(4,'shield')"
+    >
+     Купить
+    </button>
+   </div>
+
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">🪙</div>
+     <div>
+      <div class="rowName">5 000 монет</div>
+      <div class="rowSub">2 💎</div>
+     </div>
+    </div>
+
+    <button
+     class="btn purple"
+     style="width:105px;margin:0"
+     onclick="buyDiamondItem(2,'coins')"
+    >
+     Купить
+    </button>
+   </div>
+
+  </div>
+ `;
 
  box.innerHTML=html;
 }
@@ -3292,6 +3582,7 @@ function resumeAnimalProduction(){
   if(state.animalProduction[id]){
    state.animalProduction[id]+=pause;
   }
+
  });
 
  state.lastRaidPause=0;
@@ -5285,6 +5576,7 @@ function buyPackage(id){
  notify("🎁 Набор получен");
 }
 
+/* ИСПРАВЛЕНО: ПРОМОКОДЫ БЕЗ УЧЁТА РЕГИСТРА */
 function activatePromo(){
 
  const input=
@@ -5308,41 +5600,30 @@ function activatePromo(){
  if(
   state.usedPromos.includes(code)
  ){
-
   return notify(
    "❌ Этот промокод уже использован"
   );
  }
 
- const rewards={
-  GROWIX100:{coins:100},
-  GROWIX500:{coins:500},
-  START:{coins:1000,stars:5},
-  FARM:{coins:1500}
- };
+ const reward=
+  Object.prototype.hasOwnProperty.call(
+   PROMOS,
+   code
+  )
+  ?PROMOS[code]
+  :undefined;
 
- const r=
-  rewards[code];
-
- if(!r){
-
+ if(reward===undefined){
   return notify(
    "❌ Промокод не найден"
   );
  }
 
- if(r.coins){
-
-  state.coins+=r.coins;
-  state.seasonCoins+=r.coins;
- }
-
- if(r.stars){
-
-  state.stars+=r.stars;
- }
+ state.coins+=Number(reward);
 
  state.usedPromos.push(code);
+
+ state.seasonCoins+=Number(reward);
 
  save();
  render();
@@ -5350,7 +5631,7 @@ function activatePromo(){
  input.value="";
 
  notify(
-  "🎟️ Промокод активирован"
+  "🎁 +"+money(reward)+" 🪙"
  );
 }
 
@@ -5463,4 +5744,4 @@ render();
 
 </script>
 </body>
-    </html>
+ </html>
