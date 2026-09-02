@@ -4,343 +4,351 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>GROWIX FARM</title>
+
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
---bg:#071009;--card:#132319;--card2:#1b3220;--green:#67dc58;
---green2:#399f42;--gold:#ffd75c;--white:#f3fff2;--muted:#8fa594;
---red:#ff7373;--blue:#63a8ff;--purple:#a989ff
+ --bg:#071009;
+ --card:#132319;
+ --card2:#1b3220;
+ --green:#67dc58;
+ --gold:#ffd75c;
+ --red:#ff6868;
+ --muted:#94aa97;
+ --blue:#61a7ff;
+ --purple:#b978ff;
 }
-html,body{margin:0;background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-body{overflow-x:hidden}
+html,body{margin:0;background:var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100%;overflow-x:hidden}
+body{padding-bottom:88px}
 button,input{font:inherit}
-button{border:0;color:inherit;cursor:pointer}
-#app{
-width:100%;max-width:600px;min-height:100vh;margin:auto;padding-bottom:90px;
-background:radial-gradient(circle at 50% -10%,#285b31 0,#112619 35%,#071009 78%)
-}
+button{border:0;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+#app{width:min(600px,100%);margin:auto}
 .header{
-position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;
-align-items:center;padding:10px 12px;background:rgba(7,16,9,.95);
-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)
+ position:sticky;top:0;z-index:120;display:flex;align-items:center;justify-content:space-between;
+ padding:10px 12px;background:rgba(7,16,9,.96);backdrop-filter:blur(16px);
+ border-bottom:1px solid rgba(255,255,255,.06)
 }
-.logo{display:flex;align-items:center;gap:8px;font-size:21px;font-weight:1000;letter-spacing:1px}
-.logoMark{
-width:35px;height:35px;display:flex;align-items:center;justify-content:center;
-border-radius:12px;background:linear-gradient(145deg,#7cea65,#2f8535)
-}
-.stats{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.topStat{padding:7px 8px;border-radius:11px;background:rgba(255,255,255,.07);font-size:10px;font-weight:900}
-.topStat.crystal{color:#bda6ff}.topStat.star{color:#ffd75c}
-.content{padding:14px}
-.page{display:none}.page.active{display:block;animation:in .2s ease}
-@keyframes in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-
+.logo{display:flex;align-items:center;gap:7px;font-weight:1000;font-size:18px}
+.logoMark{font-size:24px}
+.stats{display:flex;gap:5px;align-items:center}
+.topStat{padding:7px 8px;border-radius:11px;background:rgba(255,255,255,.06);font-size:10px;font-weight:900;white-space:nowrap}
+.topStat.star{color:#ffe16a}
+.topStat.crystal{color:#89c2ff}
+.content{padding:10px}
+.page{display:none}
+.page.active{display:block}
 .hero{
-position:relative;overflow:hidden;min-height:150px;padding:20px;margin-bottom:13px;
-border-radius:27px;background:linear-gradient(135deg,#285f30,#16321d 55%,#102016);
-border:1px solid rgba(255,255,255,.08)
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+ padding:15px;border-radius:21px;background:linear-gradient(145deg,#1c3820,#102016);
+ border:1px solid rgba(255,255,255,.06);margin-bottom:10px
 }
-.heroText{position:relative;z-index:2;max-width:76%}
-.heroTitle{font-size:28px;line-height:1.05;font-weight:1000}
-.heroSub{margin-top:9px;color:#bfd2c0;font-size:13px;line-height:1.45}
-.heroEmoji{position:absolute;right:8px;bottom:-5px;font-size:88px;opacity:.8}
-
+.heroText{min-width:0}
+.heroTitle{font-size:21px;font-weight:1000}
+.heroSub{font-size:11px;color:#b3c3b4;line-height:1.45;margin-top:5px}
+.heroEmoji{font-size:44px;flex:none}
 .card{
-padding:15px;margin-bottom:12px;border-radius:22px;
-background:linear-gradient(145deg,rgba(27,51,31,.97),rgba(14,29,18,.97));
-border:1px solid rgba(255,255,255,.065)
+ padding:13px;border-radius:20px;background:linear-gradient(145deg,#162b1b,#102015);
+ border:1px solid rgba(255,255,255,.05);margin-bottom:10px
 }
-.sectionTitle{
-display:flex;justify-content:space-between;align-items:center;gap:8px;
-margin-bottom:12px;font-size:18px;font-weight:950
+.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:1000}
+.muted{color:var(--muted)}
+.small{font-size:10px}
+.center{text-align:center}
+.badge,.price{
+ font-size:10px;font-weight:1000;padding:5px 7px;border-radius:9px;background:rgba(255,255,255,.06);white-space:nowrap
 }
-.muted{color:var(--muted)}.small{font-size:12px}
-.badge{
-display:inline-block;padding:5px 9px;border-radius:10px;
-background:rgba(255,255,255,.08);font-size:10px;font-weight:900
-}
+.price{color:var(--gold);background:transparent;padding:0;font-size:12px}
 .btn{
-width:100%;padding:12px;margin-top:8px;border-radius:14px;
-background:linear-gradient(135deg,#4caf43,#327d38);font-size:13px;font-weight:950
+ width:100%;margin-top:8px;padding:12px 14px;border-radius:14px;
+ background:linear-gradient(145deg,#4aaf47,#2e7e36);color:#fff;font-weight:1000;font-size:12px
 }
-.btn.gold{background:linear-gradient(135deg,#ffd84d,#bd8e2c);color:#241b05}
-.btn.blue{background:linear-gradient(135deg,#427cc2,#315d95)}
-.btn.red{background:linear-gradient(135deg,#a94c4c,#733333)}
-.btn.purple{background:linear-gradient(135deg,#8c6be5,#6144b3)}
-.btn.secondary{background:rgba(255,255,255,.08)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-
-.homeTools{
-display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px
-}
+.btn.blue{background:linear-gradient(145deg,#4c92e5,#2e66a8)}
+.btn.red{background:linear-gradient(145deg,#d95353,#953a3a)}
+.btn.gold{background:linear-gradient(145deg,#cba33d,#9b7623)}
+.btn.purple{background:linear-gradient(145deg,#9b5fe2,#643e9b)}
+.btn.secondary{background:rgba(255,255,255,.07)}
+.homeTools{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
 .homeTool{
-padding:11px 6px;border-radius:17px;background:linear-gradient(145deg,#203d25,#122619);
-border:1px solid rgba(255,255,255,.07);font-size:11px;font-weight:900;text-align:center
+ padding:10px 6px;border-radius:15px;background:rgba(255,255,255,.05);color:#fff;font-size:10px;font-weight:900
 }
-.homeTool span{display:block;margin-bottom:4px;font-size:23px}
-
-.farmWorld{
-position:relative;overflow:hidden;min-height:500px;padding:12px;border-radius:26px;
-background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.08),transparent 20%),linear-gradient(#77bb61,#69a950);
-border:3px solid #315e32
-}
-.worldTitle{
-text-align:center;position:relative;z-index:20;margin-bottom:10px;
-font-weight:1000;text-shadow:0 1px 2px #0006
-}
-.worldCenter{position:relative;min-height:450px;width:100%}
-.worldField{
-position:absolute;left:50%;top:38px;transform:translateX(-50%);z-index:4;width:70%;
-display:grid;gap:4px;padding:7px;border-radius:20px;background:#74462b;
-border:5px solid #4f2d1c;transition:.25s;overflow:hidden
-}
-.worldPlot{
-min-width:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-border-radius:8px;background:linear-gradient(145deg,#97613b,#6e4027);
-font-size:clamp(15px,4.8vw,28px);cursor:pointer;position:relative
-}
-.worldPlot.ready{
-animation:bob .8s infinite alternate;box-shadow:0 0 15px #67dc5866
-}
-.worldPlot.crow{background:linear-gradient(145deg,#4b392d,#34251d)}
-@keyframes bob{to{transform:translateY(-3px)}}
-.perimeter{
-position:absolute;inset:18px 4px 4px;z-index:10;pointer-events:none
-}
-.perimeterSlot{
-position:absolute;width:34px;height:34px;border-radius:11px;
-background:rgba(71,48,27,.72);border:2px dashed rgba(255,255,255,.4);
-display:flex;align-items:center;justify-content:center;font-size:19px;
-pointer-events:auto;box-shadow:0 2px 5px #0003
-}
-.perimeterSlot.empty:hover{background:rgba(81,128,67,.9)}
-.perimeterSlot.built{border-style:solid;background:rgba(34,65,37,.94)}
-.slotTop{top:0}.slotBottom{bottom:0}.slotLeft{left:0}.slotRight{right:0}
-.guard{
-position:absolute;z-index:14;font-size:25px;transition:.8s;
-filter:drop-shadow(0 2px 2px #0008);pointer-events:none
-}
-.npc{
-position:absolute;z-index:6;font-size:27px;
-animation:walk 8s ease-in-out infinite alternate
-}
-.worldPlotTimer{
-position:absolute;left:3px;right:3px;bottom:3px;padding:3px 2px;border-radius:6px;
-background:#000b;color:#fff;font-size:7px;font-weight:1000;text-align:center;
-white-space:nowrap
-}
-
-.battleScene{
-position:relative;height:150px;margin:10px 0;border-radius:18px;overflow:hidden;
-background:linear-gradient(180deg,#6b9b5a,#42663d);border:2px solid #29452b
-}
-.battleGround{
-position:absolute;inset:0;
-background:repeating-linear-gradient(90deg,transparent 0 32px,#ffffff08 33px 34px)
-}
-.battleUnit{
-position:absolute;font-size:30px;z-index:3;
-transition:left .55s ease,top .55s ease,transform .35s ease;
-filter:drop-shadow(0 2px 2px #0008)
-}
-.battleUnit.fight{animation:unitFight .55s ease}
-.battleUnit.hit{animation:unitHit .38s ease}
-.battleSlash{
-position:absolute;z-index:5;font-size:24px;
-animation:slash .45s ease forwards;pointer-events:none
-}
-.battleHp{
-position:absolute;top:-7px;left:50%;transform:translateX(-50%);
-width:42px;height:6px;border-radius:8px;background:#241010;overflow:hidden
-}
-.battleHpFill{height:100%;background:#67dc58;transition:.2s}
-.battleDamage{
-position:absolute;z-index:20;font-size:12px;font-weight:1000;color:#ff7373;
-animation:damageFloat .7s ease forwards;pointer-events:none
-}
-.battleResult{
-position:absolute;inset:0;z-index:50;display:flex;align-items:center;
-justify-content:center;flex-direction:column;background:rgba(0,0,0,.68);
-backdrop-filter:blur(3px)
-}
-.battleResultTitle{font-size:36px;font-weight:1000;text-shadow:0 3px 12px #000}
-.battleResultSub{margin-top:7px;font-size:13px;color:#dcebdd}
-.battleEmpty{text-align:center;padding:45px 20px;color:#c8d9c9;font-weight:800}
-
-@keyframes unitFight{
-0%{transform:translateX(0) scale(1)}
-45%{transform:translateX(13px) scale(1.15)}
-100%{transform:translateX(0) scale(1)}
-}
-@keyframes unitHit{
-0%{opacity:1;transform:translateX(0)}
-50%{opacity:.55;transform:translateX(-8px)}
-100%{opacity:1;transform:translateX(0)}
-}
-@keyframes slash{
-0%{opacity:0;transform:scale(.4) rotate(-20deg)}
-30%{opacity:1}
-100%{opacity:0;transform:scale(1.3) rotate(20deg) translateY(-12px)}
-}
-@keyframes damageFloat{
-0%{opacity:1;transform:translateY(0) scale(1)}
-100%{opacity:0;transform:translateY(-25px) scale(1.15)}
-}
-@keyframes walk{
-0%{transform:translate(0,0)}
-25%{transform:translate(25px,10px)}
-50%{transform:translate(-10px,35px)}
-75%{transform:translate(30px,55px)}
-100%{transform:translate(0,20px)}
-}
-
-.field{
-display:grid;grid-template-columns:repeat(3,1fr);gap:9px
-}
+.homeTool span{display:block;font-size:23px;margin-bottom:3px}
+.miniStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}
+.miniStat{padding:9px;text-align:center;border-radius:13px;background:rgba(255,255,255,.05);font-size:10px}
+.miniStat b{display:block;font-size:16px}
+.progress{width:100%;height:9px;margin-top:8px;overflow:hidden;border-radius:20px;background:rgba(255,255,255,.07)}
+.progressFill{height:100%;border-radius:20px;background:linear-gradient(90deg,#3d9f3b,#7ce969);transition:.3s}
+.field{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
 .plot{
-position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-border-radius:17px;background:linear-gradient(145deg,#81502f,#61371f);
-border:3px solid #4c2b1b;font-size:35px;overflow:hidden;cursor:pointer
+ position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+ border-radius:17px;background:linear-gradient(145deg,#81502f,#61371f);
+ border:3px solid #4c2b1b;font-size:35px;overflow:hidden;cursor:pointer
 }
 .plot.empty:after{content:"＋";opacity:.5}
 .plot.ready{animation:bob .8s infinite alternate}
 .plot.crow{background:linear-gradient(145deg,#4c3a2f,#33271f)}
 .plotTimer{
-position:absolute;bottom:5px;left:5px;right:5px;padding:4px;border-radius:8px;
-background:#000a;text-align:center;font-size:9px;font-weight:900
+ position:absolute;bottom:5px;left:5px;right:5px;padding:4px;border-radius:8px;
+ background:#000a;text-align:center;font-size:9px;font-weight:900
 }
 .plotLabel{
-position:absolute;top:5px;left:5px;padding:3px 5px;border-radius:7px;
-background:#0007;font-size:8px
-}
-.progress{
-width:100%;height:9px;margin-top:8px;overflow:hidden;border-radius:20px;
-background:rgba(255,255,255,.07)
-}
-.progressFill{
-height:100%;border-radius:20px;
-background:linear-gradient(90deg,#3d9f3b,#7ce969);transition:.3s
+ position:absolute;top:5px;left:5px;padding:3px 5px;border-radius:7px;background:#0007;font-size:8px
 }
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
 .itemCard{
-padding:13px;border-radius:18px;background:rgba(255,255,255,.045);
-border:1px solid rgba(255,255,255,.05);text-align:center
+ padding:13px;border-radius:18px;background:rgba(255,255,255,.045);
+ border:1px solid rgba(255,255,255,.05);text-align:center
 }
 .itemImage{
-width:65px;height:65px;margin:auto;display:flex;align-items:center;
-justify-content:center;border-radius:20px;background:rgba(255,255,255,.04);font-size:40px
+ width:65px;height:65px;margin:auto;display:flex;align-items:center;justify-content:center;
+ border-radius:20px;background:rgba(255,255,255,.04);font-size:40px
 }
 .itemName{margin-top:7px;font-size:14px;font-weight:900}
 .itemCount{margin-top:3px;color:var(--muted);font-size:11px}
 .row{
-display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;
-margin-bottom:7px;border-radius:16px;background:rgba(255,255,255,.045)
+ display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:7px;
+ border-radius:16px;background:rgba(255,255,255,.045)
 }
 .rowLeft{display:flex;align-items:center;gap:10px}
 .rowIcon{
-width:42px;height:42px;display:flex;align-items:center;justify-content:center;
-border-radius:13px;background:rgba(255,255,255,.06);font-size:23px;flex-shrink:0
+ width:42px;height:42px;display:flex;align-items:center;justify-content:center;
+ border-radius:13px;background:rgba(255,255,255,.06);font-size:23px;flex-shrink:0
 }
 .rowName{font-size:13px;font-weight:900}
 .rowSub{margin-top:3px;color:var(--muted);font-size:10px}
-.price{color:var(--gold);font-size:12px;font-weight:950}
 .profileStats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.profileStat{
-padding:13px;border-radius:15px;background:rgba(255,255,255,.05);text-align:center
-}
-.profileStat b{display:block;font-size:20px}.profileStat span{color:var(--muted);font-size:10px}
+.profileStat{padding:13px;border-radius:15px;background:rgba(255,255,255,.05);text-align:center}
+.profileStat b{display:block;font-size:20px}
+.profileStat span{color:var(--muted);font-size:10px}
 .package{
-padding:15px;margin-bottom:9px;border-radius:20px;
-background:linear-gradient(145deg,#263f29,#142519);
-border:1px solid rgba(255,255,255,.07)
+ padding:15px;margin-bottom:9px;border-radius:20px;background:linear-gradient(145deg,#263f29,#142519);
+ border:1px solid rgba(255,255,255,.07)
 }
 .packageTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:950}
 .packageItems{margin-top:8px;color:#bdd0bd;font-size:11px;line-height:1.6}
 .input{
-width:100%;padding:13px;border:1px solid rgba(255,255,255,.08);
-border-radius:14px;outline:none;background:#09140c;color:white
+ width:100%;padding:13px;border:1px solid rgba(255,255,255,.08);border-radius:14px;
+ outline:none;background:#09140c;color:white
 }
-.center{text-align:center}
-.cooldownBox{
-padding:10px;border-radius:12px;background:rgba(255,255,255,.05);
-text-align:center;font-size:11px;color:#bdd0bd
+.rank{
+ display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:7px;border-radius:16px;background:rgba(255,255,255,.045)
 }
-
+.rankPos{width:35px;font-size:20px;text-align:center}
+.rankAvatar{font-size:25px}
+.rankInfo{flex:1}
+.rankName{font-weight:900;font-size:13px}
+.rankScore{color:var(--gold);font-size:11px;margin-top:2px}
+.raidArena{
+ padding:16px;border-radius:20px;background:linear-gradient(135deg,#281b1b,#17251a);text-align:center
+}
+.raidBoss{font-size:70px}
+.raidHp{
+ height:13px;overflow:hidden;border-radius:20px;background:#351919;margin:12px 0
+}
+.raidHp i{
+ display:block;height:100%;background:linear-gradient(90deg,#df4e4e,#70d85d);transition:width .45s ease
+}
+.bossCard{
+ padding:14px;border-radius:18px;background:rgba(255,255,255,.045);margin-bottom:9px;
+ border:1px solid rgba(255,255,255,.05);transition:.18s
+}
+.bossCard.bossHit{animation:bossHit .34s ease}
+.bossCard.bossAttack{animation:bossAttack .42s ease}
+.bossIcon{
+ font-size:60px;text-align:center;display:block;transform-origin:center;transition:.2s
+}
+.damageFloat{
+ position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);
+ font-weight:1000;font-size:23px;color:#ff8d8d;text-shadow:0 2px 4px #000;
+ pointer-events:none;z-index:30;animation:damageFloat .72s ease forwards
+}
+@keyframes bossHit{0%{transform:translateX(0) scale(1)}35%{transform:translateX(-5px) scale(.98)}70%{transform:translateX(5px) scale(1.01)}100%{transform:translateX(0) scale(1)}}
+@keyframes bossAttack{0%{transform:translateX(0)}35%{transform:translateX(8px)}65%{transform:translateX(-4px)}100%{transform:translateX(0)}}
+@keyframes damageFloat{0%{opacity:0;transform:translate(-50%,0) scale(.7)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-42px) scale(1.15)}}
+.country{padding:10px;border-radius:14px;background:rgba(255,255,255,.045);font-size:12px;font-weight:900}
+.countryGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.armyBox{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.armyUnit{padding:14px;text-align:center;border-radius:17px;background:rgba(255,255,255,.05)}
+.armyUnit b{display:block;font-size:23px}.armyUnit span{font-size:10px;color:var(--muted)}
+.armyGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.armyCard{padding:12px;border-radius:17px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.05)}
+.armyIcon{font-size:35px}
+.armyName{margin-top:5px;font-size:13px;font-weight:900}
+.cooldownBox{padding:12px;border-radius:15px;background:rgba(255,255,255,.05);text-align:center;font-size:12px}
+.harvestGame{
+ position:relative;height:330px;margin-top:12px;overflow:hidden;border-radius:20px;
+ background:linear-gradient(#76b65a,#649e4d);border:3px solid #47783b;touch-action:none
+}
+.gamePlant{
+ position:absolute;width:55px;height:55px;border-radius:50%;background:#ffffff18;font-size:31px;animation:gamePop .18s ease
+}
+@keyframes gamePop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.attackBox{
+ padding:13px;margin-top:8px;border-radius:16px;background:linear-gradient(135deg,#40201c,#241815);
+ border:1px solid #704034;text-align:center
+}
+.attackBox b{display:block;font-size:16px;margin-bottom:4px}
+.matchBox{
+ padding:18px;border-radius:18px;background:linear-gradient(135deg,#182c1d,#102015);text-align:center
+}
+.matchCount{font-size:44px;font-weight:1000;color:var(--gold);margin:8px 0}
+.scoreBar{
+ display:flex;height:14px;border-radius:20px;overflow:hidden;background:#0008;margin:10px 0;position:relative
+}
+.scoreA{height:100%;width:50%;background:#5dd250;transition:width .5s ease}
+.scoreB{height:100%;width:50%;background:#d45656;transition:width .5s ease}
+.dailyBox{text-align:center;padding:15px;border-radius:17px;background:linear-gradient(145deg,#283e27,#14251a)}
+.bottomNav{
+ position:fixed;z-index:100;left:50%;bottom:0;transform:translateX(-50%);width:min(600px,100%);
+ height:78px;display:grid;grid-template-columns:repeat(6,1fr);padding:6px 3px 8px;
+ background:rgba(7,14,9,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.08)
+}
+.navBtn{background:transparent;color:#718174;font-size:8px;font-weight:850}
+.navBtn.active{color:white}
+.navIcon{display:block;margin-bottom:3px;font-size:20px}
+.toast{
+ position:fixed;z-index:300;top:15px;left:50%;max-width:90%;padding:12px 16px;border-radius:14px;
+ background:#f4fff3;color:#102014;font-size:12px;font-weight:900;opacity:0;transform:translate(-50%,-20px);
+ pointer-events:none;transition:.22s
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 .modal{
-position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);
-display:none;align-items:center;justify-content:center;padding:15px
+ position:fixed;z-index:200;inset:0;display:none;align-items:flex-end;background:#000b;backdrop-filter:blur(4px)
 }
 .modal.show{display:flex}
 .modalBox{
-width:100%;max-width:560px;max-height:90vh;overflow:auto;
-border-radius:25px;background:#102016;border:1px solid rgba(255,255,255,.1);
-padding:16px;box-shadow:0 15px 60px #0009
+ width:min(600px,100%);max-height:92vh;overflow:auto;padding:20px;border-radius:25px 25px 0 0;
+ background:linear-gradient(160deg,#1b3420,#0e1c11)
 }
 .modalClose{
-float:right;width:34px;height:34px;border-radius:11px;
-background:rgba(255,255,255,.08);font-size:18px
+ float:right;width:35px;height:35px;border-radius:50%;background:#0006;color:#fff;font-size:20px
 }
+.farmWorld{
+ position:relative;overflow:hidden;height:clamp(390px,94vw,570px);aspect-ratio:1/1;padding:8px;border-radius:26px;
+ background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.08),transparent 20%),linear-gradient(#77bb61,#69a950);
+ border:3px solid #315e32
+}
+.worldTitle{
+ text-align:center;position:relative;z-index:20;margin-bottom:10px;font-weight:1000;text-shadow:0 1px 2px #0006
+}
+.worldCenter{position:relative;height:calc(100% - 34px);width:100%}
+.worldField{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
+ width:min(94%,520px);display:grid;gap:3px;padding:5px;border-radius:20px;
+ background:#74462b;border:4px solid #4f2d1c;transition:.25s;overflow:hidden
+}
+.worldPlot{
+ min-width:0;min-height:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+ border-radius:8px;background:linear-gradient(145deg,#97613b,#6e4027);font-size:clamp(13px,4.3vw,26px);cursor:pointer;position:relative
+}
+.worldPlot.ready{animation:bob .8s infinite alternate}
+.worldPlot.crow{background:linear-gradient(145deg,#4c3a2f,#33271f)}
+.forest{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.tree{
+ position:absolute;font-size:clamp(30px,9vw,54px);filter:drop-shadow(0 5px 4px #18371999);
+ transform-origin:bottom center;animation:treeSway 4s ease-in-out infinite alternate
+}
+.tree.t1{font-size:56px}.tree.t2{font-size:43px}.tree.t3{font-size:49px}
+@keyframes treeSway{from{transform:rotate(-2deg) translateY(1px)}to{transform:rotate(2deg) translateY(-2px)}}
+.path{
+ position:absolute;z-index:3;left:18%;right:18%;top:49%;height:18%;border-radius:50%;
+ background:#a87b4d66;transform:rotate(-8deg);filter:blur(1px)
+}
+.liveEntity{
+ position:absolute;z-index:18;font-size:34px;will-change:left,top,transform;
+ filter:drop-shadow(0 3px 3px #0008);transition:left 1.1s linear,top 1.1s linear
+}
+.liveEntity.boar{font-size:36px}
+.liveEntity.enemy{font-size:34px}
+.liveEntity.run{animation:entityRun .45s ease-in-out infinite alternate}
+@keyframes entityRun{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-4px) rotate(3deg)}}
+.liveEntity.defeated{animation:defeatFade .7s ease forwards;pointer-events:none}
+@keyframes defeatFade{to{opacity:0;transform:scale(.5) rotate(12deg)}}
+.eventBadge{display:none}
+.farmManagerNpc{
+ position:absolute;cursor:pointer;font-size:34px;z-index:18;text-shadow:0 2px 3px #000
+}
+.farmManagerNpc:before{
+ content:"РАБОТАТЬ!";position:absolute;left:-8px;top:-28px;padding:4px 7px;border-radius:9px;
+ background:#ffe36a;color:#271c05;font-size:9px;font-weight:1000;transform:rotate(-5deg);box-shadow:0 2px 4px #0004
+}
+.farmManagerNpc:after{
+ content:"!";display:block;position:absolute;right:-6px;top:-9px;width:18px;height:18px;border-radius:50%;
+ background:#ff4e4e;color:#fff;font-size:12px;line-height:18px;text-align:center;font-weight:1000;
+ animation:managerAngry .6s infinite alternate
+}
+@keyframes managerAngry{to{transform:scale(1.12) rotate(-8deg)}}
+
+.perimeter{position:absolute;inset:2%;z-index:16;pointer-events:none}
+.perimeterSlot{
+ position:absolute;width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+ border-radius:9px;font-size:18px;pointer-events:auto;cursor:pointer;transform:translate(-50%,-50%);
+ transition:.18s;background:rgba(8,18,9,.35)
+}
+.perimeterSlot.empty{border:1px dashed rgba(255,255,255,.22);color:#d8e9d4}
+.perimeterSlot.built{
+ background:rgba(8,18,9,.75);border:1px solid rgba(255,255,255,.18);box-shadow:0 4px 10px #0007
+}
+.perimeterSlot:hover{transform:translate(-50%,-50%) scale(1.08)}
+.perimeterSlot.slotTop{top:1%}.perimeterSlot.slotBottom{top:99%}
+.perimeterSlot.slotLeft{left:1%}.perimeterSlot.slotRight{left:99%}
+
 .battleFullscreen{
-padding:0;align-items:stretch;justify-content:stretch;background:#071009
+ align-items:stretch!important;padding:0!important;background:#020602f2
 }
 .battleFullscreen .modalBox{
-max-width:none;width:100%;height:100%;max-height:none;border-radius:0;
-padding:12px;background:linear-gradient(180deg,#142719,#071009);
-border:0
+ width:100%;max-width:none;height:100dvh;max-height:none;border-radius:0;padding:12px;
+ background:radial-gradient(circle at 50% 0,#284a2b 0,#102116 38%,#050a06 100%);
+ display:flex;flex-direction:column
 }
-.battleArena{
-position:relative;min-height:calc(100vh - 90px);overflow:hidden;border-radius:22px;
-background:
-radial-gradient(circle at 20% 30%,#ffffff10,transparent 15%),
-linear-gradient(180deg,#5c8f50 0%,#3f6639 58%,#31502e 100%);
-border:3px solid #29452b
+.battleArenaFull{
+ position:relative;flex:1;min-height:0;margin-top:10px;border-radius:20px;overflow:hidden;
+ background:radial-gradient(circle at 50% 50%,#547f47 0,#365b34 60%,#203622 100%);
+ border:3px solid #223d25
 }
-.battleArena:before{
-content:"";position:absolute;inset:0;opacity:.35;
-background:repeating-linear-gradient(0deg,transparent 0 39px,#ffffff08 40px 41px)
+.battleArenaFull:before{
+ content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:#ffffff1c
 }
-.battleSide{
-position:absolute;top:10px;padding:8px 11px;border-radius:12px;
-background:#0008;z-index:20;font-size:11px;font-weight:1000
+.battleArenaFull:after{
+ content:"⚔️";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:34px;opacity:.35
 }
-.battleSide.left{left:10px}.battleSide.right{right:10px}
-.battleCenter{
-position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-z-index:15;font-size:30px;font-weight:1000;text-shadow:0 2px 7px #000
+.battleBoardFull{
+ position:relative;height:100%;display:flex;flex-direction:column
 }
-.battleBottom{
-position:absolute;left:10px;right:10px;bottom:10px;z-index:30;
-padding:12px;border-radius:18px;background:#071009dd;backdrop-filter:blur(7px)
+.battleFullUnit{
+ position:absolute;z-index:10;font-size:38px;filter:drop-shadow(0 3px 3px #0009);
+ transition:left .42s ease,top .42s ease,transform .22s ease
 }
-.battleBottomTitle{text-align:center;font-size:14px;font-weight:1000}
-.battleBottomSub{text-align:center;margin-top:4px;color:#bcd0bd;font-size:10px}
-.battleLog{
-max-height:80px;overflow:auto;margin-top:7px;font-size:9px;color:#c9dcc9;
-text-align:center
+.battleFullUnit.attack{animation:unitFight .32s ease}
+.battleResult{
+ position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
+ background:#0009;backdrop-filter:blur(5px);padding:25px;text-align:center
 }
-.nav{
-position:fixed;bottom:0;left:50%;transform:translateX(-50%);z-index:60;
-width:100%;max-width:600px;padding:7px 8px 9px;
-display:grid;grid-template-columns:repeat(6,1fr);gap:5px;
-background:rgba(7,16,9,.96);backdrop-filter:blur(18px);
-border-top:1px solid rgba(255,255,255,.08)
+.battleResultBox{
+ width:min(430px,100%);padding:28px 20px;border-radius:28px;background:linear-gradient(160deg,#203e25,#0d1b10);
+ border:1px solid #ffffff18;box-shadow:0 20px 60px #0008
 }
-.navBtn{
-padding:7px 2px;border-radius:13px;background:transparent;
-font-size:9px;font-weight:900;color:#78907d
+.battleResultTitle{font-size:42px;font-weight:1000}
+.battleResultWin{color:#72e866}
+.battleResultLose{color:#ff7676}
+@keyframes unitFight{0%{transform:translateX(0) scale(1)}45%{transform:translateX(12px) scale(1.15)}100%{transform:translateX(0) scale(1)}}
+.liveHpBar{
+ position:absolute;z-index:24;height:4px;border-radius:4px;transform:translateX(-50%);
+ box-shadow:0 1px 2px #0009;pointer-events:none
 }
-.navBtn span{display:block;font-size:19px;margin-bottom:2px}
-.navBtn.active{background:rgba(103,220,88,.12);color:#8ef57e}
+.liveHpBar.enemy{background:#ff6666}
+.liveHpBar:not(.enemy){background:#67dc58}
 
-.toast{
-position:fixed;left:50%;bottom:82px;transform:translateX(-50%) translateY(20px);
-z-index:200;padding:12px 16px;border-radius:15px;background:#16281b;
-border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 30px #0008;
-font-size:12px;font-weight:900;opacity:0;pointer-events:none;transition:.25s;
-max-width:90%;text-align:center
+@media(min-width:600px){
+ .farmWorld{height:560px}
+ .worldField{width:min(86%,520px)}
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:380px){
+ .farmWorld{height:calc(100vw - 24px);min-height:340px}
+ .worldCenter{height:calc(100% - 32px)}
+ .worldField{width:94%!important;gap:2px!important;padding:5px!important;border-width:3px!important}
+ .perimeterSlot{width:24px;height:24px;font-size:15px}
+}
 </style>
 </head>
 
@@ -348,2149 +356,5111 @@ max-width:90%;text-align:center
 <div id="app">
 
 <header class="header">
-<div class="logo">
-<div class="logoMark">🌱</div>
-GROWIX
-</div>
-<div class="stats">
-<div class="topStat">🪙 <span id="coins">0</span></div>
-<div class="topStat crystal">💎 <span id="crystals">0</span></div>
-<div class="topStat star">⭐ <span id="stars">0</span></div>
-<div class="topStat">Lv.<span id="level">1</span></div>
-</div>
+ <div class="logo"><div class="logoMark">🌱</div>GROWIX</div>
+ <div class="stats">
+  <div class="topStat">🪙 <span id="coins">0</span></div>
+  <div class="topStat crystal">💎 <span id="crystals">0</span></div>
+  <div class="topStat star">⭐ <span id="stars">0</span></div>
+  <div class="topStat">Lv.<span id="level">1</span></div>
+ </div>
 </header>
+
+<div id="toast" class="toast"></div>
 
 <main class="content">
 
-<!-- ГЛАВНАЯ -->
-<section id="page-home" class="page active">
+<section id="page-farm" class="page active">
 
-<div class="hero">
-<div class="heroText">
-<div class="heroTitle">Периметр в порядке</div>
-<div class="heroSub">
-Развивай ферму, выращивай растения, собирай продукцию,
-тренируй армию и защищай свои ресурсы
-</div>
-</div>
-<div class="heroEmoji">🌾</div>
-</div>
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Твоя ферма 🌱</div>
+   <div class="heroSub">Развивай хозяйство, выращивай урожай, защищай ресурсы и соревнуйся с другими.</div>
+  </div>
+  <div class="heroEmoji">🌾</div>
+ </div>
 
-<div class="homeTools">
-<button class="homeTool" onclick="openTasksModal()">
-<span>🎯</span>Задания
-</button>
-<button class="homeTool" onclick="openBattleFromHome()">
-<span>⚔️</span>Бой
-</button>
-<button class="homeTool" onclick="navigate('farm')">
-<span>🌱</span>Ферма
-</button>
-</div>
+ <div class="homeTools">
+  <button class="homeTool" onclick="navigate('rating')"><span>🏆</span>Рейтинги</button>
+  <button class="homeTool" onclick="navigate('bosses')"><span>👹</span>Боссы</button>
+  <button class="homeTool" onclick="navigate('army')"><span>⚔️</span>Моя армия</button>
+  <button class="homeTool" onclick="navigate('packages')"><span>🎁</span>Наборы</button>
+  <button class="homeTool" onclick="navigate('workers')"><span>👨‍🌾</span>Фермеры</button>
+  <button class="homeTool" onclick="navigate('promos')"><span>🎟️</span>Промокод</button>
+  <button class="homeTool" onclick="navigate('partner')"><span>🤝</span>Партнёрка</button>
+  <button class="homeTool" onclick="navigate('raids')"><span>⚔️</span>Рейды</button>
+  <button class="homeTool" onclick="navigate('clans')"><span>🏳️</span>Кланы</button>
+  <button class="homeTool" onclick="openTasksModal()"><span>🎯</span>Задания</button>
+ </div>
 
-<div id="homeBattleStatus"></div>
+ <div class="card">
+  <div class="sectionTitle">
+   <span>🐦 Защита фермы</span>
+   <span class="badge" id="crowTimer">--:--:--</span>
+  </div>
+  <div class="muted small" id="crowStatus">Следующая атака ворон</div>
+  <div class="progress"><div id="crowBar" class="progressFill"></div></div>
+  <div class="miniStats">
+   <div class="miniStat"><b id="fenceCount">0</b>🧱 Заборов</div>
+   <div class="miniStat"><b id="scarecrowCount">0</b>🎃 Чучел</div>
+   <div class="miniStat"><b id="stoneCount">0</b>🪨 Камней</div>
+  </div>
+  <div id="crowAttackPanel"></div>
+ </div>
 
-<div class="farmWorld">
-<div class="worldTitle">🌲 ТЕРРИТОРИЯ GROWIX</div>
-<div class="worldCenter" id="worldCenter">
-<div id="forestEdge" class="forestEdge"></div>
-<div id="worldField" class="worldField"></div>
-<div id="perimeter" class="perimeter"></div>
-</div>
-</div>
+ <div class="card">
+  <div class="sectionTitle">
+   <span>🏡 Живая ферма</span>
+   <span class="badge" id="farmSize">9 участков</span>
+  </div>
+
+  <div class="farmWorld" id="farmWorld">
+   <div class="worldTitle">🌲 GROWIX WILDLANDS 🌲</div>
+
+   <div class="worldCenter">
+    <div id="forest" class="forest"></div>
+    <div class="path"></div>
+    <div id="liveEventBadge" class="eventBadge"></div>
+    <div id="worldField" class="worldField"></div>
+    <div id="perimeter" class="perimeter"></div>
+
+    <div id="farmManagerNpc" class="farmManagerNpc" style="left:7%;top:32%" onclick="openFarmManager()" title="Фермер">😡👨‍🌾</div>
+
+    <div style="position:absolute;right:8%;top:56%;font-size:27px;z-index:6">🐔</div>
+    <div style="position:absolute;left:8%;bottom:18%;font-size:27px;z-index:6">🐄</div>
+    <div style="position:absolute;right:9%;bottom:18%;font-size:27px;z-index:6">🐎</div>
+
+    <div id="guards"></div>
+    <div id="liveEntities"></div>
+   </div>
+  </div>
+
+  <button class="btn secondary" onclick="openBuild()">🧱 Строительство</button>
+  <button class="btn" onclick="expandFarm()">🏡 Расширить ферму</button>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">🌾 Грядки <span class="muted small"><span id="plotCount">9</span></span></div>
+  <div id="field" class="field"></div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">👨‍🌾 Быстрые действия</div>
+  <button class="btn blue" onclick="navigate('animals')">🐔 Мои животные</button>
+  <button class="btn" onclick="navigate('games')">🎮 Мини-игры</button>
+  <button class="btn gold" onclick="navigate('shop')">🛒 Магазин</button>
+  <button class="btn secondary" onclick="navigate('inventory')">🎒 Инвентарь</button>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">✨ Опыт</div>
+  <div class="progress"><div id="xpBar" class="progressFill"></div></div>
+  <div class="center small" style="margin-top:6px"><span id="xp">0</span> / <span id="xpNeed">100</span> XP</div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">🎁 Ежедневная награда</div>
+  <div id="dailyRewardBox" class="dailyBox"></div>
+ </div>
 
 </section>
 
-<!-- ФЕРМА -->
-<section id="page-farm" class="page">
-
-<div class="sectionTitle">
-<span>🌱 Моя ферма</span>
-<span class="badge" id="farmCount">0/54</span>
-</div>
-
-<div class="card">
-<div class="sectionTitle">
-<span>🌾 Грядки</span>
-<span class="muted small">Нажми на пустую грядку</span>
-</div>
-<div id="field" class="field"></div>
-</div>
-
-<div class="card">
-<div class="sectionTitle">
-<span>🌿 Живая ферма</span>
-<span class="badge">БЕЗ ТАЙМЕРОВ</span>
-</div>
-<div id="livingFarm"></div>
-</div>
-
-</section>
-
-<!-- ЖИВОТНЫЕ -->
 <section id="page-animals" class="page">
-<div class="sectionTitle">🐄 Мои животные</div>
-<div id="animalsList"></div>
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Животные 🐔</div>
+   <div class="heroSub">Продукция производится постепенно. Во время рейда производство ставится на паузу.</div>
+  </div>
+  <div class="heroEmoji">🐄</div>
+ </div>
+ <div id="animals"></div>
 </section>
 
-<!-- МИНИ-ИГРЫ -->
 <section id="page-games" class="page">
-<div class="sectionTitle">🎮 Мини-игры</div>
-<div id="gamesList"></div>
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Мини-игры 🎮</div>
+   <div class="heroSub">Каждая игра запускается на отдельном экране. КД после раунда — 15 минут.</div>
+  </div>
+  <div class="heroEmoji">🎮</div>
+ </div>
+
+ <div class="card">
+  <button class="btn" onclick="navigate('game-hand')">🌾 Косилка руками</button>
+  <button class="btn blue" onclick="navigate('game-tractor')">🚜 Трактор</button>
+  <button class="btn" onclick="navigate('game-catch')">🎯 Лови урожай</button>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">⚔️ PvP</div>
+  <div class="muted small">Поиск игрока 15 секунд, затем тренировочный противник. КД — 15 минут.</div>
+
+  <div class="row">
+   <div class="rowLeft">
+    <div class="rowIcon">⚔️</div>
+    <div>
+     <div class="rowName">Общая сила армии</div>
+     <div class="rowSub">Все бойцы и стражники</div>
+    </div>
+   </div>
+   <div class="price" id="pvpPower">0</div>
+  </div>
+
+  <div class="raidHp"><i id="pvpHp" style="width:100%"></i></div>
+  <div class="center small">HP противника: <span id="pvpHpText">500</span></div>
+  <button class="btn red" onclick="startPvp()">⚔️ В бой</button>
+  <div class="cooldownBox" id="pvpCooldown" style="margin-top:8px">✅ PvP доступно</div>
+ </div>
 </section>
 
-<!-- МАГАЗИН -->
+<section id="page-game-hand" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">🌾 Косилка</div>
+   <div class="heroSub">Отдельный экран сбора · 30 секунд</div>
+  </div>
+  <div class="heroEmoji">🌾</div>
+ </div>
+ <div class="card">
+  <div class="miniStats">
+   <div class="miniStat"><b id="handScore">0</b>🪙</div>
+   <div class="miniStat"><b id="handLeft">30</b>⏱️</div>
+   <div class="miniStat"><b id="handCells">0</b>🌾</div>
+  </div>
+  <div id="mowArea" class="harvestGame"></div>
+  <button id="mowBtn" class="btn" onclick="startMow('hand')">✋ Начать сбор</button>
+  <div class="cooldownBox" id="handCooldown">✅ Готово</div>
+ </div>
+</section>
+
+<section id="page-game-tractor" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">🚜 Трактор</div>
+   <div class="heroSub">Отдельный экран сбора · 30 секунд</div>
+  </div>
+  <div class="heroEmoji">🚜</div>
+ </div>
+ <div class="card">
+  <div class="miniStats">
+   <div class="miniStat"><b id="tractorScore">0</b>🪙</div>
+   <div class="miniStat"><b id="tractorLeft">30</b>⏱️</div>
+   <div class="miniStat"><b id="tractorCells">0</b>🌾</div>
+  </div>
+  <div id="tractorArea" class="harvestGame"></div>
+  <button id="tractorBtn" class="btn blue" onclick="startMow('tractor')">🚜 Сесть на трактор</button>
+  <div class="cooldownBox" id="tractorCooldown">✅ Готово</div>
+ </div>
+</section>
+
+<section id="page-game-catch" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">🎯 Лови урожай</div>
+   <div class="heroSub">Отдельный экран сбора · 20 секунд</div>
+  </div>
+  <div class="heroEmoji">🎯</div>
+ </div>
+ <div class="card">
+  <div class="miniStats">
+   <div class="miniStat"><b id="catchScore">0</b>🪙</div>
+   <div class="miniStat"><b id="catchLeft">20</b>⏱️</div>
+   <div class="miniStat"><b id="catchHits">0</b>🎯</div>
+  </div>
+  <div id="catchArea" class="harvestGame"></div>
+  <button id="catchBtn" class="btn" onclick="startCatchGame()">🎯 Начать</button>
+  <div class="cooldownBox" id="catchCooldown">✅ Готово</div>
+ </div>
+</section>
+
 <section id="page-shop" class="page">
-<div class="sectionTitle">🛒 Магазин</div>
-<div id="shopList"></div>
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Магазин 🛒</div>
+   <div class="heroSub">Семена, животные, Stars и премиальные предметы.</div>
+  </div>
+  <div class="heroEmoji">🛒</div>
+ </div>
+ <div id="shop"></div>
 </section>
 
-<!-- ПРОФИЛЬ -->
-<section id="page-profile" class="page">
-<div class="sectionTitle">👤 Профиль</div>
-<div id="profile"></div>
+<section id="page-inventory" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Инвентарь 🎒</div>
+   <div class="heroSub">Все твои семена, ресурсы и предметы.</div>
+  </div>
+  <div class="heroEmoji">🎒</div>
+ </div>
+ <div class="card"><div id="inventory" class="grid"></div></div>
+</section>
+
+<section id="page-workers" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Фермеры 👨‍🌾</div>
+   <div class="heroSub">Обычный фермер помогает с работами. Главный фермер стоит 500 000 🪙.</div>
+  </div>
+  <div class="heroEmoji">👨‍🌾</div>
+ </div>
+ <div id="workers"></div>
+ <div id="farmManagerCard"></div>
+</section>
+
+<section id="page-army" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Моя армия ⚔️</div>
+   <div class="heroSub">Все купленные бойцы и стража патрулируют ферму.</div>
+  </div>
+  <div class="heroEmoji">⚔️</div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">🛡️ Общая сила <span class="price" id="armyPower">0</span></div>
+  <div class="armyBox">
+   <div class="armyUnit"><b>⚔️ <span id="fighters">0</span></b><span>Бойцы</span></div>
+   <div class="armyUnit"><b>🛡️ <span id="guardsCount">0</span></b><span>Стража</span></div>
+  </div>
+ </div>
+
+ <div id="armyShop"></div>
+</section>
+
+<section id="page-bosses" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Боссы 👹</div>
+   <div class="heroSub">Каждого босса можно атаковать до 3 раз за цикл.</div>
+  </div>
+  <div class="heroEmoji">👹</div>
+ </div>
+ <div id="bosses"></div>
+</section>
+
+<section id="page-clans" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Кланы 🏰</div>
+   <div class="heroSub">Создай свой клан, собери до 25 реальных участников.</div>
+  </div>
+  <div class="heroEmoji">🏰</div>
+ </div>
+ <div id="clanPanel"></div>
+</section>
+
+<section id="page-raids" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Рейды ⚔️</div>
+   <div class="heroSub">Рандомное нападение на чужую ферму. После рейда КД 15 минут.</div>
+  </div>
+  <div class="heroEmoji">⚔️</div>
+ </div>
+
+ <div class="card">
+  <div class="raidArena">
+   <div class="raidBoss">🏡</div>
+   <div style="font-weight:1000">Поиск чужой фермы</div>
+   <div class="cooldownBox" style="margin-top:10px">КД: <b id="raidCooldown">Готово</b></div>
+   <button id="raidButton" class="btn red" onclick="startRaid()">⚔️ Зарейдить</button>
+  </div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">📜 Правила рейда</div>
+  <div class="muted small">
+   • поиск цели идёт 15 секунд<br>
+   • выбирается случайная ферма без щита<br>
+   • щит защищает ферму 12 часов<br>
+   • победитель получает часть доступных монет и ресурсов<br>
+   • Stars, кристаллы, животные и расширение фермы не крадутся<br>
+   • во время рейда производство животных ставится на паузу<br>
+   • после завершения рейда КД 15 минут
+  </div>
+ </div>
+</section>
+
+<section id="page-rating" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Рейтинги 🏆</div>
+   <div class="heroSub">Три разных рейтинга. Сезон обновляется каждый месяц.</div>
+  </div>
+  <div class="heroEmoji">🏆</div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">🌾 Рейтинг урожая <span class="badge" id="seasonName1"></span></div>
+  <div id="harvestRating"></div>
+  <div class="row"><div class="rowName">🥇 1 место</div><div class="price">100 000 🪙</div></div>
+  <div class="row"><div class="rowName">🥈 2 место</div><div class="price">75 000 🪙</div></div>
+  <div class="row"><div class="rowName">🥉 3 место</div><div class="price">50 000 🪙</div></div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">⚔️ Рейтинг PvP</div>
+  <div id="pvpRating"></div>
+  <div class="row"><div class="rowName">🥇 1 место</div><div class="price">100 000 🪙</div></div>
+  <div class="row"><div class="rowName">🥈 2 место</div><div class="price">75 000 🪙</div></div>
+  <div class="row"><div class="rowName">🥉 3 место</div><div class="price">50 000 🪙</div></div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">🪙 Рейтинг заработка</div>
+  <div id="coinsRating"></div>
+  <div class="row"><div class="rowName">🥇 1 место</div><div class="price">100 000 🪙</div></div>
+  <div class="row"><div class="rowName">🥈 2 место</div><div class="price">75 000 🪙</div></div>
+  <div class="row"><div class="rowName">🥉 3 место</div><div class="price">50 000 🪙</div></div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">🌍 Страны игроков</div>
+  <div class="countryGrid" id="countries"></div>
+ </div>
+</section>
+
+<section id="page-packages" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Наборы 🎁</div>
+   <div class="heroSub">Бесплатный + наборы за 15 / 25 / 39 Stars.</div>
+  </div>
+  <div class="heroEmoji">🎁</div>
+ </div>
+ <div id="packages"></div>
+</section>
+
+<section id="page-promos" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Промокоды 🎟️</div>
+   <div class="heroSub">Активируй коды из официальных раздач.</div>
+  </div>
+  <div class="heroEmoji">🎟️</div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">Активировать код</div>
+  <input id="promoInput" class="input" placeholder="Введите промокод" autocomplete="off">
+  <button class="btn gold" onclick="activatePromo()">🎁 Активировать</button>
+ </div>
+</section>
+
+<section id="page-partner" class="page">
+ <div class="hero">
+  <div class="heroText">
+   <div class="heroTitle">Партнёрка 🤝</div>
+   <div class="heroSub">Приглашай игроков и получай монеты.</div>
+  </div>
+  <div class="heroEmoji">🤝</div>
+ </div>
+
+ <div class="card">
+  <div class="sectionTitle">Твоя ссылка</div>
+  <input id="refLink" class="input" readonly>
+  <button class="btn" onclick="copyReferral()">📋 Скопировать</button>
+ </div>
+
+ <div class="card">
+  <div class="profileStats">
+   <div class="profileStat"><b id="refCount">0</b><span>Подтверждено</span></div>
+   <div class="profileStat"><b id="refEarned">0</b><span>Заработано</span></div>
+  </div>
+
+  <div class="muted small" style="margin-top:12px">
+   Игрок считается приглашённым после достижения 2 уровня.<br><br>
+   🤝 Ты получаешь: <b>800 🪙</b><br>
+   👤 Новый игрок получает: <b>1000 🪙 + 🐔</b>
+  </div>
+
+  <div class="card">
+   <div class="sectionTitle">💼 Сотрудничество</div>
+   <div class="muted small">@to77n</div>
+   <button class="btn blue" onclick="window.open('https://t.me/to77n','_blank')">Написать</button>
+  </div>
+ </div>
+
+ <div id="partnerActivation"></div>
 </section>
 
 </main>
 
-<!-- НИЖНЯЯ НАВИГАЦИЯ: РОВНО 6 РАЗДЕЛОВ -->
-<nav class="nav">
-<button class="navBtn active" onclick="navigate('home',this)">
-<span>🏠</span>Главная
-</button>
-<button class="navBtn" onclick="navigate('farm',this)">
-<span>🌾</span>Ферма
-</button>
-<button class="navBtn" onclick="navigate('animals',this)">
-<span>🐄</span>Животные
-</button>
-<button class="navBtn" onclick="navigate('games',this)">
-<span>🎮</span>Игры
-</button>
-<button class="navBtn" onclick="navigate('shop',this)">
-<span>🛒</span>Магазин
-</button>
-<button class="navBtn" onclick="navigate('profile',this)">
-<span>👤</span>Профиль
-</button>
+<nav class="bottomNav">
+ <button class="navBtn active" onclick="navigate('farm',this)"><span class="navIcon">🌱</span>Ферма</button>
+ <button class="navBtn" onclick="navigate('animals',this)"><span class="navIcon">🐄</span>Животные</button>
+ <button class="navBtn" onclick="navigate('games',this)"><span class="navIcon">🎮</span>Игры</button>
+ <button class="navBtn" onclick="navigate('shop',this)"><span class="navIcon">🛒</span>Магазин</button>
+ <button class="navBtn" onclick="navigate('inventory',this)"><span class="navIcon">🎒</span>Инвентарь</button>
+ <button class="navBtn" onclick="navigate('partner',this)"><span class="navIcon">🤝</span>Партнёрка</button>
 </nav>
 
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modalBox" id="modalContent">
+  <button class="modalClose" onclick="closeModal()">×</button>
+ </div>
 </div>
-
-<!-- ОБЩЕЕ МОДАЛЬНОЕ ОКНО -->
-<div id="modal" class="modal">
-<div class="modalBox">
-<button class="modalClose" onclick="closeModal()">✕</button>
-<div id="modalContent"></div>
-</div>
-</div>
-
-<div id="toast" class="toast"></div>
 
 <script>
-"use strict";
+const SAVE_KEY="growix_final_test_v4";
+const SAVE_VERSION=4;
 
-/* =========================================================
-   GROWIX FARM
-   ТЕСТОВАЯ ЛОКАЛЬНАЯ ВЕРСИЯ
-   ========================================================= */
+const COOLDOWN_GAME=15*60*1000;
+const COOLDOWN_BOSS=90*60*1000;
+const BOSS_MAX_ATTEMPTS=3;
 
-const SAVE_KEY="growix_state_v2";
-
-const ARMORY={
-scout:{name:"Разведчик",icon:"🪖",price:500,power:10,hp:70,damage:12},
-fighter:{name:"Боец",icon:"⚔️",price:1200,power:25,hp:110,damage:20},
-guard:{name:"Охранник",icon:"🛡️",price:1800,power:35,hp:150,damage:25},
-archer:{name:"Лучник",icon:"🏹",price:2200,power:40,hp:90,damage:30}
+const CROPS={
+ wheat:{name:"Пшеница",icon:"🌾",grow:30,reward:8,xp:3},
+ carrot:{name:"Морковь",icon:"🥕",grow:45,reward:12,xp:4},
+ corn:{name:"Кукуруза",icon:"🌽",grow:60,reward:17,xp:5},
+ tomato:{name:"Помидор",icon:"🍅",grow:90,reward:25,xp:7},
+ berry:{name:"Ягоды",icon:"🫐",grow:120,reward:32,xp:9},
+ pumpkin:{name:"Тыква",icon:"🎃",grow:180,reward:45,xp:12}
 };
 
-const TASK_DEFS={
-harvest:{
-name:"Собери урожай",
-goal:10,
-reward:1000,
-icon:"🌾"
-},
-animals:{
-name:"Получи продукцию животных",
-goal:10,
-reward:1500,
-icon:"🥚"
-},
-army:{
-name:"Набери силу армии",
-goal:100,
-reward:2000,
-icon:"⚔️"
-},
-coins:{
-name:"Заработай монеты",
-goal:10000,
-reward:2500,
-icon:"🪙"
-},
-games:{
-name:"Сыграй в мини-игры",
-goal:5,
-reward:1800,
-icon:"🎮"
-},
-raids:{
-name:"Защити ферму от нападений",
-goal:3,
-reward:3000,
-icon:"🛡️"
-}
-};
-
-const PLANTS={
-wheat:{name:"Пшеница",icon:"🌾",cost:50,time:60000,sell:100},
-corn:{name:"Кукуруза",icon:"🌽",cost:80,time:90000,sell:150},
-carrot:{name:"Морковь",icon:"🥕",cost:100,time:120000,sell:190},
-tomato:{name:"Помидор",icon:"🍅",cost:140,time:150000,sell:260}
+const EXPANSIONS={
+ 9:{cost:0,columns:3},
+ 18:{cost:500,columns:6},
+ 36:{cost:2500,columns:6},
+ 54:{cost:8000,columns:9}
 };
 
 const ANIMALS={
-chicken:{name:"Курица",icon:"🐔",price:500,product:"egg",productIcon:"🥚",productName:"Яйцо",rate:60000,sell:80},
-cow:{name:"Корова",icon:"🐄",price:3000,product:"milk",productIcon:"🥛",productName:"Молоко",rate:90000,sell:220},
-pig:{name:"Свинья",icon:"🐖",price:5000,product:"meat",productIcon:"🥩",productName:"Мясо",rate:120000,sell:350}
+ chicken:{name:"Курица",icon:"🐔",price:300,product:"egg",productIcon:"🥚",every:60000,amount:1},
+ cow:{name:"Корова",icon:"🐄",price:1200,product:"milk",productIcon:"🥛",every:120000,amount:1},
+ sheep:{name:"Овца",icon:"🐑",price:1800,product:"wool",productIcon:"🧶",every:150000,amount:1},
+ horse:{name:"Лошадь",icon:"🐎",price:3000,product:"kumys",productIcon:"🥛",every:180000,amount:1}
 };
 
-const defaultState={
-coins:500,
-stars:0,
-crystals:0,
-level:1,
-xp:0,
-
-plots:12,
-plants:[],
-livingFarm:{
-plants:6,
-animals:0
-},
-
-animals:{
-chicken:1,
-cow:0,
-pig:0
-},
-
-products:{
-egg:0,
-milk:0,
-meat:0
-},
-
-inventory:{},
-
-army:{
-scout:0,
-fighter:0,
-guard:0,
-archer:0
-},
-
-tasks:{
-harvest:0,
-animals:0,
-army:0,
-coins:0,
-games:0,
-raids:0,
-channel:false,
-claimed:{}
-},
-
-partnerChain:{
-level:0,
-activated:false
-},
-
-referrals:{
-confirmed:[],
-earned:0
-},
-
-raid:{
-next:0,
-wins:0,
-losses:0
-},
-
-pvp:{
-next:0,
-wins:0,
-losses:0
-},
-
-boss:{
-next:0,
-wins:0,
-losses:0
-},
-
-clan:{
-id:null,
-name:"",
-description:"",
-flag:"🏳️",
-members:[],
-maxMembers:25,
-battleNext:0,
-wins:0,
-losses:0
-},
-
-perimeter:{
-fences:0,
-scarecrows:0,
-stones:0
-},
-
-manager:{
-active:false
-},
-
-lastLogin:Date.now()
+const PRODUCT_SELL={
+ egg:{name:"Яйцо",icon:"🥚",price:10},
+ milk:{name:"Молоко",icon:"🥛",price:18},
+ wool:{name:"Шерсть",icon:"🧶",price:24},
+ kumys:{name:"Кумыс",icon:"🥛",price:30},
+ cheese:{name:"Сыр",icon:"🧀",price:45}
 };
 
-let state=loadState();
+const ARMY={
+ fighter:{name:"Боец",icon:"⚔️",price:500,power:20,damage:18,hp:100},
+ guard:{name:"Стража",icon:"🛡️",price:750,power:30,damage:16,hp:130},
+ archer:{name:"Лучник",icon:"🏹",price:900,power:35,damage:24,hp:85},
+ lancer:{name:"Копейщик",icon:"🔱",price:1300,power:48,damage:28,hp:145},
+ knight:{name:"Рыцарь",icon:"🗡️",price:2200,power:80,damage:38,hp:220},
+ paladin:{name:"Паладин",icon:"🛡️",price:3500,power:120,damage:48,hp:280}
+};
+
+const BUILDINGS={
+ fence:{name:"Забор",icon:"🧱",price:120},
+ scarecrow:{name:"Чучело",icon:"🎃",price:180},
+ stone:{name:"Камень",icon:"🪨",price:70}
+};
+
+const BOSSES=[
+ {id:"goblin",name:"Гоблин",icon:"👺",hp:1000,reward:125},
+ {id:"boar",name:"Вожак кабанов",icon:"🐗",hp:1800,reward:225},
+ {id:"dragon",name:"Дракон",icon:"🐉",hp:3500,reward:450},
+ {id:"giant",name:"Гигант",icon:"👹",hp:6000,reward:800}
+];
+
+const PACKAGES={
+ free:{name:"Бесплатный",icon:"🎁",price:0,rewards:{coins:500,stone:3,xp:50}},
+ small:{name:"Starter",icon:"📦",price:15,rewards:{coins:3000,stone:10,xp:250}},
+ medium:{name:"Farmer",icon:"💰",price:25,rewards:{coins:6000,stone:20,xp:500}},
+ large:{name:"King",icon:"👑",price:39,rewards:{coins:12000,stone:40,xp:1000}}
+};
+
+const COUNTRIES=["🇰🇬 Кыргызстан","🇺🇿 Узбекистан","🇰🇿 Казахстан","🇷🇺 Россия","🇹🇷 Турция","🇺🇸 США","🇩🇪 Германия","🇬🇧 Великобритания"];
+
+const DEFAULT_STATE={
+ coins:1500,
+ stars:0,
+ crystals:0,
+ xp:0,
+ level:1,
+ harvested:0,
+ seasonHarvested:0,
+ seasonPvp:0,
+ seasonCoins:0,
+ season:"Сентябрь 2026",
+ expansion:9,
+ field:Array(54).fill(null),
+
+ inventory:{
+  wheat:0,carrot:0,corn:0,tomato:0,berry:0,pumpkin:0,
+  egg:0,milk:0,wool:0,kumys:0,cheese:0,
+  wheatSeed:5,carrotSeed:3,cornSeed:2,tomatoSeed:1,berrySeed:0,pumpkinSeed:0
+ },
+
+ animals:{
+  chicken:1,cow:0,sheep:0,horse:0
+ },
+
+ animalProduction:{
+  chicken:0,cow:0,sheep:0,horse:0
+ },
+
+ workers:{
+  farmer:0,
+  manager:0
+ },
+
+ farmManager:{
+  owned:false,
+  seeds:{wheatSeed:0,carrotSeed:0,cornSeed:0,tomatoSeed:0,berrySeed:0,pumpkinSeed:0},
+  storage:{wheat:0,carrot:0,corn:0,tomato:0,berry:0,pumpkin:0,egg:0,milk:0,wool:0,kumys:0,cheese:0},
+  lastProcess:Date.now()
+ },
+
+ buildings:{fence:0,scarecrow:0,stone:10},
+ perimeter:{},
+
+ army:{fighter:0,guard:0,archer:0,lancer:0,knight:0,paladin:0},
+
+ crows:{
+  next:Date.now()+3600000,
+  attackActive:false,
+  attackEnd:0,
+  attacks:0
+ },
+
+ shieldUntil:0,
+
+ raid:{
+  next:0,
+  active:false,
+  target:null,
+  timerEnd:0,
+  wins:0,
+  losses:0
+ },
+
+ pvp:{
+  next:0,
+  active:false,
+  hp:500,
+  wins:0,
+  losses:0
+ },
+
+ bosses:{
+  goblin:{hp:1000,next:0,attempts:0},
+  boar:{hp:1800,next:0,attempts:0},
+  dragon:{hp:3500,next:0,attempts:0},
+  giant:{hp:6000,next:0,attempts:0}
+ },
+
+ games:{
+  hand:{next:0},
+  tractor:{next:0},
+  catch:{next:0}
+ },
+
+ usedPromos:[],
+
+ tasks:{
+  pvp:0,
+  raid:0,
+  boss:0,
+  harvest:0,
+  products:0,
+  sell:0,
+  boar:0,
+  raider:0,
+  clan:0,
+  channel:false,
+  claimed:{}
+ },
+
+ partnerCodes:{},
+ partnerActivations:[],
+ partnerChain:{level:0,code:null,parent:null},
+
+ packageFree:0,
+
+ daily:{
+  last:0,
+  streak:0
+ },
+
+ referrals:{
+  code:"",
+  invitedBy:null,
+  invited:[],
+  confirmed:[],
+  earned:0,
+  welcome:false
+ },
+
+ boosterUntil:0,
+ lastRaidPause:0,
+
+ liveWorld:{
+  boarNext:Date.now()+900000,
+  raiderNext:Date.now()+7200000,
+  event:null,
+  entities:[],
+  armyUnits:[]
+ },
+
+ clan:{
+  id:null,
+  name:"",
+  description:"",
+  flag:"🏳️",
+  members:[],
+  maxMembers:25,
+  battleNext:0,
+  wins:0,
+  losses:0
+ },
+
+ version:4
+};
+
+let state;
 let activeBattleTimer=null;
-let battleState=null;
-let toastTimer=null;
+let raidSearchTimer=null;
+let pvpSearchTimer=null;
+let pvpMatchFound=false;
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+let mowGame={running:false,end:0,score:0,cells:0,type:"hand"};
+let catchGame={running:false,end:0,score:0,hits:0};
 
-function deepClone(obj){
-return JSON.parse(JSON.stringify(obj));
+function deepCopy(obj){
+ return JSON.parse(JSON.stringify(obj));
 }
 
-function mergeState(base,loaded){
-const out=deepClone(base);
-
-function merge(a,b){
-Object.keys(b||{}).forEach(k=>{
-if(
-b[k] &&
-typeof b[k]==="object" &&
-!Array.isArray(b[k]) &&
-a[k] &&
-typeof a[k]==="object" &&
-!Array.isArray(a[k])
-){
-merge(a[k],b[k]);
-}else{
-a[k]=b[k];
-}
-});
+function money(v){
+ return Math.floor(Number(v)||0).toLocaleString("ru-RU");
 }
 
-merge(out,loaded||{});
-return out;
-}
-
-function loadState(){
-try{
-const raw=localStorage.getItem(SAVE_KEY);
-if(!raw)return deepClone(defaultState);
-return mergeState(defaultState,JSON.parse(raw));
-}catch(e){
-console.error(e);
-return deepClone(defaultState);
-}
-}
-
-function save(){
-try{
-localStorage.setItem(SAVE_KEY,JSON.stringify(state));
-}catch(e){}
-}
-
-function money(n){
-return Math.floor(Number(n)||0).toLocaleString("ru-RU");
-}
-
-function formatTime(ms){
-ms=Math.max(0,Math.floor(ms/1000));
-const m=Math.floor(ms/60);
-const s=ms%60;
-return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
-}
-
-function notify(text){
-const t=document.getElementById("toast");
-if(!t)return;
-t.textContent=text;
-t.classList.add("show");
-clearTimeout(toastTimer);
-toastTimer=setTimeout(()=>t.classList.remove("show"),2400);
-}
-
-function xpNeed(){
-return 100+(state.level-1)*75;
-}
-
-function addXP(n){
-state.xp+=n;
-while(state.xp>=xpNeed()){
-state.xp-=xpNeed();
-state.level++;
-notify("⭐ Новый уровень: "+state.level);
-}
-}
-
-function crystalText(n){
-return money(n);
-}
-
-function armyPower(){
-return Object.entries(state.army).reduce((sum,[id,count])=>{
-return sum+(ARMORY[id]?.power||0)*count;
-},0);
-}
-
-function armyCount(){
-return Object.values(state.army).reduce((a,b)=>a+b,0);
+function crystalText(v){
+ return money(v);
 }
 
 function random(min,max){
-return Math.floor(Math.random()*(max-min+1))+min;
+ return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function totalHp(arr){
+ return arr.reduce((sum,u)=>sum+Math.max(0,Number(u.hp)||0),0);
+}
+
+function formatTime(ms){
+ ms=Math.max(0,ms||0);
+ const sec=Math.floor(ms/1000);
+ const h=Math.floor(sec/3600);
+ const m=Math.floor((sec%3600)/60);
+ const s=sec%60;
+ if(h)return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+ return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+function notify(text){
+ const el=document.getElementById("toast");
+ if(!el)return;
+ el.textContent=text;
+ el.classList.add("show");
+ clearTimeout(notify.timer);
+ notify.timer=setTimeout(()=>el.classList.remove("show"),2200);
 }
-
-/* =========================================================
-   TASKS
-   ========================================================= */
-
-function taskProgress(id){
-switch(id){
-case"harvest":return state.tasks.harvest;
-case"animals":return state.tasks.animals;
-case"army":return armyPower();
-case"coins":return state.tasks.coins;
-case"games":return state.tasks.games;
-case"raids":return state.tasks.raids;
-default:return 0;
-}
-}
-
-function addTaskProgress(id,n=1){
-if(typeof state.tasks[id]!=="number")state.tasks[id]=0;
-state.tasks[id]+=n;
-}
-
-function claimTask(id){
-const d=TASK_DEFS[id];
-if(!d)return;
-
-const progress=Math.min(taskProgress(id),d.goal);
-
-if(state.tasks.claimed[id]){
-notify("ℹ️ Это задание уже получено");
-return;
-}
-
-if(progress<d.goal){
-notify("⏳ Задание ещё не выполнено");
-return;
-}
-
-state.coins+=d.reward;
-state.tasks.claimed[id]=true;
-addXP(20);
-save();
-render();
-notify("🎯 Получено +"+money(d.reward)+" 🪙");
-}
-
-function claimChannelTask(){
-if(state.tasks.channel){
-notify("ℹ️ Задание уже получено");
-return;
-}
-
-state.tasks.channel=true;
-state.coins+=1000;
-addXP(15);
-save();
-render();
-notify("📢 Партнёрское задание выполнено +1 000 🪙");
-}
-
-function activatePartnerCode(){
-const input=document.getElementById("partnerCodeInput");
-const code=(input?.value||"").trim();
-
-if(!code){
-notify("❌ Введи партнёрский код");
-return;
+
+function save(){
+ try{
+  state.version=SAVE_VERSION;
+  localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+ }catch(e){
+  console.error("SAVE ERROR",e);
+ }
+}
+
+function xpNeed(){
+ return 100+((state.level-1)*70);
+}
+
+function addXP(v){
+ state.xp+=Math.max(0,Number(v)||0);
+ while(state.xp>=xpNeed()){
+  state.xp-=xpNeed();
+  state.level++;
+  notify("⭐ Новый уровень: "+state.level);
+ }
 }
 
-if(state.partnerChain.activated){
-notify("ℹ️ Партнёрский код уже активирован");
-return;
+function ensureSeason(){
+ const now=new Date();
+ const month=now.getMonth();
+ const year=now.getFullYear();
+ const names=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+ state.season=names[month]+" "+year;
 }
 
-state.partnerChain.activated=true;
-state.partnerChain.level=Math.min(3,state.partnerChain.level+1);
-state.coins+=3000;
-save();
-render();
-notify("🤝 Партнёрский код активирован +3 000 🪙");
-}
-
-/* =========================================================
-   ЗАДАНИЯ — ОТДЕЛЬНОЕ ОКНО
-   ========================================================= */
-
-function openTasksModal(){
-let html=`
-<div class="sectionTitle">
-<span>🎯 Задания</span>
-<span class="badge">НАГРАДЫ</span>
-</div>
-<div class="muted small" style="margin-bottom:12px">
-Выполняй задания и забирай дополнительные награды
-</div>
-<div id="tasksModalList"></div>
-
-<div class="card" style="margin-top:10px">
-<div class="sectionTitle">🤝 Сотрудничество</div>
-<div class="muted small">
-По вопросам сотрудничества и партнёрства: <b>@to77n</b>
-</div>
-</div>
-
-<div class="card">
-<div class="sectionTitle">🔐 Партнёрская активация</div>
-<div class="muted small">
-Активируй партнёрский код и получи награду
-</div>
-<input id="partnerCodeInput" class="input" placeholder="Партнёрский код">
-<button class="btn purple" onclick="activatePartnerCode();openTasksModal()">
-🤝 Активировать
-</button>
-</div>
-`;
-
-showModal(html);
-
-const list=document.getElementById("tasksModalList");
-if(!list)return;
-
-let h="";
-
-Object.entries(TASK_DEFS).forEach(([id,d])=>{
-const cur=Math.min(taskProgress(id),d.goal);
-const claimed=!!state.tasks.claimed[id];
-
-h+=`
-<div class="row">
-<div class="rowLeft">
-<div class="rowIcon">${d.icon}</div>
-<div>
-<div class="rowName">${d.name}</div>
-<div class="rowSub">
-${money(cur)} / ${money(d.goal)} · награда ${money(d.reward)} 🪙
-</div>
-</div>
-</div>
-
-<button
-class="btn gold"
-style="width:110px;margin:0"
-${cur<d.goal||claimed?"disabled":""}
-onclick="claimTask('${id}');openTasksModal()"
->
-${claimed?"Получено":cur>=d.goal?"Забрать":"В процессе"}
-</button>
-</div>
-`;
-});
-
-h+=`
-<div class="row">
-<div class="rowLeft">
-<div class="rowIcon">📢</div>
-<div>
-<div class="rowName">Подпишись на официальный канал Growix</div>
-<div class="rowSub">
-Партнёрское задание · награда 1 000 🪙
-</div>
-</div>
-</div>
-<button
-class="btn blue"
-style="width:120px;margin:0"
-onclick="claimChannelTask();openTasksModal()"
-${state.tasks.channel?"disabled":""}
->
-${state.tasks.channel?"Получено":"Открыть"}
-</button>
-</div>
-`;
-
-list.innerHTML=h;
-}
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-function navigate(page,button){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-
-const target=document.getElementById("page-"+page);
-if(target)target.classList.add("active");
-
-if(button){
-document.querySelectorAll(".navBtn").forEach(b=>b.classList.remove("active"));
-button.classList.add("active");
-}
-
-render();
-}
-
-/* =========================================================
-   MODALS
-   ========================================================= */
-
-function showModal(html){
-const modal=document.getElementById("modal");
-const content=document.getElementById("modalContent");
-if(!modal||!content)return;
-
-modal.classList.remove("battleFullscreen");
-content.innerHTML=html;
-modal.classList.add("show");
-}
-
-function openModal(html){
-showModal(html);
-}
+function loadState(){
+ try{
+  const raw=localStorage.getItem(SAVE_KEY);
 
-function closeModal(){
-const modal=document.getElementById("modal");
-if(modal){
-modal.classList.remove("show","battleFullscreen");
-}
-}
+  if(!raw){
+   state=deepCopy(DEFAULT_STATE);
+   ensureSeason();
+   save();
+   return;
+  }
 
-/* =========================================================
-   FARM
-   ========================================================= */
+  const saved=JSON.parse(raw);
+  state=Object.assign(deepCopy(DEFAULT_STATE),saved);
 
-function renderField(){
-const field=document.getElementById("field");
-if(!field)return;
+  state.inventory=Object.assign({},DEFAULT_STATE.inventory,saved.inventory||{});
+  state.animals=Object.assign({},DEFAULT_STATE.animals,saved.animals||{});
+  state.animalProduction=Object.assign({},DEFAULT_STATE.animalProduction,saved.animalProduction||{});
+  state.workers=Object.assign({},DEFAULT_STATE.workers,saved.workers||{});
 
-document.getElementById("farmCount").textContent=state.plots+"/54";
+  state.farmManager=Object.assign({},deepCopy(DEFAULT_STATE.farmManager),saved.farmManager||{});
+  state.farmManager.seeds=Object.assign({},DEFAULT_STATE.farmManager.seeds,state.farmManager.seeds||{});
+  state.farmManager.storage=Object.assign({},DEFAULT_STATE.farmManager.storage,state.farmManager.storage||{});
 
-let html="";
+  state.buildings=Object.assign({},DEFAULT_STATE.buildings,saved.buildings||{});
+  state.army=Object.assign({},DEFAULT_STATE.army,saved.army||{});
+  state.crows=Object.assign({},DEFAULT_STATE.crows,saved.crows||{});
+  state.raid=Object.assign({},DEFAULT_STATE.raid,saved.raid||{});
+  state.pvp=Object.assign({},DEFAULT_STATE.pvp,saved.pvp||{});
+  state.games=Object.assign({},DEFAULT_STATE.games,saved.games||{});
+  state.daily=Object.assign({},DEFAULT_STATE.daily,saved.daily||{});
+  state.referrals=Object.assign({},DEFAULT_STATE.referrals,saved.referrals||{});
+  state.liveWorld=Object.assign({},DEFAULT_STATE.liveWorld,saved.liveWorld||{});
+  state.clan=Object.assign({},DEFAULT_STATE.clan,saved.clan||{});
+  state.tasks=Object.assign({},DEFAULT_STATE.tasks,saved.tasks||{});
+  state.tasks.claimed=Object.assign({},DEFAULT_STATE.tasks.claimed,(saved.tasks||{}).claimed||{});
 
-for(let i=0;i<state.plots;i++){
-const plant=state.plants[i];
+  state.partnerChain=Object.assign({},DEFAULT_STATE.partnerChain,saved.partnerChain||{});
+  state.partnerCodes=Object.assign({},saved.partnerCodes||{});
 
-if(!plant){
-html+=`
-<div class="plot empty" onclick="plantPlot(${i})">
-</div>
-`;
-continue;
-}
-
-if(plant.ready){
-html+=`
-<div class="plot ready" onclick="harvestPlot(${i})">
-<span>${PLANTS[plant.type].icon}</span>
-<div class="plotLabel">ГОТОВО</div>
-</div>
-`;
-}else{
-const remain=Math.max(0,plant.readyAt-Date.now());
-
-html+=`
-<div class="plot">
-<span>${PLANTS[plant.type].icon}</span>
-<div class="plotTimer">${formatTime(remain)}</div>
-</div>
-`;
-}
-}
+  state.perimeter=Object.assign({},saved.perimeter||{});
 
-field.innerHTML=html;
-}
+  if(!Array.isArray(state.field))state.field=Array(54).fill(null);
 
-function plantPlot(index){
-if(state.plants[index]){
-notify("🌱 Здесь уже что-то растёт");
-return;
-}
+  /*
+   У старой версии игрок начинал с 50 Stars.
+   При переходе на v4 убираем именно этот стартовый бонус,
+   но уже заработанные Stars после старта не трогаем.
+  */
+  if(Number(saved.version||0)<4 && state.level===1 && Number(state.stars)===50){
+   state.stars=0;
+  }
 
-showModal(`
-<div class="sectionTitle">🌱 Выбери растение</div>
-<div class="grid">
-${Object.entries(PLANTS).map(([id,p])=>`
-<div class="itemCard">
-<div class="itemImage">${p.icon}</div>
-<div class="itemName">${p.name}</div>
-<div class="itemCount">${p.cost} 🪙</div>
-<button class="btn" onclick="plant(${index},'${id}')">
-Посадить
-</button>
-</div>
-`).join("")}
-</div>
-`);
-}
+  state.version=SAVE_VERSION;
 
-function plant(index,type){
-const p=PLANTS[type];
+  migrateState();
+  ensureSeason();
+  save();
 
-if(state.coins<p.cost){
-notify("❌ Недостаточно монет");
-return;
+ }catch(e){
+  console.error("GROWIX LOAD ERROR",e);
+  state=deepCopy(DEFAULT_STATE);
+  ensureSeason();
+  save();
+ }
 }
 
-state.coins-=p.cost;
-
-state.plants[index]={
-type,
-plantedAt:Date.now(),
-readyAt:Date.now()+p.time,
-ready:false
-};
-
-save();
-closeModal();
-render();
-notify("🌱 "+p.name+" посажена");
-}
+function migrateState(){
 
-function harvestPlot(index){
-const plant=state.plants[index];
-if(!plant)return;
+ if(!Array.isArray(state.field))state.field=Array(54).fill(null);
 
-if(!plant.ready && Date.now()<plant.readyAt){
-notify("⏳ Ещё не созрело");
-return;
-}
+ Object.keys(ARMY).forEach(id=>{
+  if(typeof state.army[id]!=="number")state.army[id]=0;
+ });
 
-const p=PLANTS[plant.type];
-const amount=random(1,3);
+ Object.keys(ANIMALS).forEach(id=>{
+  if(typeof state.animals[id]!=="number")state.animals[id]=0;
+  if(typeof state.animalProduction[id]!=="number")state.animalProduction[id]=0;
+ });
 
-state.coins+=p.sell*amount;
-state.inventory[plant.type]=(state.inventory[plant.type]||0)+amount;
-addTaskProgress("harvest",amount);
-addTaskProgress("coins",p.sell*amount);
-addXP(8);
+ if(!Array.isArray(state.usedPromos))state.usedPromos=[];
+ if(!Array.isArray(state.partnerActivations))state.partnerActivations=[];
+ if(!Array.isArray(state.clan.members))state.clan.members=[];
 
-state.plants[index]=null;
+ state.liveWorld.entities=Array.isArray(state.liveWorld.entities)?state.liveWorld.entities:[];
+ state.liveWorld.armyUnits=Array.isArray(state.liveWorld.armyUnits)?state.liveWorld.armyUnits:[];
 
-save();
-render();
-notify("🌾 Собрано "+amount+" × "+p.name);
-}
+ if(typeof state.liveWorld.boarNext!=="number")state.liveWorld.boarNext=Date.now()+900000;
+ if(typeof state.liveWorld.raiderNext!=="number")state.liveWorld.raiderNext=Date.now()+7200000;
 
-/* =========================================================
-   ЖИВАЯ ФЕРМА
-   ========================================================= */
-
-function renderLivingFarm(){
-const el=document.getElementById("livingFarm");
-if(!el)return;
-
-let html=`
-<div class="card" style="margin:0">
-<div class="profileStats">
-<div class="profileStat">
-<b>${state.livingFarm.plants}</b>
-<span>Живые растения</span>
-</div>
-<div class="profileStat">
-<b>${state.livingFarm.animals}</b>
-<span>Животные</span>
-</div>
-</div>
-
-<button class="btn" onclick="growLivingFarm()">
-🌿 Развивать живую ферму
-</button>
-
-<div class="muted small" style="margin-top:9px">
-На живой ферме нет таймеров созревания
-</div>
-</div>
-`;
-
-el.innerHTML=html;
-}
+ BOSSES.forEach(b=>{
+  state.bosses[b.id]=Object.assign({},DEFAULT_STATE.bosses[b.id],state.bosses[b.id]||{});
+ });
 
-function growLivingFarm(){
-if(state.coins<1000){
-notify("❌ Нужно 1 000 🪙");
-return;
-}
+ Object.keys(DEFAULT_STATE.games).forEach(id=>{
+  state.games[id]=Object.assign({},DEFAULT_STATE.games[id],state.games[id]||{});
+ });
 
-state.coins-=1000;
-state.livingFarm.plants++;
-save();
-render();
-notify("🌿 Живая ферма расширена");
+ if(state.expansion!==9&&state.expansion!==18&&state.expansion!==36&&state.expansion!==54){
+  state.expansion=9;
+ }
 }
 
-/* =========================================================
-   ANIMALS
-   ========================================================= */
-
-function renderAnimals(){
-const box=document.getElementById("animalsList");
-if(!box)return;
-
-let html="";
-
-Object.entries(ANIMALS).forEach(([id,a])=>{
-const count=state.animals[id]||0;
-const productCount=state.products[a.product]||0;
-
-html+=`
-<div class="card">
-<div class="row">
-<div class="rowLeft">
-<div class="rowIcon">${a.icon}</div>
-<div>
-<div class="rowName">${a.name}</div>
-<div class="rowSub">Количество: ${count}</div>
-</div>
-</div>
-<div class="price">${a.price.toLocaleString()} 🪙</div>
-</div>
-
-<div class="muted small">
-Продукция: ${a.productIcon} ${a.productName} · накоплено: ${productCount}
-</div>
-
-<button class="btn" onclick="buyAnimal('${id}')">
-Купить ${a.name}
-</button>
-
-<button class="btn gold" onclick="collectAnimal('${id}')">
-Собрать ${a.productIcon}
-</button>
-
-<button class="btn secondary" onclick="sellProduct('${id}')">
-Продать продукцию
-</button>
-</div>
-`;
-});
-
-box.innerHTML=html;
-}
+function getPlayerId(){
+ let id=localStorage.getItem("growix_player_id");
 
-function buyAnimal(id){
-const a=ANIMALS[id];
+ if(!id){
+  id="P"+Math.random().toString(36).slice(2,10).toUpperCase();
+  localStorage.setItem("growix_player_id",id);
+ }
 
-if(state.coins<a.price){
-notify("❌ Недостаточно монет");
-return;
+ return id;
 }
 
-state.coins-=a.price;
-state.animals[id]=(state.animals[id]||0)+1;
-state.livingFarm.animals++;
-save();
-render();
-notify(a.icon+" Куплено: "+a.name);
+function referralCode(){
+ if(!state.referrals.code){
+  state.referrals.code=getPlayerId();
+  save();
+ }
+ return state.referrals.code;
 }
-
-function collectAnimal(id){
-const a=ANIMALS[id];
-const count=state.animals[id]||0;
 
-if(count<=0){
-notify("❌ У тебя нет таких животных");
-return;
+/* Рост теперь в 2 раза медленнее предыдущей версии */
+function growTime(crop){
+ return crop.grow*4*1000;
 }
 
-const amount=count;
-state.products[a.product]=(state.products[a.product]||0)+amount;
-addTaskProgress("animals",amount);
-addXP(5);
-
-save();
-render();
-notify("🥛 Получено продукции: "+amount);
-}
+function openPlant(index){
 
-function sellProduct(id){
-const a=ANIMALS[id];
-const count=state.products[a.product]||0;
+ if(state.field[index]){
+  return harvest(index);
+ }
 
-if(count<=0){
-notify("❌ Нет продукции для продажи");
-return;
-}
+ const options=Object.keys(CROPS)
+  .map(id=>({
+   id,
+   crop:CROPS[id],
+   seed:state.inventory[id+"Seed"]||0
+  }))
+  .filter(x=>x.seed>0);
 
-const reward=count*a.sell;
-state.products[a.product]=0;
-state.coins+=reward;
-addTaskProgress("coins",reward);
-
-save();
-render();
-notify("🪙 Продано на "+money(reward)+" 🪙");
-}
+ if(!options.length){
+  return notify("🌱 Нет семян. Купи их в магазине.");
+ }
 
-/* =========================================================
-   MINI GAMES
-   ========================================================= */
-
-function renderGames(){
-const box=document.getElementById("gamesList");
-if(!box)return;
-
-box.innerHTML=`
-<div class="card">
-<div class="sectionTitle">
-<span>🎯 Точный выстрел</span>
-<span class="badge">КД 30 сек</span>
-</div>
-<div class="muted small">
-Попробуй попасть в цель и получить награду
-</div>
-<button class="btn" onclick="playGame('target')">
-🎯 Играть
-</button>
-</div>
-
-<div class="card">
-<div class="sectionTitle">
-<span>🃏 Угадай число</span>
-<span class="badge">КД 45 сек</span>
-</div>
-<div class="muted small">
-Угадай число от 1 до 3
-</div>
-<button class="btn purple" onclick="playGuess()">
-🃏 Играть
-</button>
-</div>
-
-<div class="card">
-<div class="sectionTitle">
-<span>⚔️ Тренировка армии</span>
-<span class="badge">КД 60 сек</span>
-</div>
-<button class="btn red" onclick="trainingGame()">
-⚔️ Тренироваться
-</button>
-</div>
-`;
-}
+ let html=`<div class="sectionTitle">🌱 Посадить</div>`;
 
-let gameCooldowns={};
+ options.forEach(x=>{
+  html+=`
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">${x.crop.icon}</div>
+     <div>
+      <div class="rowName">${x.crop.name}</div>
+      <div class="rowSub">Семян: ${x.seed} · Урожай: ${x.crop.reward}</div>
+     </div>
+    </div>
+    <button class="btn" style="width:110px;margin:0" onclick="plantCrop(${index},'${x.id}')">Посадить</button>
+   </div>
+  `;
+ });
 
-function gameReady(id){
-return !gameCooldowns[id]||Date.now()>=gameCooldowns[id];
+ openModal(html);
 }
 
-function playGame(id){
-if(!gameReady(id)){
-notify("⏳ КД: "+formatTime(gameCooldowns[id]-Date.now()));
-return;
-}
+function plantCrop(index,id){
 
-gameCooldowns[id]=Date.now()+30000;
+ const crop=CROPS[id];
 
-const win=Math.random()<.65;
-const reward=win?random(200,600):50;
+ if(!crop)return;
+ if(state.field[index])return closeModal();
 
-state.coins+=reward;
-addTaskProgress("games",1);
-addTaskProgress("coins",reward);
-addXP(5);
+ if((state.inventory[id+"Seed"]||0)<=0){
+  closeModal();
+  return notify("❌ Семена закончились");
+ }
 
-save();
-render();
+ state.inventory[id+"Seed"]--;
 
-notify(win?"🎯 Попадание! +"+reward+" 🪙":"🎯 Мимо, но ты получил "+reward+" 🪙");
-}
+ state.field[index]={
+  crop:id,
+  plantedAt:Date.now(),
+  readyAt:Date.now()+growTime(crop),
+  crow:false
+ };
 
-function playGuess(){
-if(!gameReady("guess")){
-notify("⏳ КД: "+formatTime(gameCooldowns.guess-Date.now()));
-return;
-}
+ save();
+ closeModal();
+ render();
 
-const answer=random(1,3);
-const guess=Number(prompt("Угадай число от 1 до 3"));
-
-gameCooldowns.guess=Date.now()+45000;
-
-if(guess===answer){
-state.coins+=700;
-addXP(10);
-notify("🎉 Угадал! +700 🪙");
-}else{
-state.coins+=100;
-notify("❌ Не угадал. Было число "+answer);
+ notify("🌱 Посажено: "+crop.name);
 }
 
-addTaskProgress("games",1);
-save();
-render();
-}
+function harvest(index){
 
-function trainingGame(){
-if(!gameReady("training")){
-notify("⏳ КД: "+formatTime(gameCooldowns.training-Date.now()));
-return;
-}
+ const p=state.field[index];
+ if(!p)return;
 
-if(armyCount()<=0){
-notify("❌ Сначала найми бойцов");
-return;
-}
+ const crop=CROPS[p.crop];
+ if(!crop)return;
 
-gameCooldowns.training=Date.now()+60000;
+ if(Date.now()<p.readyAt){
+  return notify("⏳ Урожай ещё растёт");
+ }
 
-state.crystals+=random(1,3);
-addTaskProgress("games",1);
-addXP(10);
+ let reward=crop.reward;
 
-save();
-render();
+ if(p.crow){
 
-notify("⚔️ Армия потренировалась");
-}
+  const defense=(state.buildings.scarecrow||0)*35+(state.buildings.fence||0)*10;
 
-/* =========================================================
-   SHOP
-   ========================================================= */
-
-function renderShop(){
-const box=document.getElementById("shopList");
-if(!box)return;
-
-box.innerHTML=`
-<div class="card">
-<div class="sectionTitle">
-<span>⚔️ Армия</span>
-<span class="badge">БОЕВЫЕ ЕДИНИЦЫ</span>
-</div>
-
-${Object.entries(ARMORY).map(([id,a])=>`
-<div class="row">
-<div class="rowLeft">
-<div class="rowIcon">${a.icon}</div>
-<div>
-<div class="rowName">${a.name}</div>
-<div class="rowSub">
-Сила ${a.power} · HP ${a.hp} · Урон ${a.damage}
-</div>
-</div>
-</div>
-<div>
-<div class="price">${money(a.price)} 🪙</div>
-<button class="btn" style="margin-top:5px" onclick="buySoldier('${id}')">
-Купить
-</button>
-</div>
-</div>
-`).join("")}
-</div>
-
-<div class="card">
-<div class="sectionTitle">🛡️ Защита территории</div>
-
-<div class="row">
-<div class="rowLeft">
-<div class="rowIcon">🪵</div>
-<div>
-<div class="rowName">Забор</div>
-<div class="rowSub">Защищает периметр</div>
-</div>
-</div>
-<div class="price">500 🪙</div>
-</div>
-<button class="btn" onclick="buildDefense('fences')">
-Поставить забор
-</button>
-
-<div class="row">
-<div class="rowLeft">
-<div class="rowIcon">🎃</div>
-<div>
-<div class="rowName">Чучело</div>
-<div class="rowSub">Отпугивает воронов</div>
-</div>
-</div>
-<div class="price">800 🪙</div>
-</div>
-<button class="btn" onclick="buildDefense('scarecrows')">
-Поставить чучело
-</button>
-
-<div class="row">
-<div class="rowLeft">
-<div class="rowIcon">🪨</div>
-<div>
-<div class="rowName">Камни</div>
-<div class="rowSub">Можно бросать во врагов</div>
-</div>
-</div>
-<div class="price">100 🪙</div>
-</div>
-<button class="btn" onclick="buyStones()">
-Купить камни
-</button>
-</div>
-
-<div class="card">
-<div class="sectionTitle">🤖 Менеджер фермы</div>
-<div class="muted small">
-Автоматически управляет обычными грядками и сбором продукции
-</div>
-
-<div class="package" style="margin-top:10px">
-<div class="packageTitle">
-<span>🌱 Менеджер фермы</span>
-<span class="price">500 000 🪙 / 50 ⭐</span>
-</div>
-<div class="packageItems">
-• автоматически сажает растения<br>
-• автоматически собирает готовый урожай<br>
-• работает без постоянного контроля
-</div>
-<button class="btn gold" onclick="buyManager('coins')">
-Купить за 500 000 🪙
-</button>
-<button class="btn" onclick="buyManager('stars')">
-Купить за 50 ⭐
-</button>
-</div>
-</div>
-`;
-}
+  if(Math.random()*100>Math.min(90,defense)){
+   reward=Math.max(1,Math.floor(reward*.65));
+   notify("🐦 Вороны испортили часть урожая");
+  }else{
+   notify("🛡️ Защита спасла урожай");
+  }
+ }
 
-function buySoldier(id){
-const a=ARMORY[id];
+ state.inventory[p.crop]=(state.inventory[p.crop]||0)+reward;
 
-if(state.coins<a.price){
-notify("❌ Недостаточно монет");
-return;
-}
+ state.tasks.harvest=(state.tasks.harvest||0)+reward;
 
-state.coins-=a.price;
-state.army[id]=(state.army[id]||0)+1;
-addTaskProgress("army",a.power);
+ state.harvested+=reward;
+ state.seasonHarvested+=reward;
 
-save();
-render();
+ addXP(crop.xp);
 
-notify(a.icon+" Боец добавлен в армию");
-}
+ state.field[index]=null;
 
-function buildDefense(type){
-const prices={
-fences:500,
-scarecrows:800
-};
-
-if(state.coins<prices[type]){
-notify("❌ Недостаточно монет");
-return;
+ save();
+ render();
 }
 
-state.coins-=prices[type];
-state.perimeter[type]++;
-save();
-render();
-notify("🛡️ Защита установлена");
-}
+function expandFarm(){
 
-function buyStones(){
-if(state.coins<100){
-notify("❌ Нужно 100 🪙");
-return;
-}
+ const order=[9,18,36,54];
+ const i=order.indexOf(state.expansion);
 
-state.coins-=100;
-state.perimeter.stones++;
-save();
-render();
-notify("🪨 Куплен камень");
-}
+ if(i<0||i===order.length-1){
+  return notify("🏡 Ферма уже максимального размера");
+ }
 
-/* =========================================================
-   MANAGER
-   ========================================================= */
-
-function buyManager(method){
-if(state.manager.active){
-notify("ℹ️ Менеджер уже активен");
-return;
-}
+ const next=order[i+1];
+ const cost=EXPANSIONS[next].cost;
 
-if(method==="coins"){
-if(state.coins<500000){
-notify("❌ Нужно 500 000 🪙");
-return;
-}
-state.coins-=500000;
-}else{
-if(state.stars<50){
-notify("❌ Нужно 50 ⭐");
-return;
-}
-state.stars-=50;
-}
+ if(state.coins<cost){
+  return notify("❌ Нужно "+money(cost)+" 🪙");
+ }
 
-state.manager.active=true;
+ state.coins-=cost;
+ state.expansion=next;
 
-save();
-render();
+ save();
+ render();
 
-notify("🌱 Менеджер фермы активирован");
+ notify("🏡 Ферма расширена до "+next+" участков");
 }
-
-function processFarmManager(){
-if(!state.manager.active)return;
-
-let changed=false;
 
-/* Автосбор */
-state.plants.forEach((plant,index)=>{
-if(!plant)return;
+function armyPower(){
 
-if(Date.now()>=plant.readyAt){
-const p=PLANTS[plant.type];
-const amount=random(1,3);
+ let power=0;
 
-state.coins+=p.sell*amount;
-state.inventory[plant.type]=(state.inventory[plant.type]||0)+amount;
+ Object.entries(ARMY).forEach(([id,a])=>{
+  power+=(state.army[id]||0)*a.power;
+ });
 
-addTaskProgress("harvest",amount);
-addTaskProgress("coins",p.sell*amount);
-
-state.plants[index]=null;
-changed=true;
+ return power;
 }
-});
-
-/* Автопосадка */
-for(let i=0;i<state.plots;i++){
-if(!state.plants[i]){
-const available=Object.entries(PLANTS).find(([id,p])=>state.coins>=p.cost);
 
-if(!available)break;
+function buyArmy(id){
 
-const [id,p]=available;
+ const a=ARMY[id];
+ if(!a)return;
 
-state.coins-=p.cost;
+ if(state.coins<a.price){
+  return notify("❌ Не хватает монет");
+ }
 
-state.plants[i]={
-type:id,
-plantedAt:Date.now(),
-readyAt:Date.now()+p.time,
-ready:false
-};
+ state.coins-=a.price;
+ state.army[id]=(state.army[id]||0)+1;
 
-changed=true;
-}
-}
+ save();
+ render();
 
-if(changed)save();
+ notify(a.icon+" "+a.name+" добавлен в армию");
 }
-
-/* =========================================================
-   ARMY
-   ========================================================= */
 
 function renderArmy(){
-/* Армия показывается в боевом окне */
+
+ const box=document.getElementById("armyShop");
+ if(!box)return;
+
+ document.getElementById("armyPower").textContent=money(armyPower());
+ document.getElementById("fighters").textContent=money(state.army.fighter||0);
+ document.getElementById("guardsCount").textContent=money(state.army.guard||0);
+
+ let html=`<div class="armyGrid">`;
+
+ Object.entries(ARMY).forEach(([id,a])=>{
+  html+=`
+   <div class="armyCard">
+    <div class="armyIcon">${a.icon}</div>
+    <div class="armyName">${a.name}</div>
+    <div class="muted small">Сила: ${a.power} · Урон: ${a.damage}</div>
+    <div class="price" style="margin-top:5px">${money(a.price)} 🪙</div>
+    <button class="btn" onclick="buyArmy('${id}')">Купить</button>
+   </div>
+  `;
+ });
+
+ html+=`</div>`;
+
+ box.innerHTML=html;
 }
 
-/* =========================================================
-   BATTLE SYSTEM
-   ========================================================= */
+function renderField(){
 
-function openBattleFromHome(){
-startMarauderBattle();
+ updateLiveWorld();
+ renderForest();
+
+ const box=document.getElementById("field");
+ const world=document.getElementById("worldField");
+
+ if(!box||!world)return;
+
+ box.innerHTML="";
+ world.innerHTML="";
+
+ const count=state.expansion;
+ const layout=EXPANSIONS[count]||EXPANSIONS[9];
+
+ box.style.gridTemplateColumns=`repeat(${count>=36?6:3},1fr)`;
+
+ world.style.gridTemplateColumns=`repeat(${layout.columns},minmax(0,1fr))`;
+
+ world.style.width=count===54?"96%":count===36?"92%":count===18?"82%":"70%";
+ world.style.gap=count>=36?"3px":"5px";
+ world.style.padding=count>=36?"5px":"7px";
+ world.style.alignContent="start";
+ world.style.gridAutoRows="minmax(0,1fr)";
+
+ for(let i=0;i<count;i++){
+
+  const p=state.field[i];
+
+  const el=document.createElement("div");
+
+  el.className="plot "+(!p?"empty":p.crow?"crow":Date.now()>=p.readyAt?"ready":"");
+
+  if(p){
+
+   el.innerHTML=CROPS[p.crop].icon;
+
+   if(Date.now()<p.readyAt){
+    el.innerHTML+=`<div class="plotTimer">${formatTime(p.readyAt-Date.now())}</div>`;
+   }
+
+   if(p.crow){
+    el.innerHTML+=`<div class="plotLabel">🐦</div>`;
+   }
+
+   el.onclick=()=>harvest(i);
+
+  }else{
+   el.onclick=()=>openPlant(i);
+  }
+
+  box.appendChild(el);
+
+  const w=document.createElement("div");
+
+  w.className="worldPlot "+(p&&p.crow?"crow":p&&Date.now()>=p.readyAt?"ready":"");
+
+  w.innerHTML=p?(p.crow?"🐦":CROPS[p.crop].icon):"·";
+
+  w.onclick=p?()=>harvest(i):()=>openPlant(i);
+
+  world.appendChild(w);
+ }
+
+ document.getElementById("plotCount").textContent=count;
+ document.getElementById("farmSize").textContent=count+" участков";
+
+ renderPerimeter();
+ renderGuards();
+ renderLiveWorld();
 }
 
-function startMarauderBattle(){
-if(activeBattleTimer){
-notify("⚔️ Бой уже идёт");
-return;
+function getPerimeterSlots(){
+
+ const slots=[];
+
+ for(let i=10;i<=90;i+=10)slots.push(["top",i]);
+ for(let i=10;i<=90;i+=10)slots.push(["bottom",i]);
+ for(let i=15;i<=85;i+=10)slots.push(["left",i]);
+ for(let i=15;i<=85;i+=10)slots.push(["right",i]);
+
+ return slots;
 }
 
-const total=armyCount();
+function openPerimeterSlot(index){
 
-if(total<=0){
-notify("❌ У тебя нет бойцов");
-return;
+ if(state.perimeter[index]){
+  return notify("🧱 Этот слот уже занят");
+ }
+
+ let html=`<div class="sectionTitle">🧱 Выбери объект</div>`;
+
+ Object.entries(BUILDINGS).forEach(([id,b])=>{
+  html+=`
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">${b.icon}</div>
+     <div>
+      <div class="rowName">${b.name}</div>
+      <div class="rowSub">${money(b.price)} 🪙</div>
+     </div>
+    </div>
+
+    <button
+     class="btn"
+     style="width:110px;margin:0"
+     onclick="buildPerimeter(${index},'${id}')"
+    >Поставить</button>
+   </div>
+  `;
+ });
+
+ openModal(html);
 }
 
-const playerUnits=[];
+function buildPerimeter(index,id){
 
-Object.entries(state.army).forEach(([id,count])=>{
-const unit=ARMORY[id];
+ const b=BUILDINGS[id];
 
-for(let i=0;i<count;i++){
-playerUnits.push({
-id,
-name:unit.name,
-icon:unit.icon,
-maxHp:unit.hp,
-hp:unit.hp,
-damage:unit.damage
-});
-}
-});
+ if(!b)return;
 
-/* Ограничиваем визуальный бой, но реальные потери рассчитываются по армии */
-const visualPlayer=playerUnits.slice(0,8);
+ if(state.perimeter[index]){
+  return notify("🧱 Слот уже занят");
+ }
 
-const marauderCount=Math.min(8,Math.max(3,Math.ceil(total/2)));
+ if(state.coins<b.price){
+  closeModal();
+  return notify("❌ Не хватает монет");
+ }
 
-const enemyUnits=[];
+ state.coins-=b.price;
 
-for(let i=0;i<marauderCount;i++){
-enemyUnits.push({
-id:"marauder"+i,
-name:"Мародёр",
-icon:"🥷",
-maxHp:random(80,130),
-hp:random(80,130),
-damage:random(10,22)
-});
+ state.perimeter[index]=id;
+
+ state.buildings[id]=(state.buildings[id]||0)+1;
+
+ save();
+ closeModal();
+ render();
+
+ notify(b.icon+" "+b.name+" установлен");
 }
 
-battleState={
-type:"marauders",
-player:playerUnits,
-enemy:enemyUnits,
-visualPlayer,
-visualEnemy:enemyUnits,
-log:[],
-started:Date.now(),
-ended:false,
-winner:null,
-turn:0
-};
+function removePerimeter(index){
 
-showBattleScreen();
-runBattleLoop();
+ const id=state.perimeter[index];
+
+ if(!id)return;
+
+ if(state.buildings[id]>0)state.buildings[id]--;
+
+ delete state.perimeter[index];
+
+ save();
+ render();
+
+ notify("🧱 Объект убран");
 }
 
-function showBattleScreen(){
-const modal=document.getElementById("modal");
-const content=document.getElementById("modalContent");
+function renderPerimeter(){
 
-modal.classList.add("show","battleFullscreen");
+ const box=document.getElementById("perimeter");
 
-content.innerHTML=`
-<div class="battleArena" id="battleArena">
+ if(!box)return;
 
-<div class="battleSide left">
-🛡️ ТВОЯ АРМИЯ
-<br>
-<span id="playerBattleHp">HP: 0</span>
-</div>
+ box.innerHTML="";
 
-<div class="battleSide right">
-🥷 МАРОДЁРЫ
-<br>
-<span id="enemyBattleHp">HP: 0</span>
-</div>
+ getPerimeterSlots().forEach((slot,i)=>{
 
-<div class="battleCenter" id="battleCenter">⚔️</div>
+  const side=slot[0];
+  const pos=slot[1];
 
-<div id="battleUnits"></div>
+  const el=document.createElement("div");
+  const built=state.perimeter[i];
 
-<div class="battleBottom">
-<div class="battleBottomTitle" id="battleTitle">
-⚔️ СРАЖЕНИЕ НАЧИНАЕТСЯ
-</div>
-<div class="battleBottomSub" id="battleSub">
-Мародёры атакуют ферму
-</div>
-<div class="battleLog" id="battleLog"></div>
-</div>
+  el.className=
+   "perimeterSlot "+(built?"built":"empty")+
+   (side==="top"?" slotTop":
+   side==="bottom"?" slotBottom":
+   side==="left"?" slotLeft":"slotRight");
 
-</div>
-`;
+  if(side==="top"||side==="bottom"){
+   el.style.left=pos+"%";
+  }else{
+   el.style.top=pos+"%";
+  }
 
-renderBattleUnits();
-updateBattleBars();
+  if(built){
+   el.textContent=BUILDINGS[built].icon;
+   el.title=BUILDINGS[built].name+" · нажми для удаления";
+   el.onclick=()=>removePerimeter(i);
+  }else{
+   el.textContent="＋";
+   el.title="Поставить объект";
+   el.onclick=()=>openPerimeterSlot(i);
+  }
+
+  box.appendChild(el);
+ });
 }
 
-function renderBattleUnits(){
-const container=document.getElementById("battleUnits");
-if(!container||!battleState)return;
+function renderGuards(){
 
-let html="";
+ const box=document.getElementById("guards");
 
-battleState.visualPlayer.forEach((u,i)=>{
-if(u.hp<=0)return;
+ if(!box)return;
 
-const x=8+(i%4)*10;
-const y=25+Math.floor(i/4)*25;
+ box.innerHTML="";
 
-const hp=Math.max(0,u.hp/u.maxHp*100);
+ const units=[];
 
-html+=`
-<div
-class="battleUnit"
-id="playerUnit${i}"
-style="left:${x}%;top:${y}%"
->
-<div class="battleHp">
-<div class="battleHpFill" style="width:${hp}%"></div>
-</div>
-${u.icon}
-</div>
-`;
-});
+ Object.entries(ARMY).forEach(([id,a])=>{
+  for(let i=0;i<(state.army[id]||0);i++)units.push(a);
+ });
 
-battleState.visualEnemy.forEach((u,i)=>{
-if(u.hp<=0)return;
+ if(!units.length){
 
-const x=62+(i%4)*8;
-const y=28+Math.floor(i/4)*23;
+  units.push({
+   icon:"🛡️"
+  });
 
-const hp=Math.max(0,u.hp/u.maxHp*100);
+  units.push({
+   icon:"⚔️"
+  });
+ }
 
-html+=`
-<div
-class="battleUnit"
-id="enemyUnit${i}"
-style="left:${x}%;top:${y}%"
->
-<div class="battleHp">
-<div class="battleHpFill" style="width:${hp}%"></div>
-</div>
-${u.icon}
-</div>
-`;
-});
+ units.forEach((u,i)=>{
 
-container.innerHTML=html;
+  const g=document.createElement("div");
+
+  g.textContent=u.icon;
+
+  g.style.position="absolute";
+  g.style.zIndex="18";
+  g.style.fontSize="28px";
+  g.style.pointerEvents="none";
+
+  const total=Math.max(1,units.length);
+  const t=i/total;
+
+  if(t<=.25){
+   g.style.left=t*4*88+"%";
+   g.style.top="7%";
+  }else if(t<=.5){
+   g.style.left="83%";
+   g.style.top=((t-.25)*4*78)+"%";
+  }else if(t<=.75){
+   g.style.left=(88-(t-.5)*4*88)+"%";
+   g.style.top="84%";
+  }else{
+   g.style.left="7%";
+   g.style.top=(84-(t-.75)*4*75)+"%";
+  }
+
+  box.appendChild(g);
+ });
 }
 
-function totalHp(units){
-return units.reduce((s,u)=>s+Math.max(0,u.hp),0);
-}
-
-function updateBattleBars(){
-if(!battleState)return;
-
-const p=document.getElementById("playerBattleHp");
-const e=document.getElementById("enemyBattleHp");
-
-if(p)p.textContent="HP: "+money(totalHp(battleState.player));
-if(e)e.textContent="HP: "+money(totalHp(battleState.enemy));
-}
-
-function battleLog(text){
-if(!battleState)return;
-
-battleState.log.push(text);
-if(battleState.log.length>8)battleState.log.shift();
-
-const el=document.getElementById("battleLog");
-if(el)el.innerHTML=battleState.log.slice().reverse().map(x=>"<div>"+x+"</div>").join("");
-}
-
-function showDamage(targetUnitId,damage){
-const arena=document.getElementById("battleArena");
-if(!arena)return;
-
-const el=document.createElement("div");
-el.className="battleDamage";
-el.textContent="-"+damage;
-
-const target=document.getElementById(targetUnitId);
-
-if(target){
-const r=target.getBoundingClientRect();
-const a=arena.getBoundingClientRect();
-
-el.style.left=(r.left-a.left+5)+"px";
-el.style.top=(r.top-a.top-5)+"px";
-}else{
-el.style.left="50%";
-el.style.top="45%";
-}
-
-arena.appendChild(el);
-
-setTimeout(()=>el.remove(),750);
-}
-
-function showSlash(targetUnitId){
-const arena=document.getElementById("battleArena");
-const target=document.getElementById(targetUnitId);
-
-if(!arena||!target)return;
-
-const slash=document.createElement("div");
-slash.className="battleSlash";
-slash.textContent="⚡";
-
-const r=target.getBoundingClientRect();
-const a=arena.getBoundingClientRect();
-
-slash.style.left=(r.left-a.left)+"px";
-slash.style.top=(r.top-a.top)+"px";
-
-arena.appendChild(slash);
-setTimeout(()=>slash.remove(),500);
-}
-
-function performAttack(attacker,target,targetElementId){
-if(attacker.hp<=0||target.hp<=0)return 0;
-
-const damage=random(
-Math.max(1,Math.floor(attacker.damage*.65)),
-Math.max(1,Math.floor(attacker.damage*1.25))
-);
-
-target.hp=Math.max(0,target.hp-damage);
-
-showSlash(targetElementId);
-showDamage(targetElementId,damage);
-
-const el=document.getElementById(targetElementId);
-if(el){
-el.classList.remove("fight","hit");
-void el.offsetWidth;
-el.classList.add("hit");
-}
-
-return damage;
-}
-
-function battleTick(){
-if(!battleState||battleState.ended)return;
-
-battleState.turn++;
-
-/* выбираем живого игрока */
-const alivePlayers=battleState.player.filter(u=>u.hp>0);
-const aliveEnemies=battleState.enemy.filter(u=>u.hp>0);
-
-if(!alivePlayers.length){
-endBattle("enemy");
-return;
-}
-
-if(!aliveEnemies.length){
-endBattle("player");
-return;
-}
-
-/* Игроки атакуют */
-alivePlayers.slice(0,Math.min(5,alivePlayers.length)).forEach((attacker,i)=>{
-const targets=battleState.enemy.filter(u=>u.hp>0);
-if(!targets.length)return;
-
-const target=targets[i%targets.length];
-
-const visualIndex=battleState.visualEnemy.indexOf(target);
-const targetEl="enemyUnit"+visualIndex;
-
-const damage=performAttack(attacker,target,targetEl);
-
-if(damage){
-battleLog(attacker.icon+" нанёс "+damage+" урона");
-}
-});
-
-/* Враги отвечают */
-setTimeout(()=>{
-if(!battleState||battleState.ended)return;
-
-const aliveP=battleState.player.filter(u=>u.hp>0);
-const aliveE=battleState.enemy.filter(u=>u.hp>0);
-
-if(!aliveP.length){
-endBattle("enemy");
-return;
-}
-
-if(!aliveE.length){
-endBattle("player");
-return;
-}
-
-aliveE.slice(0,Math.min(5,aliveE.length)).forEach((attacker,i)=>{
-const targets=battleState.player.filter(u=>u.hp>0);
-if(!targets.length)return;
-
-const target=targets[i%targets.length];
-
-const visualIndex=battleState.visualPlayer.indexOf(target);
-const targetEl="playerUnit"+visualIndex;
-
-const damage=performAttack(attacker,target,targetEl);
-
-if(damage){
-battleLog("🥷 Мародёр нанёс "+damage+" урона");
-}
-});
-
-renderBattleUnits();
-updateBattleBars();
-
-const pHp=totalHp(battleState.player);
-const eHp=totalHp(battleState.enemy);
-
-if(pHp<=0){
-endBattle("enemy");
-}else if(eHp<=0){
-endBattle("player");
-}
-},450);
-
-renderBattleUnits();
-updateBattleBars();
-
-if(battleState.turn>=30){
-endBattle(totalHp(battleState.player)>=totalHp(battleState.enemy)?"player":"enemy");
-}
-}
-
-function runBattleLoop(){
-clearInterval(activeBattleTimer);
-
-activeBattleTimer=setInterval(()=>{
-if(!battleState||battleState.ended){
-clearInterval(activeBattleTimer);
-activeBattleTimer=null;
-return;
-}
-
-battleTick();
-},1000);
-}
-
-function endBattle(winner){
-if(!battleState||battleState.ended)return;
-
-battleState.ended=true;
-battleState.winner=winner;
-
-clearInterval(activeBattleTimer);
-activeBattleTimer=null;
-
-const victory=winner==="player";
-
-if(victory){
-
-state.raid.wins++;
-state.raid.next=Date.now()+60000;
-
-addTaskProgress("raids",1);
-
-const reward=random(1200,3000);
-state.coins+=reward;
-addTaskProgress("coins",reward);
-addXP(25);
-
-battleLog("🏆 Мародёры разбиты!");
-
-}else{
-
-state.raid.losses++;
-state.raid.next=Date.now()+90000;
-
-/* Потери армии пропорциональны потерям HP */
-const hpPlayer=totalHp(battleState.player);
-const maxPlayer=battleState.player.reduce((s,u)=>s+u.maxHp,0);
-
-const ratio=maxPlayer>0?hpPlayer/maxPlayer:0;
-
-const lossPercent=ratio<.25?.30:ratio<.5?.20:ratio<.75?.10:0;
-
-if(lossPercent>0){
-Object.keys(state.army).forEach(id=>{
-const count=state.army[id]||0;
-const lost=Math.min(count,Math.floor(count*lossPercent));
-state.army[id]-=lost;
-});
-}
-
-addXP(8);
-battleLog("💀 Мародёры прорвались");
-}
-
-save();
-
-const arena=document.getElementById("battleArena");
-
-if(arena){
-
-const result=document.createElement("div");
-result.className="battleResult";
-
-result.innerHTML=`
-<div class="battleResultTitle">
-${victory?"🏆 ПОБЕДА":"💀 ПОРАЖЕНИЕ"}
-</div>
-
-<div class="battleResultSub">
-${victory
-?"Мародёры уничтожены · награда получена"
-:"Армия проиграла · часть бойцов потеряна"}
-</div>
-
-${victory?`
-<div class="battleResultSub" style="margin-top:10px">
-🪙 Награда: +${money(state.coins?0:0)}
-</div>
-`:""}
-
-<button
-class="btn ${victory?"gold":"red"}"
-style="max-width:300px;margin-top:18px"
-onclick="closeModal();render()"
->
-Продолжить
-</button>
-`;
-
-arena.appendChild(result);
-}
-
-render();
-}
-
-/* =========================================================
-   RAID / PVP / BOSS
-   ========================================================= */
-
-function renderRaid(){
-const box=document.getElementById("homeBattleStatus");
-if(!box)return;
-
-const cd=Math.max(0,state.raid.next-Date.now());
-
-box.innerHTML=`
-<div class="card">
-<div class="sectionTitle">
-<span>⚔️ Нападение мародёров</span>
-<span class="badge">${cd?"КД":"ГОТОВО"}</span>
-</div>
-<div class="muted small">
-Победи мародёров на полноценном боевом поле
-</div>
-<div class="cooldownBox" style="margin-top:8px">
-${cd?"⏳ "+formatTime(cd):"🟢 Можно начинать"}
-</div>
-<button
-class="btn red"
-onclick="startMarauderBattle()"
-${cd?"disabled":""}
->
-⚔️ Начать сражение
-</button>
-</div>
-`;
-}
-
-function renderPvp(){
-/* PvP доступен через боевую систему после подключения реальных игроков */
-}
-
-function renderBosses(){
-/* Боссы подключаются отдельной боевой системой */
-}
-
-/* =========================================================
-   PROFILE
-   ========================================================= */
-
-function renderProfile(){
-const box=document.getElementById("profile");
-if(!box)return;
-
-const manager=state.manager.active;
-
-box.innerHTML=`
-<div class="card">
-<div class="hero" style="margin:0">
-<div class="heroText">
-<div class="heroTitle">Игрок GROWIX</div>
-<div class="heroSub">
-Уровень ${state.level} · сила армии ${money(armyPower())}
-</div>
-</div>
-<div class="heroEmoji">👑</div>
-</div>
-</div>
-
-<div class="card">
-<div class="sectionTitle">📊 Статистика</div>
-<div class="profileStats">
-<div class="profileStat">
-<b>${money(state.coins)}</b>
-<span>Монеты</span>
-</div>
-<div class="profileStat">
-<b>${money(state.crystals)}</b>
-<span>Кристаллы</span>
-</div>
-<div class="profileStat">
-<b>${armyCount()}</b>
-<span>Бойцы</span>
-</div>
-<div class="profileStat">
-<b>${state.raid.wins}</b>
-<span>Победы</span>
-</div>
-</div>
-</div>
-
-<div class="card">
-<div class="sectionTitle">⭐ Прогресс</div>
-<div class="muted small">
-Уровень ${state.level} · ${state.xp} / ${xpNeed()} XP
-</div>
-<div class="progress">
-<div class="progressFill" style="width:${Math.min(100,state.xp/xpNeed()*100)}%"></div>
-</div>
-</div>
-
-<div class="card">
-<div class="sectionTitle">
-<span>🌱 Менеджер фермы</span>
-<span class="badge">${manager?"АКТИВЕН":"НЕ АКТИВЕН"}</span>
-</div>
-<div class="muted small">
-${manager
-?"Менеджер автоматически управляет обычными грядками"
-:"Купить его можно в Магазине"}
-</div>
-</div>
-
-<div class="card">
-<div class="sectionTitle">🎯 Задания</div>
-<button class="btn gold" onclick="openTasksModal()">
-Открыть задания
-</button>
-</div>
-`;
-}
-
-/* =========================================================
-   WORLD
-   ========================================================= */
-
-function renderWorld(){
-const field=document.getElementById("worldField");
-const perimeter=document.getElementById("perimeter");
-if(!field||!perimeter)return;
-
-const cols=state.plots<=18?3:state.plots<=36?6:9;
-
-field.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-
-let html="";
-
-for(let i=0;i<state.plots;i++){
-const p=state.plants[i];
-
-if(!p){
-html+=`<div class="worldPlot">🟫</div>`;
-}else if(Date.now()>=p.readyAt){
-html+=`
-<div class="worldPlot ready" onclick="harvestPlot(${i})">
-${PLANTS[p.type].icon}
-</div>
-`;
-}else{
-html+=`
-<div class="worldPlot">
-${PLANTS[p.type].icon}
-<div class="worldPlotTimer">
-${formatTime(p.readyAt-Date.now())}
-</div>
-</div>
-`;
-}
-}
-
-field.innerHTML=html;
-
-let perimeterHtml="";
-
-const totalSlots=12;
-
-for(let i=0;i<totalSlots;i++){
-
-let cls="perimeterSlot empty";
-let icon="＋";
-let type="";
-
-if(i<state.perimeter.fences){
-cls="perimeterSlot built";
-icon="🪵";
-type="fence";
-}else if(i<state.perimeter.scarecrows){
-cls="perimeterSlot built";
-icon="🎃";
-type="scare";
-}
-
-const pos=i<3?"slotTop":i<6?"slotRight":i<9?"slotBottom":"slotLeft";
-
-const offset=(i%3)*38+5;
-
-perimeterHtml+=`
-<div
-class="${cls} ${pos}"
-style="${pos==="slotTop"||pos==="slotBottom"?"left:"+offset+"px":"top:"+offset+"px"}"
-onclick="perimeterClick(${i})"
->
-${icon}
-</div>
-`;
-}
-
-perimeter.innerHTML=perimeterHtml;
-}
-
-function perimeterClick(index){
-if(index<state.perimeter.fences){
-notify("🪵 Забор защищает территорию");
-return;
-}
-
-if(index<state.perimeter.fences+state.perimeter.scarecrows){
-notify("🎃 Чучело отпугивает воронов");
-return;
-}
-
-notify("🛡️ Свободное место периметра");
+function renderForest(){
+
+ const forest=document.getElementById("forest");
+
+ if(!forest)return;
+
+ forest.innerHTML="";
+
+ const trees=[
+  [2,3,"t1","🌲"],
+  [11,2,"t2","🌳"],
+  [21,5,"t3","🌲"],
+  [30,1,"t2","🌲"],
+  [40,4,"t1","🌳"],
+  [52,2,"t3","🌲"],
+  [64,4,"t2","🌳"],
+  [77,2,"t1","🌲"],
+  [90,4,"t2","🌲"],
+  [2,78,"t2","🌲"],
+  [12,88,"t1","🌳"],
+  [24,82,"t3","🌲"],
+  [38,90,"t1","🌲"],
+  [51,83,"t2","🌳"],
+  [63,89,"t3","🌲"],
+  [76,84,"t1","🌲"],
+  [89,90,"t2","🌳"],
+  [2,28,"t2","🌲"],
+  [94,29,"t1","🌲"],
+  [2,56,"t3","🌳"],
+  [94,61,"t2","🌲"]
+ ];
+
+ trees.forEach(t=>{
+  const el=document.createElement("div");
+
+  el.className="tree "+t[2];
+  el.textContent=t[3];
+
+  el.style.left=t[0]+"%";
+  el.style.top=t[1]+"%";
+
+  forest.appendChild(el);
+ });
 }
 
 function updateLiveWorld(){
-renderWorld();
+
+ const now=Date.now();
+
+ if(now>=state.liveWorld.boarNext&&!state.liveWorld.entities.length){
+
+  state.liveWorld.entities=[
+   {id:"boar1",type:"boar",icon:"🐗",hp:100,maxHp:100,x:25,y:40},
+   {id:"boar2",type:"boar",icon:"🐗",hp:100,maxHp:100,x:68,y:58}
+  ];
+
+  state.liveWorld.event="boar";
+  state.liveWorld.boarNext=now+450000;
+
+  save();
+  notify("🐗 Кабаны ворвались на ферму!");
+ }
+
+ if(now>=state.liveWorld.raiderNext&&!state.liveWorld.entities.length){
+
+  state.liveWorld.entities=[
+   {id:"raider1",type:"raider",icon:"🧟",hp:140,maxHp:140,x:72,y:32},
+   {id:"raider2",type:"raider",icon:"🧟",hp:140,maxHp:140,x:27,y:65},
+   {id:"raider3",type:"raider",icon:"🧟",hp:140,maxHp:140,x:53,y:23}
+  ];
+
+  state.liveWorld.event="raider";
+  state.liveWorld.raiderNext=now+3600000;
+
+  save();
+  notify("🧟 Мародёры атакуют ферму!");
+ }
+
+ if(state.liveWorld.entities.length){
+
+  const guards=Object.values(state.army).reduce((a,b)=>a+b,0);
+
+  state.liveWorld.entities.forEach(e=>{
+
+   e.x+=(Math.random()-.5)*2.2;
+   e.y+=(Math.random()-.5)*2.2;
+
+   e.x=Math.max(14,Math.min(86,e.x));
+   e.y=Math.max(14,Math.min(86,e.y));
+
+   if(guards>0&&Math.random()<.14){
+    e.hp=Math.max(0,e.hp-random(5,14));
+   }
+  });
+
+  state.liveWorld.entities.forEach(e=>{
+   if(e.hp<=0&&!e.deadAt)e.deadAt=now+700;
+  });
+
+  state.liveWorld.entities=
+   state.liveWorld.entities.filter(e=>!e.deadAt||e.deadAt>now);
+
+  if(!state.liveWorld.entities.length){
+
+   const was=state.liveWorld.event;
+
+   state.liveWorld.event=null;
+
+   if(was==="boar"){
+    state.tasks.boar=(state.tasks.boar||0)+1;
+    notify("🐗 Кабаны отбиты!");
+   }else if(was==="raider"){
+    state.tasks.raider=(state.tasks.raider||0)+1;
+    notify("🧟 Мародёры отбиты!");
+   }
+
+   save();
+  }
+ }
+
+ if(state.farmManager.owned){
+  processFarmManager();
+ }
 }
 
-/* =========================================================
-   CROW
-   ========================================================= */
+function renderLiveWorld(){
+
+ const box=document.getElementById("liveEntities");
+
+ if(!box)return;
+
+ box.innerHTML="";
+
+ (state.liveWorld.entities||[]).forEach(e=>{
+
+  const el=document.createElement("div");
+
+  el.className=
+   "liveEntity "+(e.type==="boar"?"boar":"enemy")+" run";
+
+  el.textContent=e.icon;
+
+  el.style.left=e.x+"%";
+  el.style.top=e.y+"%";
+
+  if(e.deadAt)el.classList.add("defeated");
+
+  box.appendChild(el);
+
+  const hp=document.createElement("div");
+
+  hp.className=
+   "liveHpBar "+(e.type==="raider"?"enemy":"");
+
+  hp.style.left=e.x+"%";
+  hp.style.top=(e.y-4)+"%";
+  hp.style.width="36px";
+
+  const pct=Math.max(0,e.hp)/Math.max(1,e.maxHp)*100;
+
+  hp.style.background=
+   `linear-gradient(90deg,${e.type==="raider"?"#ff6666":"#67dc58"} ${pct}%,#0007 ${pct}%)`;
+
+  box.appendChild(hp);
+ });
+}
+
+function processFarmManager(){
+
+ const now=Date.now();
+ const last=state.farmManager.lastProcess||now;
+
+ if(now-last<30000)return;
+
+ state.farmManager.lastProcess=now;
+
+ Object.keys(CROPS).forEach(id=>{
+
+  const key=id+"Seed";
+
+  if((state.farmManager.seeds[key]||0)<=0){
+   if((state.inventory[key]||0)>0){
+    state.inventory[key]--;
+    state.farmManager.seeds[key]=(state.farmManager.seeds[key]||0)+1;
+   }
+  }
+ });
+
+ save();
+}
+
+function openFarmManager(){
+
+ if(state.farmManager.owned){
+
+  return openModal(`
+   <div class="sectionTitle">👨‍🌾 Фермер</div>
+   <div class="muted small" style="margin-top:8px">
+    Главный фермер уже нанят и работает автоматически.
+   </div>
+   <button class="btn secondary" onclick="closeModal()">Закрыть</button>
+  `);
+ }
+
+ openModal(`
+  <div class="sectionTitle">👨‍🌾 Главный фермер</div>
+
+  <div class="muted small" style="margin-top:8px">
+   Автоматически помогает с фермой и производством.
+  </div>
+
+  <div class="price" style="font-size:18px;margin-top:12px">
+   500 000 🪙
+  </div>
+
+  <button class="btn gold" onclick="buyFarmManager()">
+   👨‍🌾 Нанять за 500 000 🪙
+  </button>
+ `);
+}
+
+function buyFarmManager(){
+
+ if(state.farmManager.owned){
+  closeModal();
+  return notify("👨‍🌾 Фермер уже нанят");
+ }
+
+ if(state.coins<500000){
+  closeModal();
+  return notify("❌ Нужно 500 000 🪙");
+ }
+
+ state.coins-=500000;
+
+ state.farmManager.owned=true;
+ state.workers.manager=1;
+
+ save();
+
+ closeModal();
+ render();
+
+ notify("👨‍🌾 Главный фермер нанят");
+}
+
+function buyWorker(id){
+
+ if(id==="farmer"){
+  return buyFarmManager();
+ }
+
+ const prices={
+  basic:500000,
+  pro:500000,
+  manager:500000
+ };
+
+ const p=prices[id]||500000;
+
+ if(state.coins<p){
+  return notify("❌ Нужно "+money(p)+" 🪙");
+ }
+
+ state.coins-=p;
+ state.workers[id]=(state.workers[id]||0)+1;
+
+ save();
+ render();
+
+ notify("👨‍🌾 Фермер нанят");
+}
+
+function renderWorkers(){
+
+ const box=document.getElementById("workers");
+
+ if(!box)return;
+
+ box.innerHTML=`
+  <div class="card">
+   <div class="row">
+    <div class="rowLeft">
+     <div class="rowIcon">👨‍🌾</div>
+     <div>
+      <div class="rowName">Главный фермер</div>
+      <div class="rowSub">
+       Полностью автоматизирует ферму и производство
+      </div>
+     </div>
+    </div>
+
+    <div class="price">500 000 🪙</div>
+   </div>
+
+   <button
+    class="btn gold"
+    onclick="buyFarmManager()"
+    ${state.farmManager.owned?"disabled":""}
+   >
+    ${state.farmManager.owned?"✅ Уже нанят":"👨‍🌾 Нанять"}
+   </button>
+  </div>
+ `;
+}
+
+function collectAnimalProduct(id){
+
+ const a=ANIMALS[id];
+
+ if(!a)return;
+
+ const count=state.animals[id]||0;
+
+ if(count<=0){
+  return notify("❌ Животного нет");
+ }
+
+ const next=state.animalProduction[id]||0;
+
+ if(Date.now()<next){
+  return notify("⏳ Ещё не готово");
+ }
+
+ const amount=count*a.amount;
+
+ state.inventory[a.product]=(state.inventory[a.product]||0)+amount;
+ state.tasks.products=(state.tasks.products||0)+amount;
+
+ state.animalProduction[id]=Date.now()+a.every;
+
+ save();
+ render();
+
+ notify(a.productIcon+" Получено: "+amount);
+}
+
+function buyAnimal(id){
+
+ const a=ANIMALS[id];
+
+ if(!a)return;
+
+ if(state.coins<a.price){
+  return notify("❌ Не хватает монет");
+ }
+
+ state.coins-=a.price;
+
+ state.animals[id]=(state.animals[id]||0)+1;
+
+ if(!state.animalProduction[id]){
+  state.animalProduction[id]=Date.now()+a.every;
+ }
+
+ save();
+ render();
+
+ notify(a.icon+" "+a.name+" куплена");
+}
+
+function renderAnimals(){
+
+ const box=document.getElementById("animals");
+
+ if(!box)return;
+
+ let html="";
+
+ Object.entries(ANIMALS).forEach(([id,a])=>{
+
+  const count=state.animals[id]||0;
+  const productCount=state.inventory[a.product]||0;
+  const next=state.animalProduction[id]||0;
+  const left=Math.max(0,next-Date.now());
+
+  html+=`
+   <div class="card">
+
+    <div class="row">
+     <div class="rowLeft">
+
+      <div class="rowIcon">${a.icon}</div>
+
+      <div>
+       <div class="rowName">${a.name}</div>
+       <div class="rowSub">
+        Количество: ${count} · ${a.productIcon} ${money(productCount)}
+       </div>
+      </div>
+     </div>
+
+     <div class="price">${money(a.price)} 🪙</div>
+    </div>
+
+    <div class="cooldownBox">
+     ${
+      count<=0
+      ?"Нет животных"
+      :left>0
+      ?"⏳ Следующая продукция через "+formatTime(left)
+      :"✅ Продукция готова"
+     }
+    </div>
+
+    <button class="btn" onclick="buyAnimal('${id}')">
+     🐾 Купить
+    </button>
+
+    ${
+     count>0
+     ?`
+      <button
+       class="btn blue"
+       ${left>0?"disabled":""}
+       onclick="collectAnimalProduct('${id}')"
+      >
+       ${left>0?"⏳ Ждать продукцию":"📦 Забрать продукцию"}
+      </button>
+     `
+     :""
+    }
+
+   </div>
+  `;
+ });
+
+ html+=`
+  <div class="card">
+   <div class="sectionTitle">🧀 Переработка</div>
+   <div class="muted small">Сыр создаётся из молока.</div>
+   <button class="btn blue" onclick="makeCheese()">🧀 Сделать сыр</button>
+  </div>
+ `;
+
+ box.innerHTML=html;
+}
+
+function makeCheese(){
+
+ if((state.inventory.milk||0)<3){
+  return notify("🥛 Нужно 3 молока");
+ }
+
+ state.inventory.milk-=3;
+ state.inventory.cheese=(state.inventory.cheese||0)+1;
+
+ save();
+ render();
+
+ notify("🧀 Сыр изготовлен");
+}
+
+function shopSeedItem(id){
+
+ const crop=CROPS[id];
+
+ if(!crop)return;
+
+ const price=Math.max(20,Math.floor(crop.reward*2.5));
+
+ if(state.coins<price){
+  return notify("❌ Не хватает монет");
+ }
+
+ state.coins-=price;
+ state.inventory[id+"Seed"]=(state.inventory[id+"Seed"]||0)+1;
+
+ save();
+ render();
+
+ notify(crop.icon+" Семя куплено");
+}
+
+function sellProduct(id){
+
+ const p=PRODUCT_SELL[id];
+
+ if(!p)return;
+
+ const count=state.inventory[id]||0;
+
+ if(count<=0){
+  return notify("❌ Нет продукции");
+ }
+
+ const total=p.price*count;
+
+ state.inventory[id]=0;
+
+ state.coins+=total;
+ state.seasonCoins+=total;
+ state.tasks.sell=(state.tasks.sell||0)+total;
+
+ save();
+ render();
+
+ notify("💰 Продано на "+money(total)+" 🪙");
+}
+
+function renderShop(){
+
+ const box=document.getElementById("shop");
+
+ if(!box)return;
+
+ let html=`
+  <div class="card">
+   <div class="sectionTitle">🌱 Семена</div>
+  </div>
+ `;
+
+ Object.entries(CROPS).forEach(([id,crop])=>{
+
+  const price=Math.max(20,Math.floor(crop.reward*2.5));
+
+  html+=`
+   <div class="itemCard" style="margin-bottom:8px">
+
+    <div class="itemImage">${crop.icon}</div>
+
+    <div class="itemName">${crop.name}</div>
+
+    <div class="itemCount">
+     Есть семян: ${state.inventory[id+"Seed"]||0}
+    </div>
+
+    <div class="price" style="margin-top:7px">
+     ${money(price)} 🪙
+    </div>
+
+    <button class="btn" onclick="shopSeedItem('${id}')">
+     Купить семя
+    </button>
+
+   </div>
+  `;
+ });
+
+ html+=`
+  <div class="card" style="margin-top:10px">
+   <div class="sectionTitle">🐾 Животные</div>
+ `;
+
+ Object.entries(ANIMALS).forEach(([id,a])=>{
+
+  html+=`
+   <div class="row">
+
+    <div class="rowLeft">
+     <div class="rowIcon">${a.icon}</div>
+
+     <div>
+      <div class="rowName">${a.name}</div>
+      <div class="rowSub">У тебя: ${state.animals[id]||0}</div>
+     </div>
+    </div>
+
+    <div class="price">${money(a.price)} 🪙</div>
+
+   </div>
+  `;
+ });
+
+ html+=`</div>`;
+
+ html+=`
+  <div class="card">
+   <div class="sectionTitle">🧾 Продажа продукции</div>
+ `;
+
+ Object.entries(PRODUCT_SELL).forEach(([id,p])=>{
+
+  html+=`
+   <div class="row">
+
+    <div class="rowLeft">
+
+     <div class="rowIcon">${p.icon}</div>
+
+     <div>
+      <div class="rowName">${p.name}</div>
+      <div class="rowSub">
+       Есть: ${money(state.inventory[id]||0)} · Цена: ${money(p.price)}
+      </div>
+     </div>
+
+    </div>
+
+    <button
+     class="btn gold"
+     style="width:105px;margin:0"
+     onclick="sellProduct('${id}')"
+    >
+     Продать всё
+    </button>
+
+   </div>
+  `;
+ });
+
+ html+=`</div>`;
+
+ box.innerHTML=html;
+}
+
+function renderInventory(){
+
+ const box=document.getElementById("inventory");
+
+ if(!box)return;
+
+ let html="";
+
+ const items=[
+  ["wheat","🌾","Пшеница"],
+  ["carrot","🥕","Морковь"],
+  ["corn","🌽","Кукуруза"],
+  ["tomato","🍅","Помидоры"],
+  ["berry","🫐","Ягоды"],
+  ["pumpkin","🎃","Тыква"],
+  ["egg","🥚","Яйца"],
+  ["milk","🥛","Молоко"],
+  ["wool","🧶","Шерсть"],
+  ["kumys","🥛","Кумыс"],
+  ["cheese","🧀","Сыр"],
+  ["wheatSeed","🌾","Семена пшеницы"],
+  ["carrotSeed","🥕","Семена моркови"],
+  ["cornSeed","🌽","Семена кукурузы"],
+  ["tomatoSeed","🍅","Семена помидора"],
+  ["berrySeed","🫐","Семена ягод"],
+  ["pumpkinSeed","🎃","Семена тыквы"]
+ ];
+
+ items.forEach(([id,icon,name])=>{
+
+  html+=`
+   <div class="itemCard">
+    <div class="itemImage">${icon}</div>
+    <div class="itemName">${name}</div>
+    <div class="itemCount">${money(state.inventory[id]||0)}</div>
+   </div>
+  `;
+ });
+
+ box.innerHTML=html;
+}
+
+function buyShield(){
+
+ const price=15;
+
+ if(state.stars<price){
+  return notify("⭐ Нужно 15 Stars");
+ }
+
+ state.stars-=price;
+
+ state.shieldUntil=
+  Math.max(Date.now(),state.shieldUntil||0)+12*60*60*1000;
+
+ save();
+ render();
+
+ notify("🛡 Щит активирован на 12 часов!");
+}
+
+function getShieldLeft(){
+ return Math.max(0,(state.shieldUntil||0)-Date.now());
+}
 
 function renderCrow(){
-/* Вороны работают как отдельная механика нападения */
+
+ const timer=document.getElementById("crowTimer");
+ const status=document.getElementById("crowStatus");
+ const bar=document.getElementById("crowBar");
+ const panel=document.getElementById("crowAttackPanel");
+
+ if(!timer||!status||!bar||!panel)return;
+
+ const now=Date.now();
+
+ document.getElementById("fenceCount").textContent=state.buildings.fence||0;
+ document.getElementById("scarecrowCount").textContent=state.buildings.scarecrow||0;
+ document.getElementById("stoneCount").textContent=state.buildings.stone||0;
+
+ if(state.crows.attackActive){
+
+  timer.textContent=formatTime(state.crows.attackEnd-now);
+
+  status.textContent="🐦 Вороны атакуют!";
+
+  bar.style.width=
+   Math.max(0,
+   Math.min(100,
+   (state.crows.attackEnd-now)/15000*100
+   ))+"%";
+
+  panel.innerHTML=`
+   <div class="attackBox">
+    <b>🐦 Атака ворон!</b>
+    <div class="muted small">Используй камни для защиты урожая.</div>
+
+    <button
+     class="btn red"
+     onclick="throwStone()"
+    >
+     🪨 Бросить камень
+    </button>
+   </div>
+  `;
+
+ }else{
+
+  const left=Math.max(0,(state.crows.next||0)-now);
+
+  timer.textContent=formatTime(left);
+
+  status.textContent="Следующая атака ворон";
+
+  bar.style.width=
+   (100-Math.min(100,left/3600000*100))+"%";
+
+  panel.innerHTML=`
+   <div class="muted small" style="margin-top:7px">
+    Камни расходуются во время нападения.
+   </div>
+  `;
+ }
 }
 
-function resolveCrowAttack(){
-/* Заглушка до полноценной серверной синхронизации */
+function throwStone(){
+
+ if(!state.crows.attackActive)return;
+
+ if((state.buildings.stone||0)<=0){
+  return notify("🪨 Камней больше нет");
+ }
+
+ state.buildings.stone--;
+
+ if(Math.random()<.25){
+
+  state.crows.attackActive=false;
+  state.crows.next=Date.now()+3600000;
+  state.crows.attacks++;
+
+  state.field.forEach(p=>{
+   if(p&&Math.random()<.25)p.crow=false;
+  });
+
+  notify("🛡️ Вороны отбиты!");
+
+ }else{
+
+  notify("🪨 Камень попал по вороне");
+ }
+
+ save();
+ render();
 }
 
-function crowTick(){
-/* Заглушка */
+function dailyReward(){
+
+ const diff=Date.now()-(state.daily.last||0);
+
+ if(diff<86400000){
+  return notify("⏳ Ещё рано");
+ }
+
+ state.daily.last=Date.now();
+ state.daily.streak++;
+
+ const reward=250+state.daily.streak*100;
+
+ state.coins+=reward;
+ state.seasonCoins+=reward;
+
+ save();
+ render();
+
+ notify("🎁 Получено "+money(reward)+" 🪙");
 }
 
-/* =========================================================
-   FARM MANAGER
-   ========================================================= */
+function renderDaily(){
 
-function renderFarmManager(){
-/* Менеджер отображается в магазине и профиле */
+ const box=document.getElementById("dailyRewardBox");
+
+ if(!box)return;
+
+ const diff=Date.now()-(state.daily.last||0);
+
+ box.innerHTML=
+  diff>=86400000
+  ?
+  `
+   <b>🎁 Награда готова!</b>
+
+   <div class="muted" style="margin-top:5px">
+    Серия: ${state.daily.streak} дней
+   </div>
+
+   <button
+    class="btn gold"
+    onclick="dailyReward()"
+   >
+    Забрать награду
+   </button>
+  `
+  :
+  `
+   <b>🔥 Серия: ${state.daily.streak}</b>
+
+   <div class="muted" style="margin-top:5px">
+    Следующая награда через ${formatTime(86400000-diff)}
+   </div>
+  `;
 }
 
-/* =========================================================
-   PACKAGES / PARTNER / CLAN
-   ========================================================= */
+function bossCooldownInfo(id){
 
-function renderPackages(){}
+ const d=state.bosses[id];
 
-function referralCode(){
-return "GW"+String(Math.abs(hashCode(location.pathname))).slice(0,6);
+ if(Date.now()<d.next){
+  return {
+   locked:true,
+   text:"⏳ КД: "+formatTime(d.next-Date.now())
+  };
+ }
+
+ if((d.attempts||0)>=BOSS_MAX_ATTEMPTS){
+  return {
+   locked:true,
+   text:"⏳ Все попытки использованы"
+  };
+ }
+
+ return {
+  locked:false,
+  text:"✅ Готово"
+ };
 }
 
-function hashCode(str){
-let h=0;
-for(let i=0;i<str.length;i++){
-h=((h<<5)-h)+str.charCodeAt(i);
-h|=0;
+function attackBoss(id){
+
+ if(activeBattleTimer){
+  return notify("⚔️ Бой уже идёт");
+ }
+
+ const b=BOSSES.find(x=>x.id===id);
+
+ if(!b)return;
+
+ const data=state.bosses[id];
+
+ if(Date.now()<data.next){
+  return notify("⏳ Босс ещё на КД");
+ }
+
+ if((data.attempts||0)>=BOSS_MAX_ATTEMPTS){
+  data.next=Date.now()+COOLDOWN_BOSS;
+  data.attempts=0;
+
+  save();
+  render();
+
+  return notify("⏳ Все 3 попытки использованы");
+ }
+
+ if(armyPower()<=0){
+  return notify("❌ Сначала собери армию");
+ }
+
+ runBossBattle(b);
 }
-return h;
+
+function battleVisualUnitsForArmy(){
+
+ const units=[];
+
+ Object.entries(ARMY).forEach(([id,a])=>{
+
+  const amount=Math.min(8,state.army[id]||0);
+
+  for(let i=0;i<amount;i++){
+
+   units.push({
+    id:id+"_"+i,
+    icon:a.icon,
+    hp:a.hp,
+    maxHp:a.hp,
+    damage:a.damage
+   });
+
+  }
+
+ });
+
+ if(!units.length){
+
+  units.push({
+   id:"visual",
+   icon:"⚔️",
+   hp:80,
+   maxHp:80,
+   damage:15
+  });
+ }
+
+ return units;
 }
 
-function renderPartner(){}
+function battleEnemyUnits(count,icons){
 
-function renderPartnerActivation(){}
+ const arr=[];
 
-const CLAN_FLAGS=[
-"🏳️","🦁","🐺","🐉","🦅","⚔️","🛡️","🔥","🌲","☠️","👑","🐻"
+ const amount=Math.max(1,count||1);
+
+ for(let i=0;i<amount;i++){
+
+  const icon=icons[i%icons.length];
+
+  arr.push({
+   id:"enemy_"+i,
+   icon,
+   hp:100+random(0,60),
+   maxHp:100+random(0,60),
+   damage:random(12,26)
+  });
+ }
+
+ return arr;
+}
+
+function battleUnitMarkup(u,i,side){
+
+ const left=
+  side==="player"
+  ?8+(i%4)*8
+  :60+(i%4)*8;
+
+ const top=
+  side==="player"
+  ?20+(Math.floor(i/4)%4)*18
+  :20+(Math.floor(i/4)%4)*18;
+
+ return `
+  <div
+   id="battleUnit_${u.id}"
+   class="battleFullUnit ${side==="player"?"my":"enemy"}"
+   style="left:${left}%;top:${top}%"
+  >
+   <div style="font-size:38px">${u.icon}</div>
+
+   <div style="
+    height:5px;
+    width:44px;
+    border-radius:8px;
+    background:#0008;
+    overflow:hidden
+   ">
+    <i
+     id="hp_${u.id}"
+     style="
+      display:block;
+      height:100%;
+      width:100%;
+      background:${side==="player"?"#67dc58":"#ff6666"}
+     "
+    ></i>
+   </div>
+  </div>
+ `;
+}
+
+function setBattleUnitHp(u){
+
+ const el=document.getElementById("hp_"+u.id);
+
+ if(!el)return;
+
+ el.style.width=
+  Math.max(0,u.hp/u.maxHp*100)+"%";
+}
+
+function moveUnitToTarget(u,target,arenaId,side){
+
+ const el=document.getElementById("battleUnit_"+u.id);
+ const targetEl=document.getElementById("battleUnit_"+target.id);
+
+ if(!el||!targetEl)return;
+
+ const targetRect=targetEl.getBoundingClientRect();
+ const arena=document.getElementById(arenaId);
+
+ if(!arena)return;
+
+ const rect=arena.getBoundingClientRect();
+
+ let x=((targetRect.left-rect.left)/rect.width)*100;
+ let y=((targetRect.top-rect.top)/rect.height)*100;
+
+ if(side==="player"){
+  x=Math.min(49,x);
+ }else{
+  x=Math.max(51,x);
+ }
+
+ el.style.left=Math.max(2,Math.min(94,x))+"%";
+ el.style.top=Math.max(8,Math.min(90,y))+"%";
+
+ el.classList.remove("attack");
+ void el.offsetWidth;
+ el.classList.add("attack");
+}
+
+function openFullscreenBattle(html){
+
+ const modal=document.getElementById("modal");
+ const content=document.getElementById("modalContent");
+
+ if(!modal||!content)return;
+
+ content.innerHTML=`
+  <button
+   class="modalClose"
+   onclick="closeFullscreenBattle()"
+  >
+   ×
+  </button>
+
+  ${html}
+ `;
+
+ modal.classList.add("show","battleFullscreen");
+}
+
+function closeFullscreenBattle(){
+
+ clearInterval(activeBattleTimer);
+ activeBattleTimer=null;
+
+ const modal=document.getElementById("modal");
+
+ if(modal){
+  modal.classList.remove("battleFullscreen","show");
+ }
+
+ const content=document.getElementById("modalContent");
+
+ if(content){
+  content.innerHTML=
+   `<button class="modalClose" onclick="closeModal()">×</button>`;
+ }
+}
+
+function showBattleResult(win,title,lines,after){
+
+ const arena=
+  document.querySelector(".battleArenaFull")||
+  document.querySelector(".battleBoard");
+
+ if(!arena){
+
+  if(after)after();
+
+  return;
+ }
+
+ const result=document.createElement("div");
+
+ result.className="battleResult";
+
+ result.innerHTML=`
+  <div class="battleResultBox">
+
+   <div class="battleResultTitle ${win?"battleResultWin":"battleResultLose"}">
+    ${win?"🏆 ПОБЕДА":"💀 ПОРАЖЕНИЕ"}
+   </div>
+
+   <div style="
+    font-size:20px;
+    font-weight:1000;
+    margin-top:8px
+   ">
+    ${title}
+   </div>
+
+   <div
+    class="muted small"
+    style="margin-top:10px;line-height:1.6"
+   >
+    ${lines}
+   </div>
+
+  </div>
+ `;
+
+ arena.appendChild(result);
+
+ setTimeout(()=>{
+  closeFullscreenBattle();
+
+  if(after)after();
+
+ },1200);
+}
+
+function resolveVisualBattle(opts){
+
+ const battle={
+  type:opts.type,
+
+  player:battleVisualUnitsForArmy(),
+
+  enemy:battleEnemyUnits(
+   opts.enemyCount,
+   opts.enemyIcons||["⚔️","🛡️","🏹"]
+  ),
+
+  turn:0,
+  finished:false
+ };
+
+ const playerPower=Math.max(1,armyPower());
+
+ const enemyPower=
+  Math.max(1,opts.enemyPower||playerPower*.85);
+
+ const playerHtml=
+  battle.player
+   .map((u,i)=>battleUnitMarkup(u,i,"player"))
+   .join("");
+
+ const enemyHtml=
+  battle.enemy
+   .map((u,i)=>battleUnitMarkup(u,i,"enemy"))
+   .join("");
+
+ openFullscreenBattle(`
+  <div class="battleBoardFull">
+
+   <div class="sectionTitle">
+    <span>${opts.title}</span>
+    <span class="badge">${opts.enemyLabel||"Противник"}</span>
+   </div>
+
+   <div class="row" style="margin-top:8px">
+
+    <div>
+     <div class="rowName">🟢 Твоя армия</div>
+     <div class="rowSub">Сила: ${money(playerPower)}</div>
+    </div>
+
+    <div style="text-align:right">
+     <div class="rowName">🔴 Противник</div>
+     <div class="rowSub">Сила: ${money(enemyPower)}</div>
+    </div>
+
+   </div>
+
+   <div class="scoreBar">
+    <div class="scoreA" id="battleScoreA" style="width:50%"></div>
+    <div class="scoreB" id="battleScoreB" style="width:50%"></div>
+   </div>
+
+   <div id="${opts.arenaId}" class="battleArenaFull">
+
+    ${playerHtml}
+    ${enemyHtml}
+
+    <div
+     style="
+      position:absolute;
+      left:50%;
+      top:8%;
+      transform:translateX(-50%);
+      width:75%;
+      padding:7px 9px;
+      border-radius:12px;
+      background:#071009dd;
+      text-align:center;
+      font-size:10px;
+      font-weight:900;
+      z-index:50
+     "
+    >
+     <div id="battleBattleText">
+      ⚔️ Отряды выдвигаются навстречу друг другу
+     </div>
+
+     <div
+      style="
+       height:7px;
+       margin-top:5px;
+       border-radius:8px;
+       overflow:hidden;
+       background:#0008
+      "
+     >
+      <i
+       id="battleGlobalHp"
+       style="
+        display:block;
+        width:100%;
+        height:100%;
+        background:#67dc58
+       "
+      ></i>
+     </div>
+    </div>
+
+   </div>
+
+  </div>
+ `);
+
+ function update(){
+
+  battle.player.forEach(setBattleUnitHp);
+  battle.enemy.forEach(setBattleUnitHp);
+
+  const hpP=totalHp(battle.player);
+  const hpE=totalHp(battle.enemy);
+
+  const total=Math.max(1,hpP+hpE);
+
+  const a=document.getElementById("battleScoreA");
+  const b=document.getElementById("battleScoreB");
+
+  if(a)a.style.width=(hpP/total*100)+"%";
+  if(b)b.style.width=(hpE/total*100)+"%";
+
+  const maxPlayerHp=
+   Math.max(1,
+   battle.player.reduce((sum,u)=>sum+u.maxHp,0));
+
+  const g=document.getElementById("battleGlobalHp");
+
+  if(g){
+   g.style.width=
+    Math.max(0,hpP/maxPlayerHp*100)+"%";
+  }
+ }
+
+ function finish(forcedWinner){
+
+  if(battle.finished)return;
+
+  battle.finished=true;
+
+  clearInterval(activeBattleTimer);
+  activeBattleTimer=null;
+
+  const hpP=totalHp(battle.player);
+  const hpE=totalHp(battle.enemy);
+
+  const winner=
+   forcedWinner||
+   (
+    hpE<=0&&hpP>0
+    ?"player"
+    :
+    hpP<=0
+    ?"enemy"
+    :
+    hpP>=hpE
+    ?"player"
+    :"enemy"
+   );
+
+  opts.onFinish(
+   winner==="player",
+   battle
+  );
+ }
+
+ activeBattleTimer=setInterval(()=>{
+
+  if(battle.finished)return;
+
+  battle.turn++;
+
+  const aliveP=
+   battle.player.filter(u=>u.hp>0);
+
+  const aliveE=
+   battle.enemy.filter(u=>u.hp>0);
+
+  if(!aliveP.length||!aliveE.length){
+
+   finish(
+    aliveP.length
+    ?"player"
+    :"enemy"
+   );
+
+   return;
+  }
+
+  aliveP.slice(0,4).forEach((a,i)=>{
+
+   const target=
+    aliveE[i%aliveE.length];
+
+   if(!target)return;
+
+   const dmg=random(
+    Math.max(2,Math.floor(a.damage*.6)),
+    Math.max(3,Math.floor(a.damage*1.25))
+   );
+
+   moveUnitToTarget(
+    a,
+    target,
+    opts.arenaId,
+    "player"
+   );
+
+   target.hp=
+    Math.max(0,target.hp-dmg);
+
+   setBattleUnitHp(target);
+
+   const text=
+    document.getElementById("battleBattleText");
+
+   if(text){
+    text.innerHTML=
+     `⚔️ ${a.icon} атакует ${target.icon} · <b>-${dmg} HP</b>`;
+   }
+
+  });
+
+  setTimeout(()=>{
+
+   if(battle.finished)return;
+
+   const p2=
+    battle.player.filter(u=>u.hp>0);
+
+   const e2=
+    battle.enemy.filter(u=>u.hp>0);
+
+   e2.slice(0,4).forEach((a,i)=>{
+
+    const target=
+     p2[i%Math.max(1,p2.length)];
+
+    if(!target)return;
+
+    const dmg=random(
+     Math.max(2,Math.floor(a.damage*.6)),
+     Math.max(3,Math.floor(a.damage*1.2))
+    );
+
+    moveUnitToTarget(
+     a,
+     target,
+     opts.arenaId,
+     "enemy"
+    );
+
+    target.hp=
+     Math.max(0,target.hp-dmg);
+
+    setBattleUnitHp(target);
+   });
+
+   update();
+
+   if(
+    !p2.length||
+    !battle.enemy.some(u=>u.hp>0)
+   ){
+    finish(
+     p2.length
+     ?"enemy"
+     :"player"
+    );
+   }
+
+  },280);
+
+  update();
+
+  if(battle.turn>=28){
+
+   finish(
+    totalHp(battle.player)>=
+    totalHp(battle.enemy)
+    ?"player"
+    :"enemy"
+   );
+  }
+
+ },720);
+
+ update();
+}
+
+function runBossBattle(b){
+
+ const data=state.bosses[b.id];
+
+ const hpStart=data.hp;
+
+ resolveVisualBattle({
+
+  type:"boss",
+
+  title:"👹 БИТВА С БОССОМ · "+b.name,
+
+  enemyLabel:b.icon+" "+b.name,
+
+  enemyCount:1,
+
+  enemyIcons:[b.icon],
+
+  enemyPower:Math.max(80,b.hp/12),
+
+  arenaId:"bossArena",
+
+  onFinish:(win)=>{
+
+   data.attempts=
+    (data.attempts||0)+1;
+
+   if(win){
+
+    state.coins+=b.reward;
+
+    state.seasonPvp+=
+     Math.floor(armyPower()/2);
+
+    state.tasks.boss=
+     (state.tasks.boss||0)+1;
+
+    data.hp=b.hp;
+
+    showBattleResult(
+     true,
+     b.name+" побеждён",
+     `+${money(b.reward)} 🪙<br>Попытка ${data.attempts}/3`,
+     render
+    );
+
+   }else{
+
+    data.hp=
+     Math.max(
+      1,
+      hpStart-Math.floor(b.hp*.15)
+     );
+
+    showBattleResult(
+     false,
+     "Босс выжил",
+     `Награда не получена<br>Попытка ${data.attempts}/3`,
+     render
+    );
+   }
+
+   if(data.attempts>=BOSS_MAX_ATTEMPTS){
+
+    data.next=
+     Date.now()+COOLDOWN_BOSS;
+
+    data.attempts=0;
+   }
+
+   save();
+  }
+ });
+}
+
+const RAID_TEST_PLAYERS=[
+ {name:"FarmKing",icon:"👨‍🌾",coins:45000,resources:300,shield:false},
+ {name:"GreenFox",icon:"🦊",coins:83000,resources:550,shield:false},
+ {name:"HorseMaster",icon:"🐎",coins:127000,resources:750,shield:true},
+ {name:"WarriorX",icon:"⚔️",coins:62000,resources:420,shield:false},
+ {name:"RichFarmer",icon:"💰",coins:210000,resources:900,shield:true},
+ {name:"GuardKing",icon:"🛡️",coins:97000,resources:480,shield:false}
 ];
 
-function clanEsc(v){
-return String(v||"").replace(/[&<>"']/g,c=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-}[c]));
+function startRaid(){
+
+ if(raidSearchTimer){
+  return notify("⚔️ Поиск рейда уже идёт");
+ }
+
+ if(activeBattleTimer){
+  return notify("⚔️ Сначала закончи текущий бой");
+ }
+
+ if(Date.now()<state.raid.next){
+  return notify("⏳ Рейд ещё на КД 15 минут");
+ }
+
+ if(getShieldLeft()>0){
+  return notify("🛡 Нельзя начать рейд, пока щит активен");
+ }
+
+ if(armyPower()<=0){
+  return notify("❌ Сначала собери армию");
+ }
+
+ let seconds=15;
+
+ openModal(`
+  <div class="matchBox">
+   <h2>⚔️ Поиск фермы</h2>
+
+   <div class="matchCount" id="raidSearchCounter">
+    15
+   </div>
+
+   <div class="muted">
+    Ищем случайную ферму без активного щита...
+   </div>
+
+   <button
+    class="btn secondary"
+    onclick="cancelRaidSearch()"
+   >
+    Отменить
+   </button>
+  </div>
+ `);
+
+ state.raid.timerEnd=
+  Date.now()+15000;
+
+ save();
+
+ raidSearchTimer=setInterval(()=>{
+
+  seconds--;
+
+  const el=
+   document.getElementById(
+    "raidSearchCounter"
+   );
+
+  if(el)el.textContent=seconds;
+
+  if(seconds<=0){
+
+   clearInterval(raidSearchTimer);
+   raidSearchTimer=null;
+
+   findRaidTarget();
+  }
+
+ },1000);
 }
 
-function createClan(){
-if(state.clan.id){
-notify("🏰 У тебя уже есть клан");
-return;
+function cancelRaidSearch(){
+
+ clearInterval(raidSearchTimer);
+
+ raidSearchTimer=null;
+
+ state.raid.timerEnd=0;
+
+ save();
+
+ closeModal();
+
+ notify("❌ Поиск рейда отменён");
 }
 
-if(state.coins<25000){
-notify("❌ Для создания клана нужно 25 000 🪙");
-return;
+function findRaidTarget(){
+
+ const available=
+  RAID_TEST_PLAYERS.filter(p=>!p.shield);
+
+ const target=
+  available.length
+  ?
+  available[
+   Math.floor(
+    Math.random()*available.length
+   )
+  ]
+  :
+  {
+   name:"Training Farm",
+   icon:"🏡",
+   coins:30000,
+   resources:200,
+   shield:false
+  };
+
+ state.raid.target=target;
+
+ openRaidBattle();
 }
 
-const name=prompt("Название клана");
+function pauseAnimalProduction(){
 
-if(!name||name.trim().length<2){
-notify("❌ Название слишком короткое");
-return;
+ if(state.lastRaidPause)return;
+
+ state.lastRaidPause=
+  Date.now();
 }
 
-const description=prompt("Описание клана")||"";
-const flag=prompt("Флаг, например 🐺")||"🏳️";
+function resumeAnimalProduction(){
 
-state.coins-=25000;
+ if(!state.lastRaidPause)return;
 
-state.clan={
-id:"C"+Date.now().toString(36),
-name:name.trim().slice(0,24),
-description:description.trim().slice(0,120),
-flag:CLAN_FLAGS.includes(flag.trim())?flag.trim():"🏳️",
-members:[
-{
-name:"Ты",
-icon:"👑",
-power:armyPower()
+ const pause=
+  Math.max(
+   0,
+   Date.now()-state.lastRaidPause
+  );
+
+ Object.keys(
+  state.animalProduction
+ ).forEach(id=>{
+
+  if(state.animalProduction[id]){
+   state.animalProduction[id]+=pause;
+  }
+ });
+
+ state.lastRaidPause=0;
 }
-],
-maxMembers:25,
-battleNext:0,
-wins:0,
-losses:0
+
+function openRaidBattle(){
+
+ const target=state.raid.target;
+
+ if(!target)return;
+
+ closeModal();
+
+ pauseAnimalProduction();
+
+ state.raid.active=true;
+
+ save();
+
+ setTimeout(
+  ()=>runRaidBattle(target),
+  100
+ );
+}
+
+function runRaidBattle(target){
+
+ const enemyPower=
+  Math.max(
+   25,
+   Math.floor(
+    (target.resources+
+     target.coins/1000+
+     100)/4
+   )
+  );
+
+ resolveVisualBattle({
+
+  type:"raid",
+
+  title:"⚔️ РЕЙД · БИТВА",
+
+  enemyLabel:
+   target.icon+" "+target.name,
+
+  enemyCount:
+   Math.min(
+    6,
+    Math.max(
+     3,
+     Math.ceil(enemyPower/45)
+    )
+   ),
+
+  enemyIcons:[
+   "🏹","⚔️","🛡️","🐎"
+  ],
+
+  enemyPower,
+
+  arenaId:"raidArena",
+
+  onFinish:(win)=>
+   finishRaid(target,win)
+ });
+}
+
+function finishRaid(target,win){
+
+ const stolenCoins=
+  Math.floor(
+   Number(target.coins||0)*.05/2
+  );
+
+ const stolenResources=
+  Math.floor(
+   Number(target.resources||0)*.05/2
+  );
+
+ const rewardCoins=
+  Math.max(
+   12,
+   Math.min(1250,stolenCoins)
+  );
+
+ resumeAnimalProduction();
+
+ state.raid.next=
+  Date.now()+COOLDOWN_GAME;
+
+ state.raid.active=false;
+ state.raid.timerEnd=0;
+ state.raid.target=null;
+
+ let lines="";
+
+ if(win){
+
+  state.raid.wins++;
+
+  state.tasks.raid=
+   (state.tasks.raid||0)+1;
+
+  state.coins+=rewardCoins;
+  state.seasonCoins+=rewardCoins;
+
+  state.seasonPvp+=
+   Math.floor(armyPower()/2);
+
+  lines=
+   `+${money(rewardCoins)} 🪙<br>
+    Добыча: ${money(stolenResources)} ресурсов<br>
+    КД: 15 минут`;
+
+ }else{
+
+  state.raid.losses++;
+
+  lines=
+   "Армия проиграла, добыча не получена.<br>КД: 15 минут";
+ }
+
+ save();
+
+ showBattleResult(
+  win,
+  win
+   ?"Чужая ферма успешно захвачена"
+   :"Рейд провален",
+  lines,
+  render
+ );
+}
+
+function startPvp(){
+
+ if(activeBattleTimer){
+  return notify("⚔️ Уже идёт бой");
+ }
+
+ if(Date.now()<state.pvp.next){
+  return notify("⏳ PvP ещё на КД 15 минут");
+ }
+
+ const power=armyPower();
+
+ if(power<=0){
+  return notify("❌ Сначала купи бойцов");
+ }
+
+ let seconds=15;
+
+ pvpMatchFound=false;
+
+ openModal(`
+  <div class="matchBox">
+
+   <h2>⚔️ Поиск PvP</h2>
+
+   <div class="matchCount" id="pvpCounter">
+    15
+   </div>
+
+   <div class="muted">
+    Ищем второго игрока для боя.
+   </div>
+
+   <button
+    class="btn secondary"
+    onclick="cancelPvpSearch()"
+   >
+    Отменить
+   </button>
+
+  </div>
+ `);
+
+ pvpSearchTimer=setInterval(()=>{
+
+  seconds--;
+
+  const el=
+   document.getElementById("pvpCounter");
+
+  if(el)el.textContent=seconds;
+
+  if(seconds<=0){
+
+   clearInterval(pvpSearchTimer);
+   pvpSearchTimer=null;
+
+   closeModal();
+
+   runPvpBattle({
+    name:"Training Fighter",
+    icon:"🤖",
+    power:
+     Math.max(
+      35,
+      Math.floor(
+       power*(.65+Math.random()*.7)
+      )
+     )
+   },false);
+
+  }
+
+ },1000);
+}
+
+function cancelPvpSearch(){
+
+ clearInterval(pvpSearchTimer);
+
+ pvpSearchTimer=null;
+ pvpMatchFound=false;
+
+ closeModal();
+
+ notify("❌ Поиск PvP отменён");
+}
+
+function runPvpBattle(opponent,realPlayer){
+
+ state.pvp.active=true;
+ state.pvp.hp=500;
+
+ save();
+
+ resolveVisualBattle({
+
+  type:"pvp",
+
+  title:
+   `⚔️ PVP · ${
+    realPlayer
+    ?"РЕАЛЬНЫЙ ИГРОК"
+    :"ТРЕНИРОВОЧНЫЙ БОЙ"
+   }`,
+
+  enemyLabel:
+   (opponent.icon||"🤖")+" "+
+   (opponent.name||"Противник"),
+
+  enemyCount:
+   Math.min(
+    6,
+    Math.max(
+     3,
+     Math.ceil(
+      (opponent.power||50)/45
+     )
+    )
+   ),
+
+  enemyIcons:[
+   "⚔️","🛡️","🏹"
+  ],
+
+  enemyPower:
+   Math.max(
+    25,
+    Number(opponent.power||50)
+   ),
+
+  arenaId:"pvpArena",
+
+  onFinish:(win)=>
+   finishPvp(win)
+ });
+}
+
+function finishPvp(win){
+
+ state.pvp.active=false;
+
+ state.pvp.hp=
+  win?0:500;
+
+ state.pvp.next=
+  Date.now()+COOLDOWN_GAME;
+
+ let lines=
+  win
+  ?"Ты победил противника."
+  :"Армия потерпела поражение.";
+
+ if(win){
+
+  state.pvp.wins++;
+
+  state.tasks.pvp=
+   (state.tasks.pvp||0)+1;
+
+  const reward=
+   Math.max(
+    20,
+    Math.floor(
+     (40+Math.floor(armyPower()/25))/2
+    )
+   );
+
+  state.coins+=reward;
+
+  state.seasonPvp+=
+   Math.floor(armyPower()/2);
+
+  state.seasonCoins+=reward;
+
+  lines=
+   `+${money(reward)} 🪙<br>
+    КД: 15 минут`;
+
+ }else{
+
+  state.pvp.losses++;
+
+  lines+="<br>КД: 15 минут";
+ }
+
+ save();
+
+ showBattleResult(
+  win,
+  win
+   ?"PvP завершён успешно"
+   :"PvP завершён",
+  lines,
+  render
+ );
+}
+
+function renderPvp(){
+
+ const powerEl=
+  document.getElementById("pvpPower");
+
+ const hpEl=
+  document.getElementById("pvpHp");
+
+ const hpText=
+  document.getElementById("pvpHpText");
+
+ const cd=
+  document.getElementById("pvpCooldown");
+
+ if(powerEl){
+  powerEl.textContent=
+   money(armyPower());
+ }
+
+ if(hpEl){
+
+  const hp=
+   Math.max(
+    0,
+    Math.min(
+     500,
+     Number(state.pvp.hp||500)
+    )
+   );
+
+  hpEl.style.width=
+   (hp/500*100)+"%";
+ }
+
+ if(hpText){
+  hpText.textContent=
+   money(state.pvp.hp||500);
+ }
+
+ if(cd){
+
+  const left=
+   Math.max(
+    0,
+    (state.pvp.next||0)-Date.now()
+   );
+
+  cd.textContent=
+   state.pvp.active
+   ?"⚔️ Бой идёт..."
+   :left>0
+   ?"⏳ КД: "+formatTime(left)
+   :"✅ PvP доступно";
+ }
+}
+
+function renderBosses(){
+
+ const box=
+  document.getElementById("bosses");
+
+ if(!box)return;
+
+ box.innerHTML=
+  BOSSES.map(b=>{
+
+   const d=
+    state.bosses[b.id];
+
+   const info=
+    bossCooldownInfo(b.id);
+
+   const percent=
+    Math.max(
+     0,
+     Math.min(
+      100,
+      d.hp/b.hp*100
+     )
+    );
+
+   const attempts=
+    d.attempts||0;
+
+   return `
+    <div
+     class="bossCard"
+     style="position:relative"
+    >
+
+     <div class="sectionTitle">
+      <span>${b.icon} ${b.name}</span>
+      <span class="price">+${b.reward} 🪙</span>
+     </div>
+
+     <span class="bossIcon">
+      ${b.icon}
+     </span>
+
+     <div class="raidHp">
+      <i style="width:${percent}%"></i>
+     </div>
+
+     <div class="center small">
+      HP: ${money(d.hp)} / ${money(b.hp)}
+     </div>
+
+     <div
+      class="cooldownBox"
+      style="margin-top:8px"
+     >
+      ${info.text}
+     </div>
+
+     <div
+      class="muted small center"
+      style="margin-top:6px"
+     >
+      Попытки: ${attempts}/3 · КД после 3-й: 1 час 30 минут
+     </div>
+
+     <button
+      class="btn red"
+      ${info.locked||activeBattleTimer?"disabled":""}
+      onclick="attackBoss('${b.id}')"
+     >
+      ${info.locked
+       ?"⏳ Недоступно"
+       :"⚔️ Атаковать всей армией"}
+     </button>
+
+    </div>
+   `;
+
+  }).join("");
+}
+
+function gameCooldownLeft(id){
+
+ return Math.max(
+  0,
+  (state.games[id]?.next||0)-Date.now()
+ );
+}
+
+function canStartGame(id){
+
+ const left=
+  gameCooldownLeft(id);
+
+ if(left>0){
+
+  notify(
+   "⏳ Эта игра на КД: "+
+   formatTime(left)
+  );
+
+  return false;
+ }
+
+ return true;
+}
+
+function renderGameCooldowns(){
+
+ [
+  ["hand","handCooldown"],
+  ["tractor","tractorCooldown"],
+  ["catch","catchCooldown"]
+ ]
+ .forEach(([id,elId])=>{
+
+  const el=
+   document.getElementById(elId);
+
+  if(!el)return;
+
+  const left=
+   gameCooldownLeft(id);
+
+  el.textContent=
+   left>0
+   ?"⏳ КД: "+formatTime(left)
+   :"✅ Готово";
+ });
+}
+
+function startMow(type){
+
+ if(!canStartGame(type))return;
+
+ if(mowGame.running)return;
+
+ const area=
+  document.getElementById(
+   type==="hand"
+   ?"mowArea"
+   :"tractorArea"
+  );
+
+ const btn=
+  document.getElementById(
+   type==="hand"
+   ?"mowBtn"
+   :"tractorBtn"
+  );
+
+ if(!area||!btn)return;
+
+ mowGame={
+  running:true,
+  end:Date.now()+30000,
+  score:0,
+  cells:0,
+  type
+ };
+
+ area.innerHTML="";
+ btn.disabled=true;
+
+ const loop=
+  setInterval(()=>{
+
+   if(!mowGame.running){
+
+    clearInterval(loop);
+
+    return;
+   }
+
+   const left=
+    Math.max(
+     0,
+     mowGame.end-Date.now()
+    );
+
+   const leftEl=
+    document.getElementById(
+     type==="hand"
+     ?"handLeft"
+     :"tractorLeft"
+    );
+
+   const scoreEl=
+    document.getElementById(
+     type==="hand"
+     ?"handScore"
+     :"tractorScore"
+    );
+
+   const cellsEl=
+    document.getElementById(
+     type==="hand"
+     ?"handCells"
+     :"tractorCells"
+    );
+
+   if(leftEl){
+    leftEl.textContent=
+     Math.ceil(left/1000);
+   }
+
+   if(scoreEl){
+    scoreEl.textContent=
+     money(mowGame.score);
+   }
+
+   if(cellsEl){
+    cellsEl.textContent=
+     mowGame.cells;
+   }
+
+   if(Math.random()<.48){
+
+    const el=
+     document.createElement("button");
+
+    el.className="gamePlant";
+
+    el.textContent=
+     ["🌾","🥕","🌽","🍅"]
+     [Math.floor(Math.random()*4)];
+
+    el.style.left=
+     Math.random()*84+"%";
+
+    el.style.top=
+     Math.random()*76+"%";
+
+    el.onclick=()=>{
+
+     if(!mowGame.running)return;
+
+     mowGame.score+=
+      type==="tractor"
+      ?12
+      :8;
+
+     mowGame.cells++;
+
+     el.remove();
+    };
+
+    area.appendChild(el);
+
+    setTimeout(
+     ()=>el.remove(),
+     1200
+    );
+   }
+
+   if(left<=0){
+
+    clearInterval(loop);
+
+    mowGame.running=false;
+
+    state.coins+=
+     mowGame.score;
+
+    state.seasonCoins+=
+     mowGame.score;
+
+    state.games[type].next=
+     Date.now()+COOLDOWN_GAME;
+
+    save();
+    render();
+
+    showModal(`
+     <div class="center">
+
+      <div style="font-size:42px">
+       ${type==="tractor"?"🚜":"🌾"}
+      </div>
+
+      <div
+       style="
+        font-size:22px;
+        font-weight:1000;
+        margin-top:8px
+       "
+      >
+       Раунд завершён
+      </div>
+
+      <div
+       class="price"
+       style="
+        font-size:20px;
+        margin-top:10px
+       "
+      >
+       +${money(mowGame.score)} 🪙
+      </div>
+
+     </div>
+    `);
+
+    setTimeout(
+     closeModal,
+     900
+    );
+   }
+
+  },300);
+}
+
+function startCatchGame(){
+
+ if(!canStartGame("catch"))return;
+
+ if(catchGame.running)return;
+
+ catchGame.running=true;
+ catchGame.end=Date.now()+20000;
+ catchGame.score=0;
+ catchGame.hits=0;
+
+ const area=
+  document.getElementById("catchArea");
+
+ const btn=
+  document.getElementById("catchBtn");
+
+ if(!area||!btn)return;
+
+ area.innerHTML="";
+ btn.disabled=true;
+
+ function spawn(){
+
+  if(!catchGame.running)return;
+
+  area.innerHTML="";
+
+  const el=
+   document.createElement("button");
+
+  el.className="gamePlant";
+
+  el.textContent=
+   ["🌾","🥕","🌽","🍅"]
+   [Math.floor(Math.random()*4)];
+
+  el.style.left=
+   Math.random()*82+"%";
+
+  el.style.top=
+   Math.random()*76+"%";
+
+  el.onclick=()=>{
+
+   if(!catchGame.running)return;
+
+   catchGame.hits++;
+   catchGame.score+=10;
+
+   el.remove();
+  };
+
+  area.appendChild(el);
+ }
+
+ spawn();
+
+ const loop=
+  setInterval(()=>{
+
+   if(!catchGame.running){
+
+    clearInterval(loop);
+
+    return;
+   }
+
+   const left=
+    Math.max(
+     0,
+     catchGame.end-Date.now()
+    );
+
+   const leftEl=
+    document.getElementById("catchLeft");
+
+   const scoreEl=
+    document.getElementById("catchScore");
+
+   const hitsEl=
+    document.getElementById("catchHits");
+
+   if(leftEl){
+    leftEl.textContent=
+     Math.ceil(left/1000);
+   }
+
+   if(scoreEl){
+    scoreEl.textContent=
+     money(catchGame.score);
+   }
+
+   if(hitsEl){
+    hitsEl.textContent=
+     catchGame.hits;
+   }
+
+   spawn();
+
+   if(left<=0){
+
+    clearInterval(loop);
+
+    catchGame.running=false;
+
+    state.coins+=
+     catchGame.score;
+
+    state.seasonCoins+=
+     catchGame.score;
+
+    state.games.catch.next=
+     Date.now()+COOLDOWN_GAME;
+
+    save();
+    render();
+
+    showModal(`
+     <div class="center">
+
+      <div style="font-size:42px">
+       🎯
+      </div>
+
+      <div
+       style="
+        font-size:22px;
+        font-weight:1000;
+        margin-top:8px
+       "
+      >
+       Раунд завершён
+      </div>
+
+      <div
+       class="price"
+       style="
+        font-size:20px;
+        margin-top:10px
+       "
+      >
+       +${money(catchGame.score)} 🪙
+      </div>
+
+     </div>
+    `);
+
+    setTimeout(
+     closeModal,
+     900
+    );
+   }
+
+  },250);
+}
+
+function renderRating(){
+
+ const harvest=[
+  ["Ты","👑",state.seasonHarvested],
+  ["GreenFox","🦊",0],
+  ["FarmKing","👨‍🌾",0],
+  ["HorseMaster","🐎",0]
+ ];
+
+ const pvp=[
+  ["Ты","⚔️",state.seasonPvp],
+  ["WarriorX","⚔️",0],
+  ["GuardKing","🛡️",0],
+  ["Knight","🗡️",0]
+ ];
+
+ const coins=[
+  ["Ты","🪙",state.seasonCoins],
+  ["RichFox","🦊",0],
+  ["MoneyFarm","💰",0],
+  ["GoldenCow","🐄",0]
+ ];
+
+ function renderList(arr,id){
+
+  arr.sort((a,b)=>b[2]-a[2]);
+
+  const box=
+   document.getElementById(id);
+
+  if(!box)return;
+
+  box.innerHTML=
+   arr.map((p,i)=>`
+
+    <div class="rank">
+
+     <div class="rankPos">
+      ${i===0?"🥇":i===1?"🥈":i===2?"🥉":i+1}
+     </div>
+
+     <div class="rankAvatar">
+      ${p[1]}
+     </div>
+
+     <div class="rankInfo">
+
+      <div class="rankName">
+       ${p[0]}
+      </div>
+
+      <div class="rankScore">
+       ${money(p[2])}
+      </div>
+
+     </div>
+
+    </div>
+
+   `).join("");
+ }
+
+ renderList(
+  harvest,
+  "harvestRating"
+ );
+
+ renderList(
+  pvp,
+  "pvpRating"
+ );
+
+ renderList(
+  coins,
+  "coinsRating"
+ );
+
+ const sn=
+  document.getElementById(
+   "seasonName1"
+  );
+
+ if(sn)sn.textContent=
+  state.season;
+
+ const countries=
+  document.getElementById(
+   "countries"
+  );
+
+ if(countries){
+  countries.innerHTML=
+   COUNTRIES.map(
+    c=>`<div class="country">${c}</div>`
+   ).join("");
+ }
+}
+
+const TASK_DEFS={
+ pvp:["⚔️ Победи в PvP",5,500],
+ raid:["⚔️ Успешно проведи рейд",3,800],
+ boss:["👹 Победи босса",3,1000],
+ harvest:["🌾 Собери урожай",50,500],
+ products:["🥚 Собери продукцию животных",10,500],
+ sell:["💰 Продай продукции на",1000,700],
+ boar:["🐗 Отбей атаку кабанов",1,600],
+ raider:["🧟 Отбей атаку мародёров",1,1000],
+ clan:["🏰 Победи в битве кланов",1,1500]
 };
 
-save();
-render();
+function claimTask(id){
 
-notify("🏰 Клан создан за 25 000 🪙");
+ const d=TASK_DEFS[id];
+
+ if(!d)return;
+
+ const cur=
+  Number(state.tasks[id]||0);
+
+ if(cur<d[1]){
+  return notify("⏳ Задание ещё не выполнено");
+ }
+
+ if(state.tasks.claimed?.[id]){
+  return notify("✅ Награда уже получена");
+ }
+
+ state.tasks.claimed=
+  state.tasks.claimed||{};
+
+ state.tasks.claimed[id]=true;
+
+ state.coins+=d[2];
+ state.seasonCoins+=d[2];
+
+ save();
+ render();
+
+ notify(
+  "🎁 Задание выполнено! +"+
+  money(d[2])+
+  " 🪙"
+ );
+}
+
+function claimChannelTask(){
+
+ if(state.tasks.channel){
+  return notify("✅ Награда уже получена");
+ }
+
+ window.open(
+  "https://t.me/growixfarm",
+  "_blank"
+ );
+
+ state.tasks.channel=true;
+
+ state.coins+=1000;
+ state.seasonCoins+=1000;
+
+ save();
+ render();
+
+ notify("📢 Награда за подписку +1000 🪙");
+}
+
+function activatePartnerCode(){
+
+ const input=
+  document.getElementById(
+   "partnerCodeInput"
+  );
+
+ const code=
+  (input?.value||"")
+  .trim()
+  .toUpperCase();
+
+ if(!code){
+  return notify(
+   "Введите партнёрский код"
+  );
+ }
+
+ if(state.partnerChain.level>=3){
+  return notify(
+   "🛑 Максимальная глубина партнёрской цепочки — 3 уровня"
+  );
+ }
+
+ if(state.partnerActivations.includes(code)){
+  return notify(
+   "❌ Этот код уже активирован"
+  );
+ }
+
+ if(code===getPlayerId().toUpperCase()){
+  return notify(
+   "❌ Нельзя активировать свой код"
+  );
+ }
+
+ const owner=
+  state.partnerCodes[code]||null;
+
+ if(!owner&&code!=="TO77N"){
+  return notify(
+   "❌ Партнёрский код не найден"
+  );
+ }
+
+ state.partnerActivations.push(code);
+
+ state.partnerChain.level++;
+
+ state.partnerChain.code=code;
+
+ state.partnerChain.parent=owner;
+
+ state.coins+=3000;
+ state.seasonCoins+=3000;
+
+ save();
+ render();
+
+ notify(
+  "🤝 Код активирован! +3000 🪙"
+ );
+}
+
+function openTasksModal(){
+
+ const html=`
+  <div class="hero">
+   <div class="heroText">
+    <div class="heroTitle">Задания 🎯</div>
+    <div class="heroSub">Игровые и партнёрские задания</div>
+   </div>
+   <div class="heroEmoji">🎯</div>
+  </div>
+
+  <div class="tasksModal">
+   <div id="tasksModalList"></div>
+  </div>
+
+  <div class="card">
+   <div class="sectionTitle">📢 Подписка</div>
+
+   <div class="muted small">
+    Подпишись на официальный канал Growix
+   </div>
+
+   <button
+    class="btn blue"
+    ${state.tasks.channel?"disabled":""}
+    onclick="claimChannelTaskModal()"
+   >
+    ${
+     state.tasks.channel
+     ?"✅ Получено"
+     :"📢 Открыть канал"
+    }
+   </button>
+  </div>
+
+  <div class="card">
+   <div class="sectionTitle">
+    🤝 Сотрудничество
+   </div>
+
+   <div class="muted small">
+    По вопросам сотрудничества: <b>@to77n</b>
+   </div>
+
+   <button
+    class="btn blue"
+    onclick="window.open('https://t.me/to77n','_blank')"
+   >
+    💼 Написать @to77n
+   </button>
+  </div>
+ `;
+
+ showModal(html);
+
+ renderTasksModal();
+}
+
+function renderTasksModal(){
+
+ const list=
+  document.getElementById(
+   "tasksModalList"
+  );
+
+ if(!list)return;
+
+ let html="";
+
+ Object.entries(TASK_DEFS)
+ .forEach(([id,d])=>{
+
+  const cur=
+   Math.min(
+    d[1],
+    Number(state.tasks[id]||0)
+   );
+
+  const claimed=
+   !!state.tasks.claimed?.[id];
+
+  const pct=
+   Math.min(
+    100,
+    cur/d[1]*100
+   );
+
+  html+=`
+   <div class="row">
+
+    <div style="flex:1">
+
+     <div class="rowName">
+      ${d[0]}
+     </div>
+
+     <div class="rowSub">
+      Прогресс: ${money(cur)} / ${money(d[1])}
+      · награда ${money(d[2])} 🪙
+     </div>
+
+     <div class="progress">
+      <div
+       class="progressFill"
+       style="width:${pct}%"
+      ></div>
+     </div>
+
+    </div>
+
+    <button
+     class="btn gold"
+     style="width:108px;margin:0"
+     ${cur<d[1]||claimed?"disabled":""}
+     onclick="claimTaskModal('${id}')"
+    >
+     ${
+      claimed
+      ?"Получено"
+      :cur>=d[1]
+      ?"Забрать"
+      :"В процессе"
+     }
+    </button>
+
+   </div>
+  `;
+ });
+
+ list.innerHTML=html;
+}
+
+function claimTaskModal(id){
+
+ claimTask(id);
+
+ renderTasksModal();
+}
+
+function claimChannelTaskModal(){
+
+ claimChannelTask();
+
+ renderTasksModal();
+}
+
+function renderTasks(){}
+
+function renderPartnerActivation(){
+
+ const box=
+  document.getElementById(
+   "partnerActivation"
+  );
+
+ if(!box)return;
+
+ box.innerHTML=`
+  <div class="card">
+
+   <div class="sectionTitle">
+    🔐 Активация партнёрского кода
+   </div>
+
+   <div class="muted small">
+    Один код на игрока · твоя награда +3 000 🪙.
+    Максимальная глубина партнёрской цепочки — 3 уровня.
+   </div>
+
+   <input
+    id="partnerCodeInput"
+    class="input"
+    placeholder="Партнёрский код"
+    autocomplete="off"
+   >
+
+   <button
+    class="btn purple"
+    onclick="activatePartnerCode()"
+   >
+    🤝 Активировать
+   </button>
+
+   <div
+    class="cooldownBox"
+    style="margin-top:8px"
+   >
+    Текущий уровень цепочки:
+    <b>${state.partnerChain.level}/3</b>
+   </div>
+
+  </div>
+ `;
+}
+
+function renderPartner(){
+
+ const ref=
+  document.getElementById(
+   "refLink"
+  );
+
+ const count=
+  document.getElementById(
+   "refCount"
+  );
+
+ const earned=
+  document.getElementById(
+   "refEarned"
+  );
+
+ if(ref){
+  ref.value=
+   location.origin+
+   location.pathname+
+   "?ref="+
+   referralCode();
+ }
+
+ if(count){
+  count.textContent=
+   state.referrals.confirmed.length;
+ }
+
+ if(earned){
+  earned.textContent=
+   money(state.referrals.earned);
+ }
+
+ renderPartnerActivation();
+}
+
+function showModal(html){
+
+ const modal=
+  document.getElementById("modal");
+
+ const content=
+  document.getElementById(
+   "modalContent"
+  );
+
+ if(!modal||!content)return;
+
+ content.innerHTML=`
+  <button
+   class="modalClose"
+   onclick="closeModal()"
+  >
+   ×
+  </button>
+  ${html}
+ `;
+
+ modal.classList.remove(
+  "battleFullscreen"
+ );
+
+ modal.classList.add("show");
+}
+
+function openModal(html){
+ showModal(html);
+}
+
+function closeModal(){
+
+ const m=
+  document.getElementById("modal");
+
+ if(m){
+  m.classList.remove(
+   "show",
+   "battleFullscreen"
+  );
+ }
+
+ const content=
+  document.getElementById(
+   "modalContent"
+  );
+
+ if(content){
+
+  content.innerHTML=
+   `<button class="modalClose" onclick="closeModal()">×</button>`;
+ }
+}
+
+function clanEsc(v){
+
+ return String(v||"").replace(
+  /[&<>\"']/g,
+  c=>({
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[c])
+ );
+}
+
+const CLAN_FLAGS=[
+ "🏳️",
+ "🦁",
+ "🐺",
+ "🐉",
+ "🦅",
+ "⚔️",
+ "🛡️",
+ "🔥",
+ "🌲",
+ "☠️",
+ "👑",
+ "🐻"
+];
+
+function createClan(){
+
+ if(state.clan.id){
+  return notify(
+   "🏰 У тебя уже есть клан"
+  );
+ }
+
+ if(state.coins<25000){
+  return notify(
+   "❌ Для создания клана нужно 25 000 🪙"
+  );
+ }
+
+ const name=
+  prompt("Название клана");
+
+ if(
+  !name||
+  name.trim().length<2
+ ){
+  return notify(
+   "❌ Название слишком короткое"
+  );
+ }
+
+ const description=
+  prompt("Описание клана")||"";
+
+ const flag=
+  prompt(
+   "Флаг: выбери эмодзи, например 🐺"
+  )||"🏳️";
+
+ state.coins-=25000;
+
+ state.clan={
+  id:"C"+Date.now().toString(36),
+  name:name.trim().slice(0,24),
+  description:description.trim().slice(0,120),
+  flag:
+   CLAN_FLAGS.includes(
+    flag.trim()
+   )
+   ?
+   flag.trim()
+   :
+   "🏳️",
+  members:[
+   {
+    name:"Ты",
+    icon:"👑",
+    power:armyPower()
+   }
+  ],
+  maxMembers:25,
+  battleNext:0,
+  wins:0,
+  losses:0
+ };
+
+ save();
+
+ notify(
+  "🏰 Клан создан за 25 000 🪙"
+ );
+
+ render();
 }
 
 function searchClans(){
-const q=(prompt("Поиск клана по названию")||"").trim().toLowerCase();
 
-if(!q)return;
+ const q=
+  (prompt(
+   "Поиск клана по названию"
+  )||"")
+  .trim()
+  .toLowerCase();
 
-if(state.clan.id&&state.clan.name.toLowerCase().includes(q)){
-notify("🏰 Найден твой клан");
-}else{
-notify("🔎 Поиск реальных игроков подключится после БД");
-}
+ if(!q)return;
+
+ if(
+  state.clan.id&&
+  state.clan.name.toLowerCase().includes(q)
+ ){
+  return notify(
+   "🏰 Найден твой клан"
+  );
+ }
+
+ notify(
+  "🔎 Реальный поиск кланов будет подключён через БД"
+ );
 }
 
 function joinClanReal(){
-notify("👥 Реальные кланы будут подключены после БД");
+
+ notify(
+  "👥 Вступление в реальные кланы подключим через БД"
+ );
 }
 
 function startClanBattle(){
-if(!state.clan.id){
-notify("❌ Сначала создай клан");
-return;
+
+ if(!state.clan.id){
+  return notify(
+   "❌ Сначала создай клан"
+  );
+ }
+
+ if(Date.now()<state.clan.battleNext){
+  return notify(
+   "⏳ Следующая битва через "+
+   formatTime(
+    state.clan.battleNext-Date.now()
+   )
+  );
+ }
+
+ if(state.clan.members.length<2){
+  return notify(
+   "❌ Для битвы нужны минимум 2 реальных участника"
+  );
+ }
+
+ notify(
+  "🏰 Реальная битва кланов будет подключена через БД"
+ );
 }
 
-if(Date.now()<state.clan.battleNext){
-notify("⏳ Следующая битва через "+formatTime(state.clan.battleNext-Date.now()));
-return;
+function renderClan(){
+
+ const box=
+  document.getElementById(
+   "clanPanel"
+  );
+
+ if(!box)return;
+
+ if(!state.clan.id){
+
+  box.innerHTML=`
+   <div class="card">
+
+    <div
+     style="
+      font-size:60px;
+      text-align:center
+     "
+    >
+     🏰
+    </div>
+
+    <div
+     class="sectionTitle"
+     style="margin-top:8px"
+    >
+     Создание клана
+     <span class="price">
+      25 000 🪙
+     </span>
+    </div>
+
+    <div class="muted small">
+     Название, описание и собственный флаг.
+     Максимум 25 реальных участников.
+    </div>
+
+    <button
+     class="btn purple"
+     onclick="createClan()"
+    >
+     🏰 Создать клан — 25 000 🪙
+    </button>
+
+   </div>
+  `;
+
+  return;
+ }
+
+ const c=
+  state.clan;
+
+ const left=
+  Math.max(
+   0,
+   c.battleNext-Date.now()
+  );
+
+ const members=
+  c.members.map(
+   (m,i)=>`
+
+   <div class="row">
+
+    <div class="rowLeft">
+
+     <div class="rowIcon">
+      ${m.icon}
+     </div>
+
+     <div>
+
+      <div class="rowName">
+       ${clanEsc(m.name)}
+       ${i===0?"👑":""}
+      </div>
+
+      <div class="rowSub">
+       Сила: ${money(m.power||0)}
+      </div>
+
+     </div>
+
+    </div>
+
+   </div>
+
+  `
+  ).join("");
+
+ box.innerHTML=`
+  <div class="card">
+
+   <div
+    style="
+     font-size:60px;
+     text-align:center
+    "
+   >
+    ${c.flag}
+   </div>
+
+   <div
+    style="
+     text-align:center;
+     font-size:22px;
+     font-weight:1000
+    "
+   >
+    ${clanEsc(c.name)}
+   </div>
+
+   <div
+    class="muted small center"
+    style="margin-top:5px"
+   >
+    ${clanEsc(c.description)||"Без описания"}
+   </div>
+
+   <div
+    class="profileStats"
+    style="margin-top:12px"
+   >
+
+    <div class="profileStat">
+     <b>${c.members.length}/25</b>
+     <span>Участники</span>
+    </div>
+
+    <div class="profileStat">
+     <b>${c.wins}</b>
+     <span>Победы</span>
+    </div>
+
+    <div class="profileStat">
+     <b>${c.losses}</b>
+     <span>Поражения</span>
+    </div>
+
+    <div class="profileStat">
+     <b>
+      ${money(
+       c.members.reduce(
+        (sum,m)=>
+         sum+Number(m.power||0),
+        0
+       )
+      )}
+     </b>
+     <span>Сила</span>
+    </div>
+
+   </div>
+
+   <button
+    class="btn"
+    onclick="searchClans()"
+   >
+    🔎 Найти клан
+   </button>
+
+   <button
+    class="btn secondary"
+    onclick="joinClanReal()"
+   >
+    ➕ Вступить в найденный клан
+   </button>
+
+   <button
+    class="btn red"
+    onclick="startClanBattle()"
+    ${left>0?"disabled":""}
+   >
+    ⚔️ Битва кланов
+   </button>
+
+   <div
+    class="cooldownBox"
+    style="margin-top:8px"
+   >
+    ${
+     left
+     ?"⏳ Следующая битва: "+formatTime(left)
+     :"✅ Битва доступна"
+    }
+   </div>
+
+  </div>
+
+  <div class="card">
+
+   <div class="sectionTitle">
+    👥 Участники
+   </div>
+
+   ${members}
+
+  </div>
+ `;
 }
 
-if(state.clan.members.length<2){
-notify("❌ Для битвы нужны минимум 2 реальных участника");
-return;
+function navigate(page,button){
+
+ document.querySelectorAll(".page")
+  .forEach(p=>
+   p.classList.remove("active")
+  );
+
+ const target=
+  document.getElementById(
+   "page-"+page
+  );
+
+ if(target){
+  target.classList.add("active");
+ }
+
+ if(button){
+
+  document.querySelectorAll(".navBtn")
+   .forEach(b=>
+    b.classList.remove("active")
+   );
+
+  button.classList.add("active");
+ }
+
+ render();
 }
-
-notify("🏰 Битвы реальных кланов подключатся после БД");
-}
-
-function renderClan(){}
-
-function renderDaily(){}
-
-/* =========================================================
-   TOP
-   ========================================================= */
 
 function renderTopOnly(){
-document.getElementById("coins").textContent=money(state.coins);
-document.getElementById("stars").textContent=money(state.stars);
-document.getElementById("crystals").textContent=crystalText(state.crystals);
-document.getElementById("level").textContent=state.level;
+
+ const coins=
+  document.getElementById("coins");
+
+ const stars=
+  document.getElementById("stars");
+
+ const crystals=
+  document.getElementById("crystals");
+
+ const level=
+  document.getElementById("level");
+
+ if(coins){
+  coins.textContent=
+   money(state.coins);
+ }
+
+ if(stars){
+  stars.textContent=
+   money(state.stars);
+ }
+
+ if(crystals){
+  crystals.textContent=
+   crystalText(state.crystals);
+ }
+
+ if(level){
+  level.textContent=
+   state.level;
+ }
 }
 
-/* =========================================================
-   FULL RENDER
-   ========================================================= */
+function renderRaid(){
+
+ const el=
+  document.getElementById(
+   "raidCooldown"
+  );
+
+ const btn=
+  document.getElementById(
+   "raidButton"
+  );
+
+ if(!el)return;
+
+ if(activeBattleTimer){
+
+  el.textContent=
+   "⚔️ Бой идёт...";
+
+ }else if(
+  Date.now()<state.raid.next
+ ){
+
+  el.textContent=
+   formatTime(
+    state.raid.next-Date.now()
+   );
+
+ }else{
+
+  el.textContent=
+   "Готово";
+ }
+
+ if(btn){
+
+  btn.disabled=
+   !!activeBattleTimer||
+   Date.now()<state.raid.next||
+   state.raid.active||
+   !!raidSearchTimer;
+ }
+}
+
+function renderPackages(){
+
+ const box=
+  document.getElementById(
+   "packages"
+  );
+
+ if(!box)return;
+
+ const freeLeft=
+  Math.max(
+   0,
+   state.packageFree-Date.now()
+  );
+
+ box.innerHTML=
+  Object.entries(PACKAGES)
+  .map(([id,p])=>{
+
+   const free=
+    id==="free";
+
+   const rewards=
+    Object.entries(p.rewards)
+    .map(
+     ([k,v])=>
+      "+"+money(v)+" "+
+      (
+       k==="coins"
+       ?"🪙"
+       :k==="xp"
+       ?"✨ XP"
+       :k==="stone"
+       ?"🪨"
+       :k
+      )
+    )
+    .join(" · ");
+
+   return `
+    <div class="package">
+
+     <div class="packageTitle">
+
+      <span>
+       ${p.icon} ${p.name}
+      </span>
+
+      <span class="price">
+       ${
+        free
+        ?"БЕСПЛАТНО"
+        :p.price+" ⭐"
+       }
+      </span>
+
+     </div>
+
+     <div class="packageItems">
+      ${rewards}
+     </div>
+
+     <button
+      class="btn ${free?"":"gold"}"
+      onclick="buyPackage('${id}')"
+      ${free&&freeLeft>0?"disabled":""}
+     >
+      ${
+       free
+       ?
+       freeLeft>0
+       ?
+       "⏳ "+formatTime(freeLeft)
+       :
+       "🎁 Забрать"
+       :
+       p.price+" ⭐"
+      }
+     </button>
+
+    </div>
+   `;
+
+  }).join("");
+}
+
+function buyPackage(id){
+
+ const p=PACKAGES[id];
+
+ if(!p)return;
+
+ if(id==="free"){
+
+  if(
+   Date.now()<state.packageFree
+  ){
+   return notify(
+    "⏳ Бесплатный набор ещё недоступен"
+   );
+  }
+
+ }else{
+
+  if(state.stars<p.price){
+
+   return notify(
+    "⭐ Недостаточно Stars"
+   );
+  }
+
+  state.stars-=p.price;
+ }
+
+ Object.entries(p.rewards)
+ .forEach(([k,v])=>{
+
+  if(k==="coins"){
+
+   state.coins+=v;
+   state.seasonCoins+=v;
+
+  }
+
+  if(k==="xp"){
+   addXP(v);
+  }
+
+  if(k==="stone"){
+   state.buildings.stone=
+    (state.buildings.stone||0)+v;
+  }
+
+ });
+
+ state.packageFree=
+  Date.now()+86400000;
+
+ save();
+ render();
+
+ notify("🎁 Набор получен");
+}
+
+function activatePromo(){
+
+ const input=
+  document.getElementById(
+   "promoInput"
+  );
+
+ if(!input)return;
+
+ const code=
+  input.value
+   .trim()
+   .toUpperCase();
+
+ if(!code){
+  return notify(
+   "Введите промокод"
+  );
+ }
+
+ if(
+  state.usedPromos.includes(code)
+ ){
+
+  return notify(
+   "❌ Этот промокод уже использован"
+  );
+ }
+
+ const rewards={
+  GROWIX100:{coins:100},
+  GROWIX500:{coins:500},
+  START:{coins:1000,stars:5},
+  FARM:{coins:1500}
+ };
+
+ const r=
+  rewards[code];
+
+ if(!r){
+
+  return notify(
+   "❌ Промокод не найден"
+  );
+ }
+
+ if(r.coins){
+
+  state.coins+=r.coins;
+  state.seasonCoins+=r.coins;
+ }
+
+ if(r.stars){
+
+  state.stars+=r.stars;
+ }
+
+ state.usedPromos.push(code);
+
+ save();
+ render();
+
+ input.value="";
+
+ notify(
+  "🎟️ Промокод активирован"
+ );
+}
+
+function copyReferral(){
+
+ const value=
+  document.getElementById(
+   "refLink"
+  )?.value||
+  referralCode();
+
+ if(navigator.clipboard){
+
+  navigator.clipboard
+   .writeText(value)
+   .then(
+    ()=>notify(
+     "📋 Ссылка скопирована"
+    )
+   )
+   .catch(
+    ()=>notify(
+     "📋 Скопируй ссылку вручную"
+    )
+   );
+
+ }else{
+
+  notify(
+   "📋 Скопируй ссылку вручную"
+  );
+ }
+}
 
 function render(){
-renderTopOnly();
 
-renderField();
-renderLivingFarm();
-renderAnimals();
-renderGames();
-renderShop();
-renderProfile();
-renderWorld();
-renderRaid();
+ ensureSeason();
+
+ renderTopOnly();
+
+ const xp=
+  document.getElementById("xp");
+
+ const xpNeedEl=
+  document.getElementById("xpNeed");
+
+ const xpBar=
+  document.getElementById("xpBar");
+
+ if(xp){
+  xp.textContent=
+   state.xp;
+ }
+
+ if(xpNeedEl){
+  xpNeedEl.textContent=
+   xpNeed();
+ }
+
+ if(xpBar){
+
+  xpBar.style.width=
+   Math.min(
+    100,
+    state.xp/xpNeed()*100
+   )+"%";
+ }
+
+ renderField();
+ renderCrow();
+ renderAnimals();
+ renderShop();
+ renderInventory();
+ renderWorkers();
+ renderArmy();
+ renderBosses();
+ renderRaid();
+ renderPvp();
+ renderGameCooldowns();
+ renderRating();
+ renderPartner();
+ renderTasks();
+ renderPackages();
+ renderClan();
+ renderDaily();
 }
 
-/* =========================================================
-   INIT
-   ========================================================= */
-
-function dailyReward(){
-const now=Date.now();
-const last=Number(localStorage.getItem("growix_daily")||0);
-
-if(now-last>=86400000){
-localStorage.setItem("growix_daily",String(now));
-state.coins+=500;
-notify("🎁 Ежедневная награда +500 🪙");
-save();
-}
-}
-
-dailyReward();
-render();
+loadState();
 
 setInterval(()=>{
-processFarmManager();
-renderTopOnly();
-renderField();
-renderWorld();
-renderRaid();
-renderProfile();
+ renderCrow();
+ renderRaid();
+ renderPvp();
+ renderGameCooldowns();
+ renderBosses();
+ renderAnimals();
+
+ const active=
+  document.querySelector(
+   ".page.active"
+  )?.id||"";
+
+ if(active==="page-farm"){
+  renderField();
+ }
+
 },1000);
 
-if(!localStorage.getItem("growix_started")){
-localStorage.setItem("growix_started","1");
-notify("🌱 Добро пожаловать в GROWIX!");
-}
+render();
 
 </script>
 </body>
-  </html>
+    </html>
